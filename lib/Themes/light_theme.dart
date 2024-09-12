@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+const Color customGrey = Color(0xFFb1b8ca); // Example grey color
 
 ColorScheme colorScheme = const ColorScheme.light(
   primary: Color(0xFF005667),
@@ -15,6 +16,7 @@ ColorScheme colorScheme = const ColorScheme.light(
   error: Colors.red,
   onError: Colors.white,
   onSecondary: Colors.white,
+
 );
 
 AppBarTheme lightAppBarTheme = const AppBarTheme(
