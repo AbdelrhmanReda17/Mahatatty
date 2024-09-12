@@ -31,7 +31,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   title:
                       'Enjoy The Convenience Of Buying Tickets For Your Trip',
                   subtitle:
-                      'Urna amet, suspendisse ullamcorper ac elit diam facilisis Cur SuS vestibulum.',
+                      'Plan, book, and manage your journeys all in one place, effortlessly.',
                 ),
                 controller: _controller,
               ),
@@ -40,7 +40,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   image: onboardingScreenImage2,
                   title: 'Access From Your Smartphone Anywhere',
                   subtitle:
-                      'Urna amet, suspendisse ullamcorper ac elit diam facilisis Cur SuS vestibulum.',
+                      'Stay connected with real-time updates and instant access to your bookings.',
                 ),
                 controller: _controller,
               ),
@@ -49,7 +49,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   image: onboardingScreenImage3,
                   title: 'Easy To Get Train Tickets From Anywhere',
                   subtitle:
-                      'Urna amet, suspendisse ullamcorper ac elit diam facilisis Cur SuS vestibulum.',
+                      'Book tickets on the go, hassle-free, whether you\'re at home or on the move.',
                 ),
                 controller: _controller,
               ),
