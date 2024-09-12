@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mahattaty/Screens/verification_screen.dart';
 import 'package:mahattaty/Utils/open_screens.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_button.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_text_form_field.dart';
@@ -87,7 +88,13 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                   text: 'Change Password',
                   style: MahattatyButtonStyle.primary,
                   onPressed: () {
-                   //Verify password
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => VerificationScreen(),
+                      ),
+                    );
+
                   },
                   height: 50,
                 ),
