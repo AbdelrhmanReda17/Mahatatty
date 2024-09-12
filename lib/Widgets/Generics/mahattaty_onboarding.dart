@@ -90,6 +90,7 @@ class MahattatyOnboarding extends StatelessWidget {
                             routeName: const AuthenticationScreen(
                               key: Key("register_screen"),
                             ).registerRouteName,
+                            isReplace: true,
                           );
                         },
                         textStyle:
@@ -122,6 +123,7 @@ class MahattatyOnboarding extends StatelessWidget {
                                     context: context,
                                     routeName: const AuthenticationScreen()
                                         .loginRouteName,
+                                    isReplace: true,
                                   );
                                 },
                               text: 'Sign In',

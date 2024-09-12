@@ -24,6 +24,10 @@ AppBarTheme lightAppBarTheme = const AppBarTheme(
     systemNavigationBarColor: Colors.transparent,
     systemNavigationBarIconBrightness: Brightness.dark,
   ),
+  backgroundColor: Colors.white,
+  foregroundColor: Colors.black,
+  scrolledUnderElevation: 0.0,
+  elevation: 0.0,
 );
 
 ElevatedButtonThemeData elevatedButtonTheme = ElevatedButtonThemeData(
@@ -66,29 +70,23 @@ OutlinedButtonThemeData outlinedButtonTheme = OutlinedButtonThemeData(
   ),
 );
 
-InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
-  outlineBorder: BorderSide(color: colorScheme.primary),
-  border: OutlineInputBorder(
-    borderRadius: const BorderRadius.all(
-      Radius.circular(20.0),
-    ),
-    borderSide: BorderSide(color: colorScheme.primary),
+CheckboxThemeData checkboxTheme = CheckboxThemeData(
+  side: BorderSide(
+    color: colorScheme.primary,
   ),
-  // enabledBorder: OutlineInputBorder(
-  //   borderRadius: const BorderRadius.all(
-  //     Radius.circular(20.0),
-  //   ),
-  //   borderSide: BorderSide(color: colorScheme.primary),
-  // ),
+  checkColor: MaterialStateProperty.all<Color>(
+    colorScheme.background,
+  ),
 );
 
 ThemeData lightTheme = ThemeData(
   colorScheme: colorScheme,
   textTheme: GoogleFonts.outfitTextTheme().apply(
     displayColor: Colors.black,
+    bodyColor: Colors.black,
   ),
   appBarTheme: lightAppBarTheme,
   elevatedButtonTheme: elevatedButtonTheme,
   outlinedButtonTheme: outlinedButtonTheme,
-  inputDecorationTheme: inputDecorationTheme,
+  checkboxTheme: checkboxTheme,
 );

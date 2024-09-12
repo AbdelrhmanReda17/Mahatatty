@@ -81,10 +81,13 @@ class _MahattatyTextFormFieldState extends State<MahattatyTextFormField> {
           style: widget.textStyle,
           obscureText: isPasswordVisible,
           decoration: InputDecoration(
-            border: OutlineInputBorder(
+            enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15.0),
-              borderSide:
-                  shouldBeFocused ? const BorderSide() : BorderSide.none,
+              borderSide: shouldBeFocused
+                  ? BorderSide(
+                      color: colorScheme.onPrimaryContainer,
+                    )
+                  : BorderSide.none,
             ),
             filled: true,
             fillColor: shouldBeFocused
