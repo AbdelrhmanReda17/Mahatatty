@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:mahattaty/Screens/authentication_screen.dart';
 import 'package:mahattaty/Screens/onboarding_screen.dart';
 import 'package:mahattaty/Screens/splash_screen.dart';
+import 'package:mahattaty/Screens/verification_screen.dart';
 import 'package:mahattaty/Themes/dark_theme.dart';
 import 'package:mahattaty/Themes/light_theme.dart';
 
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
       darkTheme: darkTheme,
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
-      home: const SplashScreen(),
+      initialRoute: const SplashScreen().routeName,
       routes: {
         const SplashScreen().routeName: (context) => const SplashScreen(),
         const OnboardingScreen().routeName: (context) =>

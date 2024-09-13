@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:mahattaty/Utils/constant.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_onboarding.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';

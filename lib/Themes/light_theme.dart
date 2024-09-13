@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-const Color customGrey = Color(0xFFb1b8ca); // Example grey color
+
+// const Color customGrey = Color(0xFFb1b8ca); 
 
 ColorScheme colorScheme = const ColorScheme.light(
   primary: Color(0xFF005667),
