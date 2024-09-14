@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:mahattaty/Screens/authentication_screen.dart';
 import 'package:mahattaty/Screens/onboarding_screen.dart';
 import 'package:mahattaty/Screens/splash_screen.dart';
-import 'package:mahattaty/Screens/verification_screen.dart';
 import 'package:mahattaty/Themes/dark_theme.dart';
 import 'package:mahattaty/Themes/light_theme.dart';
 
@@ -13,12 +12,14 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -27,13 +28,14 @@ class MyApp extends StatelessWidget {
         systemNavigationBarIconBrightness: Brightness.dark,
       ),
     );
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: lightTheme,
       darkTheme: darkTheme,
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.system, // Uses system theme (light/dark)
       debugShowCheckedModeBanner: false,
-      initialRoute: const SplashScreen().routeName,
+      initialRoute: const SplashScreen().routeName, // Set initial route
       routes: {
         const SplashScreen().routeName: (context) => const SplashScreen(),
         const OnboardingScreen().routeName: (context) =>

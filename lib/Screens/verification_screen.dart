@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,10 +6,7 @@ import '../Widgets/Generics/mahattaty_button.dart';
 import '../Widgets/Generics/mahattaty_text_form_field.dart';
 
 class VerificationScreen extends StatefulWidget {
-  //final String email;
-
   const VerificationScreen({super.key});
-//  VerificationCodePage({required this.email});
 
   @override
   State<VerificationScreen> createState() => _VerificationScreenState();
