@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mahattaty/Data/user_repository.dart';
+import 'package:mahattaty/Models/user.dart';
 import 'package:mahattaty/Utils/validate.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_button.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_text_form_field.dart';
@@ -33,6 +35,21 @@ class _RegisterFormState extends State<RegisterForm> {
       controller.dispose();
     }
     super.dispose();
+  }
+
+  void registerUser() async {
+    try {
+      await UserRepositoy().registerUser(
+        User(
+          name: _registerControllers[0].text,
+          emailOrPhone: _registerControllers[1].text,
+          password: _registerControllers[2].text,
+        ),
+      );
+      log('User Registered Successfully');
+    } catch (error) {
+      log('Error: $error');
+    }
   }
 
   @override
@@ -135,10 +152,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 onPressed: () {
                   if (!_registerFromKey.currentState!.validate() ||
                       !isAcceptTerms) return;
-                  for (var controller in _registerControllers) {
-                    log(controller.text);
-                  }
-                  log(isAcceptTerms ? 'Accepted' : 'Not Accepted');
+                  registerUser();
                 },
                 height: 50,
               ),
