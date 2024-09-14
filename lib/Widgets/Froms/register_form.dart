@@ -154,7 +154,7 @@ class _RegisterFormState extends State<RegisterForm> {
                       !isAcceptTerms) return;
                   registerUser();
                 },
-                height: 50,
+                height: 60,
               ),
             ],
           ),

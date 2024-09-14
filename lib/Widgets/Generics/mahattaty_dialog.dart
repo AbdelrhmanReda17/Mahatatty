@@ -102,7 +102,7 @@ class MahattatyDialog extends StatelessWidget {
               text: buttonText,
               style: MahattatyButtonStyle.primary,
               onPressed: onButtonPressed,
-              height: 50,
+              height: 60,
             ),
           ],
         ),

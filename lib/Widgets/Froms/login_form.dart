@@ -96,7 +96,7 @@ class _LoginFormState extends State<LoginForm> {
                   _loginControllers[1].text.isEmpty) return;
               loginUser();
             },
-            height: 50,
+            height: 60,
           ),
         ],
       ),
