@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 const Color customGrey = Color(0xFFb1b8ca); // Example grey color
 
+// const Color customGrey = Color(0xFFb1b8ca);
+
 ColorScheme colorScheme = const ColorScheme.light(
   primary: Color(0xFF005667),
   onPrimary: Color(0xFF181d31),
@@ -81,6 +83,45 @@ CheckboxThemeData checkboxTheme = CheckboxThemeData(
   ),
 );
 
+InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
+  filled: true,
+  fillColor: colorScheme.primaryContainer,
+  contentPadding: const EdgeInsets.symmetric(
+    horizontal: 20.0,
+    vertical: 15.0,
+  ),
+  focusedBorder: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(15.0),
+    borderSide: BorderSide(
+      color: colorScheme.primary,
+    ),
+  ),
+  enabledBorder: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(15.0),
+    borderSide: BorderSide(
+      color: colorScheme.onPrimaryContainer,
+    ),
+  ),
+  errorBorder: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(15.0),
+    borderSide: BorderSide(
+      color: colorScheme.error.withOpacity(0.5),
+    ),
+  ),
+  floatingLabelBehavior: FloatingLabelBehavior.never,
+  focusedErrorBorder: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(15.0),
+    borderSide: BorderSide(
+      color: colorScheme.error,
+    ),
+  ),
+            
+  errorMaxLines: 2,
+  hintStyle: TextStyle(
+    color: colorScheme.onPrimaryContainer,
+  ),
+);
+
 ThemeData lightTheme = ThemeData(
   colorScheme: colorScheme,
   textTheme: GoogleFonts.outfitTextTheme().apply(
@@ -91,4 +132,5 @@ ThemeData lightTheme = ThemeData(
   elevatedButtonTheme: elevatedButtonTheme,
   outlinedButtonTheme: outlinedButtonTheme,
   checkboxTheme: checkboxTheme,
+  inputDecorationTheme: inputDecorationTheme,
 );

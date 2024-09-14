@@ -3,24 +3,40 @@ import 'package:flutter/material.dart';
 class MahattatyTextFormField extends StatefulWidget {
   const MahattatyTextFormField({
     super.key,
-    required this.labelText,
+    this.labelText,
     this.hintText,
     this.isPassword = false,
     required this.controller,
     this.validator,
-    this.errorText,
     this.textStyle,
     this.iconData,
+    this.keyboardType = TextInputType.text,
+    this.verticalPadding = 15.0,
+    this.horizontalPadding = 20.0,
+    this.counterText = '',
+    this.maxLength = 50,
+    this.textAlign = TextAlign.start,
+    this.onTap,
+    this.onChanged,
+    this.fieldKey,
   });
 
-  final String labelText;
+  final String? labelText;
   final String? hintText;
   final bool isPassword;
   final TextEditingController controller;
   final FormFieldValidator<String>? validator;
-  final String? errorText;
   final TextStyle? textStyle;
+  final TextInputType? keyboardType;
   final IconData? iconData;
+  final double verticalPadding;
+  final double horizontalPadding;
+  final String? counterText;
+  final int maxLength;
+  final TextAlign textAlign;
+  final void Function()? onTap;
+  final void Function(String? value)? onChanged;
+  final GlobalKey<FormFieldState>? fieldKey;
 
   @override
   State<MahattatyTextFormField> createState() => _MahattatyTextFormFieldState();
@@ -64,23 +80,43 @@ class _MahattatyTextFormFieldState extends State<MahattatyTextFormField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          widget.labelText,
-          style: bodyLarge?.copyWith(
-                fontWeight: FontWeight.w600,
-                fontSize: 17.5,
-              ) ??
-              const TextStyle(fontWeight: FontWeight.w600, fontSize: 17.5),
-        ),
+        widget.labelText != null
+            ? Text(
+                widget.labelText!,
+                style: bodyLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 17.5,
+                    ) ??
+                    const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 17.5,
+                    ),
+              )
+            : const SizedBox.shrink(),
         const SizedBox(height: 10.0),
         TextFormField(
+          key: widget.fieldKey,
           focusNode: _focusNode,
           autocorrect: true,
           controller: widget.controller,
-          validator: widget.validator,
+          validator: widget.validator, // Use validator for error handling
+          textAlign: widget.textAlign,
+          keyboardType: widget.keyboardType,
           style: widget.textStyle,
+          onTap: () {
+            if (widget.onTap != null) {
+              widget.onTap!();
+            }
+          },
+          onChanged: widget.onChanged,
           obscureText: isPasswordVisible,
+          maxLength: widget.maxLength,
           decoration: InputDecoration(
+            counterText: widget.counterText,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 20.0,
+              vertical: 15.0,
+            ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15.0),
               borderSide: shouldBeFocused
@@ -96,22 +132,13 @@ class _MahattatyTextFormFieldState extends State<MahattatyTextFormField> {
             prefixIcon: widget.iconData != null
                 ? Icon(
                     widget.iconData,
-                    color: shouldBeFocused && widget.errorText == null
+                    color: shouldBeFocused
                         ? colorScheme.primary
-                        : widget.errorText != null
-                            ? colorScheme.error
-                            : colorScheme.onPrimaryContainer,
+                        : colorScheme.onPrimaryContainer,
                   )
                 : null,
             prefixIconConstraints: const BoxConstraints(
               minWidth: 50.0,
-            ),
-            errorText: widget.errorText,
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15.0),
-              borderSide: BorderSide(
-                color: colorScheme.error,
-              ),
             ),
             suffixIcon: widget.isPassword
                 ? IconButton(
@@ -128,22 +155,12 @@ class _MahattatyTextFormFieldState extends State<MahattatyTextFormField> {
                     },
                   )
                 : null,
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 20.0,
-              vertical: 15.0,
-            ),
             hintStyle: bodyLarge?.copyWith(
                   color: colorScheme.onPrimaryContainer,
                 ) ??
                 const TextStyle(color: Colors.grey),
             floatingLabelBehavior: FloatingLabelBehavior.never,
             hintText: widget.hintText,
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15.0),
-              borderSide: BorderSide(
-                color: colorScheme.primary,
-              ),
-            ),
           ),
         ),
       ],

@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:mahattaty/Screens/authentication_screen.dart';
 import 'package:mahattaty/Utils/open_screens.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_button.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-
 class OnBoardingData {
   final String image;
   final String title;

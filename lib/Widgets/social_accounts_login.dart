@@ -7,46 +7,39 @@ class SocialAccountsLogin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        bool isLargeScreen = constraints.maxWidth > 500;
-        return SizedBox(
-          width: double.infinity,
-          child: Column(
+    return SizedBox(
+      width: double.infinity,
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Text(
+            'Or using other methods',
+            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                ),
+          ),
+          const SizedBox(height: 15),
+          Column(
             mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text(
-                'Or using other methods',
-                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimaryContainer,
-                    ),
+              MahattatyButton(
+                text: 'Google',
+                onPressed: () {},
+                style: MahattatyButtonStyle.secondary,
+                iconData: FontAwesomeIcons.google,
               ),
-              const SizedBox(height: 15),
-              Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  MahattatyButton(
-                    text: 'Google',
-                    onPressed: () {},
-                    style: MahattatyButtonStyle.secondary,
-                    width: isLargeScreen ? constraints.maxWidth : 0,
-                    iconData: FontAwesomeIcons.google,
-                  ),
-                  const SizedBox(height: 10, width: 10),
-                  MahattatyButton(
-                    text: 'Facebook',
-                    onPressed: () {},
-                    style: MahattatyButtonStyle.secondary,
-                    width: isLargeScreen ? constraints.maxWidth : 0,
-                    iconData: FontAwesomeIcons.facebook,
-                  ),
-                ],
+              const SizedBox(height: 10, width: 10),
+              MahattatyButton(
+                text: 'Facebook',
+                onPressed: () {},
+                style: MahattatyButtonStyle.secondary,
+                iconData: FontAwesomeIcons.facebook,
               ),
             ],
           ),
-        );
-      },
+        ],
+      ),
     );
   }
 }
