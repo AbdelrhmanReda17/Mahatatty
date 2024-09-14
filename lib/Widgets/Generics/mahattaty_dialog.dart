@@ -16,8 +16,8 @@ class MahattatyDialog extends StatelessWidget {
     required this.content,
     required this.buttonText,
     required this.onButtonPressed,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

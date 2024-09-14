@@ -190,13 +190,13 @@ class _VerificationScreenState extends State<VerificationScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: List.generate(5, (index) {
-        return Expanded(
+        return SizedBox(
+          width: 72,
+          height: 80,
           child: MahattatyTextFormField(
             controller: _controllers[index],
             keyboardType: TextInputType.number,
             maxLength: 1,
-            width: 72,
-            height: 72,
             textStyle: Theme.of(context).textTheme.headlineMedium,
             textAlign: TextAlign.center,
             onTap: () {

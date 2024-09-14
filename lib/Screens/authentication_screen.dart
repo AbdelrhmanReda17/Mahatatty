@@ -60,15 +60,6 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
           children: [
             const SizedBox(height: 20),
             content,
-            const SizedBox(height: 20),
-            MahattatyButton(
-              text: widget.key == const Key('login_screen')
-                  ? 'Sign In'
-                  : 'Sign Up',
-              style: MahattatyButtonStyle.primary,
-              onPressed: () {},
-              height: 50,
-            ),
             const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
