@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_text_form_field.dart';
-import 'package:mahattaty/Widgets/forgot_password_dialog.dart';
+import 'package:mahattaty/Widgets/Dialogs/forgot_password_dialog.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
