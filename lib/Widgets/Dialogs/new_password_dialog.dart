@@ -40,12 +40,15 @@ void showNewPasswordDialog(BuildContext context) {
         ],
         buttonText: 'Change Password',
         onButtonPressed: () {
+          Navigator.of(context).pop();
+
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => const VerificationScreen(),
             ),
           );
+
         },
       );
     },

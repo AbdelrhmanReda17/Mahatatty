@@ -2,7 +2,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mahattaty/Widgets/Dialogs/register_success_dialog.dart';
 import '../Widgets/Generics/mahattaty_button.dart';
+import '../Widgets/Generics/mahattaty_circle_icon.dart';
 import '../Widgets/Generics/mahattaty_text_form_field.dart';
 
 class VerificationScreen extends StatefulWidget {
@@ -76,49 +78,33 @@ class _VerificationScreenState extends State<VerificationScreen> {
         children: [
           const SizedBox(height: 40),
           // Icon at the top
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              // Outer circle with low opacity
-              CircleAvatar(
-                radius: 78,
-                backgroundColor: Theme.of(context)
-                    .colorScheme
-                    .primary
-                    .withOpacity(0.16), // Low opacity background
-              ),
-              CircleAvatar(
-                radius: 55,
-                backgroundColor: Theme.of(context)
-                    .colorScheme
-                    .primary, // Background for the lock icon
-                child: Stack(
-                  children: [
-                    Icon(
-                      Icons.email,
-                      size: 40,
+          MahattatyCircleIcon(
+            outerCircleColor: Theme.of(context).colorScheme.primary,
+            innerCircleColor: Theme.of(context).colorScheme.primary,
+            child: Stack(
+              children: [
+                Icon(
+                  Icons.email,  // Main icon
+                  size: 40,
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: CircleAvatar(
+                    radius: 9,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    child: Icon(
+                      Icons.lock,  // Small lock icon
+                      size: 13,
                       color: Theme.of(context).colorScheme.primaryContainer,
                     ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: CircleAvatar(
-                        radius: 9,
-                        backgroundColor: Theme.of(context)
-                            .colorScheme
-                            .primary, // it is Background
-                        child: Icon(
-                          FontAwesomeIcons.lock,
-                          size: 13,
-                          color: Theme.of(context).colorScheme.primaryContainer,
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
+
 
           const SizedBox(height: 40),
           Text(
@@ -152,7 +138,11 @@ class _VerificationScreenState extends State<VerificationScreen> {
           MahattatyButton(
             style: MahattatyButtonStyle.primary,
             text: 'Submit',
-            onPressed: () {},
+            onPressed: () {
+              //Navigator.of(context).pop();
+              RegisterSuccessDialog(context);
+
+            },
             textStyle: Theme.of(context)
                 .textTheme
                 .bodyLarge
