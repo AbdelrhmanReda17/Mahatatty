@@ -11,14 +11,14 @@ class MahattatyCircleIcon extends StatelessWidget {
   final double innerCircleRadius;
 
   const MahattatyCircleIcon({
-    Key? key,
+    super.key,
     this.innerCircleColor = const Color(0xff00d261),
     this.outerCircleOpacity = 0.16,
     required this.child,
     this.outerCircleColor,
     this.outerCircleRadius = 78.0,
     this.innerCircleRadius = 55.0,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

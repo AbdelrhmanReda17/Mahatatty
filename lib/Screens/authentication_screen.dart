@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mahattaty/Utils/open_screens.dart';
-import 'package:mahattaty/Widgets/Generics/mahattaty_button.dart';
 import 'package:mahattaty/Widgets/Froms/login_form.dart';
 import 'package:mahattaty/Widgets/Froms/register_form.dart';
 import 'package:mahattaty/Widgets/social_accounts_login.dart';
-
-import '../Themes/light_theme.dart';
 
 class AuthenticationScreen extends StatefulWidget {
   const AuthenticationScreen({super.key = const Key('login_screen')});

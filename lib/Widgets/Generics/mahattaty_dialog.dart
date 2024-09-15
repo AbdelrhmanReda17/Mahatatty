@@ -14,6 +14,7 @@ class MahattatyDialog extends StatelessWidget {
   final String buttonText;
   final VoidCallback onButtonPressed;
   final ContentPlacement contentPlacement;
+  final TextAlign textAlign;
 
   const MahattatyDialog({
     required this.title,
@@ -21,9 +22,10 @@ class MahattatyDialog extends StatelessWidget {
     required this.content,
     required this.buttonText,
     required this.onButtonPressed,
-    this.contentPlacement = ContentPlacement.afterTitle, // Default placement
-    Key? key,
-  }) : super(key: key);
+    this.contentPlacement = ContentPlacement.afterTitle,
+    this.textAlign = TextAlign.start,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,70 +36,44 @@ class MahattatyDialog extends StatelessWidget {
         });
       },
       child: Padding(
-        padding: const EdgeInsets.only(left: 30.0, right: 30.0, top: 20.0, bottom: 30.0),
+        padding: const EdgeInsets.only(
+            left: 30.0, right: 30.0, top: 30.0, bottom: 30.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  borderRadius: const BorderRadius.horizontal(
-                    left: Radius.circular(5.0),
-                    right: Radius.circular(5.0),
-                  ),
-                ),
-                width: 70,
-              ),
-            ),
-            const SizedBox(height: 40),
             if (contentPlacement == ContentPlacement.beforeTitle) ...[
               ...content,
               const SizedBox(height: 20),
-              // Center title and description when content is before
-              Center(
-                child: Column(
-                  children: [
-                    Text(
-                      title,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleLarge!
-                          .copyWith(fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      description,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimaryContainer,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-            ] else ...[
-              // Place title and description without centering when content is after
-              Text(
-                title,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
+              _buildAlignedText(
+                  title,
+                  Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
-              Text(
-                description,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
-                ),
-              ),
+              _buildAlignedText(
+                  description,
+                  Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      )),
+            ] else ...[
+              _buildAlignedText(
+                  title,
+                  Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(fontWeight: FontWeight.bold)),
+              const SizedBox(height: 10),
+              _buildAlignedText(
+                  description,
+                  Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      )),
               const SizedBox(height: 20),
               ...content,
             ],
-            const SizedBox(height: 45),
+            const SizedBox(height: 20),
             MahattatyButton(
               text: buttonText,
               style: MahattatyButtonStyle.primary,
@@ -108,5 +84,27 @@ class MahattatyDialog extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildAlignedText(String text, TextStyle? style) {
+    return Align(
+      alignment: _getAlignmentFromTextAlign(textAlign),
+      child: Text(
+        text,
+        style: style,
+        textAlign: textAlign,
+      ),
+    );
+  }
+
+  Alignment _getAlignmentFromTextAlign(TextAlign textAlign) {
+    switch (textAlign) {
+      case TextAlign.center:
+        return Alignment.center;
+      case TextAlign.right:
+        return Alignment.centerRight;
+      default:
+        return Alignment.centerLeft;
+    }
   }
 }

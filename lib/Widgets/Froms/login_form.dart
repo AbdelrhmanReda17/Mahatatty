@@ -7,6 +7,7 @@ import 'package:mahattaty/Widgets/Generics/mahattaty_button.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_text_form_field.dart';
 import 'package:mahattaty/Widgets/Dialogs/forgot_password_dialog.dart';
 import 'package:mahattaty/Utils/validate.dart';
+import 'package:mahattaty/Utils/open_dialog.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -76,7 +77,10 @@ class _LoginFormState extends State<LoginForm> {
             children: [
               const Spacer(),
               GestureDetector(
-                onTap: () => showForgotPasswordDialog(context),
+                onTap: () => openDialog(
+                  context: context,
+                  dialog: ForgetPasswordDialog(),
+                ),
                 child: Text(
                   'Forgot Password?',
                   style: TextStyle(
