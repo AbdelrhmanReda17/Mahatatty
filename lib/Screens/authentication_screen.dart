@@ -25,7 +25,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
   @override
   Widget build(BuildContext context) {
     Widget content = widget.key == const Key('login_screen')
-        ? const LoginForm()
+        ? LoginForm()
         : const RegisterForm();
 
     return Scaffold(
@@ -72,12 +72,12 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                 ),
                 TextButton(
                   onPressed: () {
+                    Navigator.of(context).pop();
                     openScreen(
                       context: context,
                       routeName: widget.key == const Key('login_screen')
                           ? widget.registerRouteName
                           : widget.loginRouteName,
-                      isReplace: true,
                     );
                   },
                   child: Text(

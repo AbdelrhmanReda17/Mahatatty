@@ -4,6 +4,7 @@ class User {
   final String id;
   final String name;
   final String emailOrPhone;
+  final bool isEmail;
   final String password;
   final String? profileImage;
   final DateTime createdAt;
@@ -15,5 +16,6 @@ class User {
     required this.password,
     this.profileImage,
   })  : createdAt = DateTime.now(),
-        id = uuid.v4();
+        id = uuid.v4(),
+        isEmail = emailOrPhone.contains('@');
 }

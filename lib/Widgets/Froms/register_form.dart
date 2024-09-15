@@ -1,26 +1,27 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mahattaty/Data/user_repository.dart';
-import 'package:mahattaty/Models/user.dart';
+import 'package:mahattaty/Providers/auth_provider.dart';
 import 'package:mahattaty/Utils/validate.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_button.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_text_form_field.dart';
 
-class RegisterForm extends StatefulWidget {
+class RegisterForm extends ConsumerStatefulWidget {
   const RegisterForm({super.key});
 
   @override
-  State<RegisterForm> createState() => _RegisterFormState();
+  RegisterFormState createState() => RegisterFormState();
 }
 
-class _RegisterFormState extends State<RegisterForm> {
+class RegisterFormState extends ConsumerState<RegisterForm> {
   final List<TextEditingController> _registerControllers =
       List.generate(4, (_) => TextEditingController());
   final List<GlobalKey<FormFieldState>> _registerKeys =
       List.generate(4, (_) => GlobalKey<FormFieldState>());
   final GlobalKey<FormState> _registerFromKey = GlobalKey<FormState>();
+
   bool isAcceptTerms = false;
   void _handleCheckBox(bool? value) {
     if (value == null) return;
@@ -30,33 +31,16 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 
   @override
-  void dispose() {
-    for (var controller in _registerControllers) {
-      controller.dispose();
-    }
-    super.dispose();
-  }
-
-  void registerUser() async {
-    try {
-      await UserRepositoy().registerUser(
-        User(
-          name: _registerControllers[0].text,
-          emailOrPhone: _registerControllers[1].text,
-          password: _registerControllers[2].text,
-        ),
-      );
-      log('User Registered Successfully');
-    } catch (error) {
-      log('Error: $error');
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authProvider);
+    final authNotifier = ref.read(authProvider.notifier);
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return Form(
+          onPopInvoked: (_) {
+            log('Clearing Errors');
+            authNotifier.clearErrors();
+          },
           key: _registerFromKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,6 +63,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 controller: _registerControllers[1],
                 iconData: FontAwesomeIcons.envelope,
                 hintText: 'Enter your email or phone number',
+                errorText: authState.emailOrPhoneError,
                 validator: (value) => value!.isValidPhoneOrEmail
                     ? null
                     : 'Invalid Input  , must be a valid email or phone number',
@@ -94,7 +79,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 hintText: 'Create your password',
                 validator: (value) => value!.isValidPassword
                     ? null
-                    : 'Invalid Input , must be at least 8 characters With at least 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character',
+                    : 'Invalid Input , must be at least 8 characters With at least one uppercase letter, one lowercase letter',
                 onChanged: (value) => _registerKeys[2].currentState!.validate(),
               ),
               const SizedBox(height: 20),
@@ -152,7 +137,11 @@ class _RegisterFormState extends State<RegisterForm> {
                 onPressed: () {
                   if (!_registerFromKey.currentState!.validate() ||
                       !isAcceptTerms) return;
-                  registerUser();
+                  authNotifier.submitRegister(
+                    name: _registerControllers[0].text,
+                    emailOrPhone: _registerControllers[1].text,
+                    password: _registerControllers[2].text,
+                  );
                 },
                 height: 60,
               ),

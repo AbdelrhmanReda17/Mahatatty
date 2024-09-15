@@ -6,7 +6,7 @@ void openScreen({
   bool isReplace = false,
 }) {
   if (isReplace) {
-    Navigator.of(context).pushReplacementNamed(routeName);
+    Navigator.of(context).popAndPushNamed(routeName);
   } else {
     Navigator.of(context).pushNamed(routeName);
   }

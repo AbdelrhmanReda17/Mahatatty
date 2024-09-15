@@ -9,6 +9,7 @@ class MahattatyTextFormField extends StatefulWidget {
     required this.controller,
     this.validator,
     this.textStyle,
+    this.errorText,
     this.iconData,
     this.keyboardType = TextInputType.text,
     this.verticalPadding = 15.0,
@@ -27,6 +28,7 @@ class MahattatyTextFormField extends StatefulWidget {
   final TextEditingController controller;
   final FormFieldValidator<String>? validator;
   final TextStyle? textStyle;
+  final String? errorText;
   final TextInputType? keyboardType;
   final IconData? iconData;
   final double verticalPadding;
@@ -65,6 +67,7 @@ class _MahattatyTextFormFieldState extends State<MahattatyTextFormField> {
 
   @override
   void dispose() {
+    widget.controller.dispose();
     _focusNode.dispose();
     super.dispose();
   }
@@ -103,6 +106,7 @@ class _MahattatyTextFormFieldState extends State<MahattatyTextFormField> {
           textAlign: widget.textAlign,
           keyboardType: widget.keyboardType,
           style: widget.textStyle,
+
           onTap: () {
             if (widget.onTap != null) {
               widget.onTap!();
@@ -112,6 +116,7 @@ class _MahattatyTextFormFieldState extends State<MahattatyTextFormField> {
           obscureText: isPasswordVisible,
           maxLength: widget.maxLength,
           decoration: InputDecoration(
+            errorText: widget.errorText,
             counterText: widget.counterText,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 20.0,
