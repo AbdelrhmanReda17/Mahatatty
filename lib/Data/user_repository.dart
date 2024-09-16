@@ -1,23 +1,29 @@
 import 'package:mahattaty/Models/user.dart';
+import 'package:mahattaty/Utils/auth_exception.dart';
 
-class UserRepositoy {
-  static final UserRepositoy _instance = UserRepositoy._internal();
-  final List<User> _users = [];
+class UserRepository {
+  static final UserRepository _instance = UserRepository._internal();
+  final List<User> _users = [
+    User(
+      name: 'Example',
+      emailOrPhone: 'example@gmail.com',
+      password: '123456',
+    ),
+  ];
 
-  UserRepositoy._internal();
+  UserRepository._internal();
 
-  factory UserRepositoy() {
+  factory UserRepository() {
     return _instance;
   }
 
   List<User> get users => _users;
 
-  // Register a new user to the database
-
   Future<User?> registerUser(User user) async {
     for (var u in _users) {
       if (u.emailOrPhone == user.emailOrPhone) {
-        throw Exception('User already exists');
+        throw AuthException(
+            message: 'Email or Phone already exists', emailOrPhoneError: true);
       }
     }
     _users.add(user);
@@ -29,11 +35,13 @@ class UserRepositoy {
     for (var u in _users) {
       if (u.emailOrPhone == emailOrPhone) {
         if (u.password != password) {
-          throw Exception('Invalid password');
+          throw AuthException(
+              message: 'Invalid password or Email', passwordError: true);
         }
         return u;
       }
     }
-    throw Exception('User not found');
+    throw AuthException(
+        message: 'Invalid Email or Phone', emailOrPhoneError: true);
   }
 }

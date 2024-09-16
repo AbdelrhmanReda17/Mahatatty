@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mahattaty/Screens/authentication_screen.dart';
 import 'package:mahattaty/Screens/onboarding_screen.dart';
 import 'package:mahattaty/Screens/splash_screen.dart';
@@ -7,7 +8,7 @@ import 'package:mahattaty/Themes/dark_theme.dart';
 import 'package:mahattaty/Themes/light_theme.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {

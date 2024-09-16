@@ -29,59 +29,52 @@ class MahattatyDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      onPopInvoked: (_) {
-        content.whereType<MahattatyTextFormField>().forEach((formField) {
-          formField.controller.dispose();
-        });
-      },
-      child: Padding(
-        padding: const EdgeInsets.only(
-            left: 30.0, right: 30.0, top: 30.0, bottom: 30.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (contentPlacement == ContentPlacement.beforeTitle) ...[
-              ...content,
-              const SizedBox(height: 20),
-              _buildAlignedText(
-                  title,
-                  Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(fontWeight: FontWeight.bold)),
-              const SizedBox(height: 10),
-              _buildAlignedText(
-                  description,
-                  Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimaryContainer,
-                      )),
-            ] else ...[
-              _buildAlignedText(
-                  title,
-                  Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(fontWeight: FontWeight.bold)),
-              const SizedBox(height: 10),
-              _buildAlignedText(
-                  description,
-                  Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimaryContainer,
-                      )),
-              const SizedBox(height: 20),
-              ...content,
-            ],
+    return Padding(
+      padding: const EdgeInsets.only(
+          left: 30.0, right: 30.0, top: 30.0, bottom: 30.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (contentPlacement == ContentPlacement.beforeTitle) ...[
+            ...content,
             const SizedBox(height: 20),
-            MahattatyButton(
-              text: buttonText,
-              style: MahattatyButtonStyle.primary,
-              onPressed: onButtonPressed,
-              height: 60,
-            ),
+            _buildAlignedText(
+                title,
+                Theme.of(context)
+                    .textTheme
+                    .titleLarge!
+                    .copyWith(fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            _buildAlignedText(
+                description,
+                Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    )),
+          ] else ...[
+            _buildAlignedText(
+                title,
+                Theme.of(context)
+                    .textTheme
+                    .titleLarge!
+                    .copyWith(fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            _buildAlignedText(
+                description,
+                Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    )),
+            const SizedBox(height: 20),
+            ...content,
           ],
-        ),
+          const SizedBox(height: 20),
+          MahattatyButton(
+            text: buttonText,
+            style: MahattatyButtonStyle.primary,
+            onPressed: onButtonPressed,
+            height: 60,
+          ),
+        ],
       ),
     );
   }
