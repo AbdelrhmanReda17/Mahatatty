@@ -1,21 +1,40 @@
 import 'dart:developer';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mahattaty/Data/user_repository.dart';
-import 'package:mahattaty/Models/user.dart';
 import 'package:mahattaty/Providers/States/auth_state.dart';
-import 'package:mahattaty/Utils/auth_exception.dart';
+import 'package:mahattaty/Services/auth_service.dart';
+import 'package:mahattaty/Exceptions/auth_exceptions.dart';
+
+final authServiceProvider = Provider<AuthService>((ref) {
+  return AuthService();
+});
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>(
-  (ref) => AuthNotifier(),
+  (ref) => AuthNotifier(ref.watch(authServiceProvider)),
 );
 
 class AuthNotifier extends StateNotifier<AuthState> {
-  AuthNotifier() : super(AuthState());
+  final AuthService _authService;
 
-  void setError({String? emailOrPhoneError, String? passwordError}) {
+  AuthNotifier(this._authService) : super(AuthState()) {
+    final currentUser = _authService.currentUser;
+    if (currentUser != null) {
+      state = state.copyWith(user: currentUser, isLoading: false);
+    }
+    _authService.authStateChanges.listen((user) {
+      state = state.copyWith(user: user, isLoading: false);
+    });
+  }
+
+  void setError(AuthError error) {
+    state = state.copyWith(error: error);
+  }
+
+  void setLoading(
+    bool isLoading,
+  ) {
     state = state.copyWith(
-        emailOrPhoneError: emailOrPhoneError, passwordError: passwordError);
+        isLoading: isLoading, error: state.error, user: state.user);
   }
 
   void resetState() {
@@ -23,54 +42,43 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   void clearErrors() {
-    setError(emailOrPhoneError: null, passwordError: null);
+    state = state.copyWith(error: null);
   }
 
-  void submitLogin(
-      {required String emailOrPhone, required String password}) async {
-    state = state.copyWith(isLoading: true);
-    try {
-      final user = await UserRepository()
-          .loginUser(emailOrPhone: emailOrPhone, password: password);
-
-      if (user != null) {
-        log('User Logged in Successfully');
-        state = state.copyWith(isSuccess: true, user: user);
-      }
-    } on AuthException catch (e) {
-      setError(
-        emailOrPhoneError: e.emailOrPhoneError == true ? e.message : null,
-        passwordError: e.passwordError == true ? e.message : null,
-      );
-    } finally {
-      state = state.copyWith(isLoading: false);
-    }
+  void signOut() {
+    _authService.signOut();
+    resetState();
   }
 
-  void submitRegister({
-    required String name,
+  Future<void> submitLogin({
     required String emailOrPhone,
     required String password,
   }) async {
-    state = state.copyWith(isLoading: true);
+    setLoading(true);
     try {
-      User? user = await UserRepository().registerUser(
-        User(
-          name: name,
-          emailOrPhone: emailOrPhone,
-          password: password,
-        ),
-      );
+      final user = await _authService.signIn(emailOrPhone, password);
       if (user != null) {
-        state = state.copyWith(isSuccess: true, user: user);
+        state = state.copyWith(user: user, isLoading: false);
       }
     } on AuthException catch (e) {
-      setError(
-        emailOrPhoneError: e.emailOrPhoneError == true ? e.message : null,
-        passwordError: e.passwordError == true ? e.message : null,
-      );
-    } finally {
-      state = state.copyWith(isLoading: false);
+      setError(AuthError.fromAuthException(e));
+      setLoading(false);
+    }
+  }
+  Future<void> submitRegister({
+    required String name,
+    required String email,
+    required String password,
+  }) async {
+    setLoading(true);
+    try {
+      final user = await _authService.signUp(name, email, password);
+      if (user != null) {
+        state = state.copyWith(user: user, isLoading: false);
+      }
+    } on AuthException catch (e) {
+      setError(AuthError.fromAuthException(e));
+      setLoading(false);
     }
   }
 }

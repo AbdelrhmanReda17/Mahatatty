@@ -4,10 +4,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mahattaty/Screens/authentication_screen.dart';
 import 'package:mahattaty/Screens/onboarding_screen.dart';
 import 'package:mahattaty/Screens/splash_screen.dart';
+import 'package:mahattaty/Screens/temp_screen.dart';
 import 'package:mahattaty/Themes/dark_theme.dart';
 import 'package:mahattaty/Themes/light_theme.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // Ensure Flutter binding is initialized
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  ).then((value) => print('Firebase initialized'));
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -40,15 +47,16 @@ class MyApp extends StatelessWidget {
       routes: {
         const SplashScreen().routeName: (context) => const SplashScreen(),
         const OnboardingScreen().routeName: (context) =>
-            const OnboardingScreen(),
+        const OnboardingScreen(),
         const AuthenticationScreen().loginRouteName: (context) =>
-            const AuthenticationScreen(
-              key: Key('login_screen'),
-            ),
+        const AuthenticationScreen(
+          key: Key('login_screen'),
+        ),
         const AuthenticationScreen().registerRouteName: (context) =>
-            const AuthenticationScreen(
-              key: Key('register_screen'),
-            ),
+        const AuthenticationScreen(
+          key: Key('register_screen'),
+        ),
+        const TempScreen().routeName: (context) => const TempScreen(),
       },
     );
   }

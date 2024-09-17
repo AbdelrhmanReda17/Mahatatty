@@ -1,38 +1,69 @@
-import 'package:mahattaty/Models/user.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mahattaty/Exceptions/auth_exceptions.dart';
+
+enum AuthErrorType {
+  unknown,
+  emailOrPhone,
+  password,
+}
+
+class AuthError {
+  String? message;
+  AuthErrorType? type;
+
+  AuthError({this.message, this.type});
+
+  AuthError copyWith({bool? isError, String? message}) {
+    return AuthError(
+      message: message ?? this.message,
+    );
+  }
+
+  AuthError.fromAuthException(AuthException exception) {
+    switch (exception.type) {
+      case AuthExceptionType.wrongEmail:
+        type = AuthErrorType.emailOrPhone;
+        break;
+      case AuthExceptionType.wrongPassword:
+        type = AuthErrorType.password;
+        break;
+      default:
+        type = AuthErrorType.unknown;
+    }
+    message = exception.message;
+  }
+
+  @override
+  String toString() {
+    return 'AuthError{message: $message}';
+  }
+}
 
 class AuthState {
   final bool isLoading;
-  final bool isSuccess;
   final User? user;
-  final String? emailOrPhoneError;
-  final String? passwordError;
+  final AuthError? error;
 
   AuthState({
     this.isLoading = false,
-    this.isSuccess = false,
     this.user,
-    this.emailOrPhoneError,
-    this.passwordError,
+    this.error,
   });
 
   AuthState copyWith({
     bool? isLoading,
-    bool? isSuccess,
     User? user,
-    String? emailOrPhoneError,
-    String? passwordError,
+    AuthError? error,
   }) {
     return AuthState(
       isLoading: isLoading ?? this.isLoading,
-      isSuccess: isSuccess ?? this.isSuccess,
       user: user ?? this.user,
-      emailOrPhoneError: emailOrPhoneError,
-      passwordError: passwordError,
+      error: error,
     );
   }
 
   @override
   String toString() {
-    return 'AuthState{isLoading: $isLoading, isSuccess: $isSuccess, user: $user, emailOrPhoneError: $emailOrPhoneError, passwordError: $passwordError }';
+    return 'AuthState{isLoading: $isLoading, user: $user , error: $error}';
   }
 }

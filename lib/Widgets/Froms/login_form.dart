@@ -3,7 +3,10 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mahattaty/Providers/States/auth_state.dart';
 import 'package:mahattaty/Providers/auth_provider.dart';
+import 'package:mahattaty/Screens/temp_screen.dart';
+import 'package:mahattaty/Utils/open_screens.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_button.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_text_form_field.dart';
 import 'package:mahattaty/Widgets/Dialogs/forgot_password_dialog.dart';
@@ -25,6 +28,7 @@ class LoginForm extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authProvider);
     final authNotifier = ref.read(authProvider.notifier);
+    log(authState.toString());
 
     return Form(
       onPopInvoked: (_) {
@@ -44,7 +48,9 @@ class LoginForm extends ConsumerWidget {
               labelText: 'Email or Phone Number',
               controller: _loginControllers[0],
               iconData: FontAwesomeIcons.envelope,
-              errorText: authState.emailOrPhoneError,
+              errorText: authState.error?.type == AuthErrorType.emailOrPhone
+                  ? authState.error?.message
+                  : null,
               validator: (value) => value!.isValidPhoneOrEmail
                   ? null
                   : 'Invalid Input, Please enter a valid email or phone number',
@@ -57,7 +63,9 @@ class LoginForm extends ConsumerWidget {
               labelText: 'Password',
               controller: _loginControllers[1],
               isPassword: true,
-              errorText: authState.passwordError,
+              errorText: authState.error?.type == AuthErrorType.password
+                  ? authState.error?.message
+                  : null,
               iconData: FontAwesomeIcons.lock,
               hintText: 'Create your password',
               validator: (value) =>
@@ -87,13 +95,14 @@ class LoginForm extends ConsumerWidget {
             MahattatyButton(
               text: 'Sign In',
               style: MahattatyButtonStyle.primary,
+              disabled: authState.isLoading,
               onPressed: () {
-                if (!_loginFormKey.currentState!.validate() ||
-                    _loginControllers[1].text.isEmpty) return;
-                authNotifier.submitLogin(
-                  emailOrPhone: _loginControllers[0].text,
-                  password: _loginControllers[1].text,
-                );
+                if (_loginFormKey.currentState!.validate()) {
+                  authNotifier.submitLogin(
+                    emailOrPhone: _loginControllers[0].text,
+                    password: _loginControllers[1].text,
+                  );
+                }
               },
               height: 60,
             ),
@@ -103,6 +112,3 @@ class LoginForm extends ConsumerWidget {
     );
   }
 }
-
-
-

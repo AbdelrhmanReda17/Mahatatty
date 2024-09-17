@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "750210986338",
+    "project_id": "mahattaty",
+    "storage_bucket": "mahattaty.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:750210986338:android:bf6ab16001511441ac7c3b",
+        "android_client_info": {
+          "package_name": "com.example.mahattaty"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "750210986338-a9jdvles6mhlnkvr65c9gdneckuue0s2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mahattaty",
+            "certificate_hash": "12e1d4a38eccb411f2d6541c4ffb3fa07dd47f79"
+          }
+        },
+        {
+          "client_id": "750210986338-4pmof1kon6vioto10stbosl206cefa0a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfucmDUCKa6X7Z3X7QRRYZP5kLmBznMIQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "750210986338-4pmof1kon6vioto10stbosl206cefa0a.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "750210986338-hmnj22iv8t8dkh9ecdl4duavljrm8dus.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.mahattaty"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

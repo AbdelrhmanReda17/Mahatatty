@@ -16,6 +16,7 @@ class MahattatyButton extends StatelessWidget {
     required this.style,
     required this.text,
     required this.onPressed,
+    this.disabled = false,
     this.width = double.infinity,
     this.height = 50.0,
     this.iconData,
@@ -29,6 +30,7 @@ class MahattatyButton extends StatelessWidget {
 
   final MahattatyButtonStyle style;
   final double width;
+  final bool disabled;
   final double height;
   final String text;
   final void Function()? onPressed;
@@ -62,7 +64,7 @@ class MahattatyButton extends StatelessWidget {
   Widget returnMahattatyButton(BuildContext context, Widget child) {
     if (style == MahattatyButtonStyle.primary) {
       return ElevatedButton(
-        onPressed: onPressed,
+        onPressed: disabled ? null : onPressed,
         style: ElevatedButton.styleFrom(
           minimumSize: Size(width, height),
           elevation: elevation,
@@ -76,7 +78,7 @@ class MahattatyButton extends StatelessWidget {
       );
     } else if (style == MahattatyButtonStyle.secondary) {
       return OutlinedButton(
-        onPressed: onPressed,
+        onPressed: disabled ? null : onPressed,
         style: OutlinedButton.styleFrom(
           minimumSize: Size(width, height),
           elevation: elevation,
@@ -99,6 +101,12 @@ class MahattatyButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return returnMahattatyButton(
       context,
+      disabled
+          ? const CircularProgressIndicator(
+              color: Colors.white,
+        strokeWidth: 3.0,
+      )
+          :
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

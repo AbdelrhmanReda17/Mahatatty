@@ -1,10 +1,16 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mahattaty/Providers/States/auth_state.dart';
 import 'package:mahattaty/Providers/auth_provider.dart';
+import 'package:mahattaty/Screens/temp_screen.dart';
+import 'package:mahattaty/Utils/open_screens.dart';
 import 'package:mahattaty/Utils/validate.dart';
+import 'package:mahattaty/Widgets/Generics/mahattaty_alert.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_button.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_text_form_field.dart';
 
@@ -34,6 +40,7 @@ class RegisterFormState extends ConsumerState<RegisterForm> {
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
     final authNotifier = ref.read(authProvider.notifier);
+    log(authState.toString());
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return Form(
@@ -63,7 +70,9 @@ class RegisterFormState extends ConsumerState<RegisterForm> {
                 controller: _registerControllers[1],
                 iconData: FontAwesomeIcons.envelope,
                 hintText: 'Enter your email or phone number',
-                errorText: authState.emailOrPhoneError,
+                errorText: authState.error?.type == AuthErrorType.emailOrPhone
+                    ? authState.error?.message
+                    : null,
                 validator: (value) => value!.isValidPhoneOrEmail
                     ? null
                     : 'Invalid Input  , must be a valid email or phone number',
@@ -75,6 +84,9 @@ class RegisterFormState extends ConsumerState<RegisterForm> {
                 labelText: 'Password',
                 controller: _registerControllers[2],
                 isPassword: true,
+                errorText: authState.error?.type == AuthErrorType.password
+                    ? authState.error?.message
+                    : null,
                 iconData: FontAwesomeIcons.lock,
                 hintText: 'Create your password',
                 validator: (value) => value!.isValidPassword
@@ -131,15 +143,17 @@ class RegisterFormState extends ConsumerState<RegisterForm> {
                   const SizedBox(height: 20),
                 ],
               ),
+              const SizedBox(height: 20),
               MahattatyButton(
                 text: 'Sign Up',
                 style: MahattatyButtonStyle.primary,
+                disabled: authState.isLoading,
                 onPressed: () {
                   if (!_registerFromKey.currentState!.validate() ||
                       !isAcceptTerms) return;
                   authNotifier.submitRegister(
                     name: _registerControllers[0].text,
-                    emailOrPhone: _registerControllers[1].text,
+                    email: _registerControllers[1].text,
                     password: _registerControllers[2].text,
                   );
                 },
