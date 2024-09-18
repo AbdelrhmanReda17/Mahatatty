@@ -5,6 +5,8 @@ enum AuthErrorType {
   unknown,
   emailOrPhone,
   password,
+  networkError,
+
 }
 
 class AuthError {
@@ -26,6 +28,9 @@ class AuthError {
         break;
       case AuthExceptionType.wrongPassword:
         type = AuthErrorType.password;
+        break;
+      case AuthExceptionType.networkError:
+        type = AuthErrorType.networkError;
         break;
       default:
         type = AuthErrorType.unknown;
