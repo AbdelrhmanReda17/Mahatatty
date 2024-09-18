@@ -1,14 +1,10 @@
 import 'dart:developer';
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mahattaty/Providers/States/auth_state.dart';
 import 'package:mahattaty/Providers/auth_provider.dart';
-import 'package:mahattaty/Screens/temp_screen.dart';
-import 'package:mahattaty/Utils/open_screens.dart';
 import 'package:mahattaty/Utils/validate.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_alert.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_button.dart';
@@ -40,13 +36,21 @@ class RegisterFormState extends ConsumerState<RegisterForm> {
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
     final authNotifier = ref.read(authProvider.notifier);
-    log(authState.toString());
+    if (authState.error != null &&
+        (authState.error!.type == AuthErrorType.unknown ||
+            authState.error!.type == AuthErrorType.networkError ||
+            authState.error!.type == AuthErrorType.networkError)) {
+      mahattatyAlertDialog(
+        context,
+        message: authState.error!.message ?? 'An error occurred',
+        type: MahattatyAlertType.error,
+      );
+    }
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return Form(
-          onPopInvoked: (_) {
-            log('Clearing Errors');
-            authNotifier.clearErrors();
+          onPopInvokedWithResult: (_, __) {
+            authNotifier.resetState();
           },
           key: _registerFromKey,
           child: Column(
@@ -152,12 +156,12 @@ class RegisterFormState extends ConsumerState<RegisterForm> {
                 style: MahattatyButtonStyle.primary,
                 disabled: authState.isLoading,
                 onPressed: () {
-                  // checked
                   if (!isAcceptTerms) {
                     log('Terms checkbox is not checked');
                     mahattatyAlertDialog(
                       context,
-                      message: 'You must accept the Terms & Conditions & Privacy Policy to sign up.',
+                      message:
+                          'You must accept the Terms & Conditions & Privacy Policy to sign up.',
                       type: MahattatyAlertType.warning,
                     );
                     return;
@@ -166,7 +170,6 @@ class RegisterFormState extends ConsumerState<RegisterForm> {
                     name: _registerControllers[0].text,
                     email: _registerControllers[1].text,
                     password: _registerControllers[2].text,
-                    context: context,
                   );
                 },
                 height: 60,

@@ -1,11 +1,8 @@
-import 'dart:developer';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mahattaty/Providers/States/auth_state.dart';
 import 'package:mahattaty/Services/auth_service.dart';
 import 'package:mahattaty/Exceptions/auth_exceptions.dart';
-import '../Widgets/Generics/mahattaty_alert.dart';
 
 final authServiceProvider = Provider<AuthService>((ref) {
   return AuthService();
@@ -32,7 +29,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = state.copyWith(error: error);
   }
 
-  void setLoading(bool isLoading,) {
+  void setLoading(
+    bool isLoading,
+  ) {
     state = state.copyWith(
         isLoading: isLoading, error: state.error, user: state.user);
   }
@@ -41,38 +40,32 @@ class AuthNotifier extends StateNotifier<AuthState> {
     state = AuthState();
   }
 
-  void clearErrors() {
-    state = state.copyWith(error: null);
-  }
-
   void signOut() {
     _authService.signOut();
     resetState();
   }
 
   Future<void> submitLogin({
-    required String emailOrPhone,
-    required String password,
-    required BuildContext context,
+    String? emailOrPhone,
+    String? password,
+    bool isGoogleLogin = false,
+    bool isFacebookLogin = false,
   }) async {
-
+    resetState();
     setLoading(true);
-
     try {
-      final user = await _authService.signIn(emailOrPhone, password);
+      final user = isGoogleLogin
+          ? await _authService.signInWithGoogle()
+          : isFacebookLogin
+              ? await _authService.signInWithFacebook()
+              : await _authService.signIn(emailOrPhone!, password!);
       if (user != null) {
-        state = state.copyWith(user: user, isLoading: false);
+        state = state.copyWith(user: user);
       }
     } on AuthException catch (e) {
       setError(AuthError.fromAuthException(e));
+    } finally {
       setLoading(false);
-      if (e.type != AuthExceptionType.wrongEmail && e.type != AuthExceptionType.wrongPassword) {
-        mahattatyAlertDialog(
-        context,
-        message: e.message ?? 'Unknown error occurred',
-        type: MahattatyAlertType.error,
-      );
-      }
     }
   }
 
@@ -80,26 +73,18 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required String name,
     required String email,
     required String password,
-    required BuildContext context,
   }) async {
+    resetState();
     setLoading(true);
     try {
       final user = await _authService.signUp(name, email, password);
       if (user != null) {
-        state = state.copyWith(user: user, isLoading: false);
+        state = state.copyWith(user: user);
       }
     } on AuthException catch (e) {
-      log('AuthException caught: ${e.message}');
       setError(AuthError.fromAuthException(e));
+    } finally {
       setLoading(false);
-      if (e.type != AuthExceptionType.wrongEmail && e.type != AuthExceptionType.wrongPassword) {
-
-        mahattatyAlertDialog(
-        context,
-        message: e.message ?? 'Unknown error occurred',
-        type: MahattatyAlertType.error,
-      );
-    }
     }
   }
 }

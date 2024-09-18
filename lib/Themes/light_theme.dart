@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 const Color customGrey = Color(0xFFb1b8ca); // Example grey color
 
 // const Color customGrey = Color(0xFFb1b8ca);
@@ -13,12 +14,9 @@ ColorScheme colorScheme = const ColorScheme.light(
   secondary: Color.fromARGB(255, 8, 40, 48),
   surface: Colors.white,
   onSurface: Colors.black,
-  background: Colors.white,
-  onBackground: Colors.black,
   error: Colors.red,
   onError: Colors.white,
   onSecondary: Colors.white,
-
 );
 
 AppBarTheme lightAppBarTheme = const AppBarTheme(
@@ -36,16 +34,16 @@ AppBarTheme lightAppBarTheme = const AppBarTheme(
 
 ElevatedButtonThemeData elevatedButtonTheme = ElevatedButtonThemeData(
   style: ButtonStyle(
-    backgroundColor: MaterialStateProperty.all<Color>(
+    backgroundColor: WidgetStateProperty.all<Color>(
       colorScheme.primary,
     ),
-    foregroundColor: MaterialStateProperty.all<Color>(
-      colorScheme.background,
+    foregroundColor: WidgetStateProperty.all<Color>(
+      colorScheme.surface,
     ),
-    shadowColor: MaterialStateProperty.all<Color>(
+    shadowColor: WidgetStateProperty.all<Color>(
       colorScheme.primary,
     ),
-    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
       RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(50.0),
       ),
@@ -55,18 +53,18 @@ ElevatedButtonThemeData elevatedButtonTheme = ElevatedButtonThemeData(
 
 OutlinedButtonThemeData outlinedButtonTheme = OutlinedButtonThemeData(
   style: ButtonStyle(
-    shadowColor: MaterialStateProperty.all<Color>(
+    shadowColor: WidgetStateProperty.all<Color>(
       colorScheme.primary,
     ),
-    foregroundColor: MaterialStateProperty.all<Color>(
+    foregroundColor: WidgetStateProperty.all<Color>(
       colorScheme.primary,
     ),
-    side: MaterialStateProperty.all<BorderSide>(
+    side: WidgetStateProperty.all<BorderSide>(
       BorderSide(
         color: colorScheme.primary,
       ),
     ),
-    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
       RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(50.0),
       ),
@@ -78,8 +76,8 @@ CheckboxThemeData checkboxTheme = CheckboxThemeData(
   side: BorderSide(
     color: colorScheme.primary,
   ),
-  checkColor: MaterialStateProperty.all<Color>(
-    colorScheme.background,
+  checkColor: WidgetStateProperty.all<Color>(
+    colorScheme.surface,
   ),
 );
 
@@ -115,7 +113,6 @@ InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
       color: colorScheme.error,
     ),
   ),
-            
   errorMaxLines: 2,
   hintStyle: TextStyle(
     color: colorScheme.onPrimaryContainer,

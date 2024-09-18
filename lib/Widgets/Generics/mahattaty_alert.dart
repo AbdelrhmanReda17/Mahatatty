@@ -49,7 +49,7 @@ void mahattatyAlertDialog(
         ),
         const SizedBox(width: 10),
         Text(
-          type.toString().split('.').last,
+          type.toString().split('.').last.toUpperCase(),
           style: TextStyle(
             color: color,
             fontWeight: FontWeight.bold,

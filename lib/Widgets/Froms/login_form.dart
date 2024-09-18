@@ -5,8 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mahattaty/Providers/States/auth_state.dart';
 import 'package:mahattaty/Providers/auth_provider.dart';
-import 'package:mahattaty/Screens/temp_screen.dart';
-import 'package:mahattaty/Utils/open_screens.dart';
+import 'package:mahattaty/Widgets/Generics/mahattaty_alert.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_button.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_text_form_field.dart';
 import 'package:mahattaty/Widgets/Dialogs/forgot_password_dialog.dart';
@@ -28,13 +27,20 @@ class LoginForm extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authProvider);
     final authNotifier = ref.read(authProvider.notifier);
+    if (authState.error != null &&
+        (authState.error!.type == AuthErrorType.unknown ||
+            authState.error!.type == AuthErrorType.networkError ||
+            authState.error!.type == AuthErrorType.networkError)) {
+      mahattatyAlertDialog(
+        context,
+        message: authState.error?.message ?? 'An error occurred',
+        type: MahattatyAlertType.error,
+      );
+    }
     log(authState.toString());
-
     return Form(
-      onPopInvoked: (_) {
-        log('Clearing Errors');
-
-        authNotifier.clearErrors();
+      onPopInvokedWithResult: (_, __) {
+        authNotifier.resetState();
       },
       key: _loginFormKey,
       child: SizedBox(
@@ -101,16 +107,9 @@ class LoginForm extends ConsumerWidget {
                   authNotifier.submitLogin(
                     emailOrPhone: _loginControllers[0].text,
                     password: _loginControllers[1].text,
-                    context: context, // Pass the context
+                    isGoogleLogin: false,
                   );
                 }
-               /* if (authState.user != null) {
-                  openScreen(
-                    context: context,
-                    routeName: const TempScreen().routeName,
-                    isReplace: true,
-                  );
-                }*/
               },
               height: 60,
             ),

@@ -19,42 +19,27 @@ class AuthException implements Exception {
 
   AuthException.fromFirebaseAuthException(FirebaseAuthException e) {
     switch (e.code) {
-      case 'wrong-password'://not working
-        type = AuthExceptionType.wrongPassword;
-        message = 'Wrong password provided for that user.';
-        break;
+      case 'invalid-email':
       case 'user-not-found':
         type = AuthExceptionType.wrongEmail;
-        message = 'No user found for that email.';
         break;
       case 'user-disabled':
         type = AuthExceptionType.userDisabled;
-        message = 'The user account has been disabled by an administrator.';
-        break;
-      case 'operation-not-allowed':
-        type = AuthExceptionType.unknown;
-        message =
-            'The given sign-in provider is disabled for this Firebase project.';
         break;
       case 'too-many-requests':
-        type = AuthExceptionType.unknown;
-        message =
-            'We have blocked all requests from this device due to unusual activity. Try again later.';
-        break;
-      case 'email-already-in-use':
-        type = AuthExceptionType.wrongEmail;
-        message = 'The email address is already in use by another account.';
-        break;
-      case 'weak-password':
-        type = AuthExceptionType.wrongPassword;
-        message = 'The password provided is too weak.';
-        break;
+      case 'user-token-expired':
       case 'network-request-failed':
         type = AuthExceptionType.networkError;
-        message = 'Network error. Please check your connection.';
+        break;
+      case 'wrong-password':
+      case 'INVALID_LOGIN_CREDENTIALS':
+      case 'invalid-credential':
+        type = AuthExceptionType.wrongPassword;
+        break;
+      case 'operation-not-allowed':
       default:
         type = AuthExceptionType.unknown;
-        message = 'An error occurred, please try again later.';
     }
+    message = e.message ?? 'An error occurred';
   }
 }

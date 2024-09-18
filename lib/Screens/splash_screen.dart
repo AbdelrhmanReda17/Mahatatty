@@ -29,7 +29,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       if (authState.user != null) {
         openScreen(
           context: context,
-          routeName: const TempScreen().routeName, 
+          routeName: const TempScreen().routeName,
           isReplace: true,
         );
       } else {
@@ -77,8 +77,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
                     child: Text(
                       "Mahattaty",
                       style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                        color: Colors.white,
-                      ),
+                            color: Colors.white,
+                          ),
                     ),
                   ),
                 ],

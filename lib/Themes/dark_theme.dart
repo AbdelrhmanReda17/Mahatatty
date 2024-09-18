@@ -10,8 +10,6 @@ ColorScheme colorScheme = const ColorScheme.dark(
   secondary: Color.fromARGB(255, 8, 40, 48),
   surface: Colors.black,
   onSurface: Colors.white,
-  background: Colors.black,
-  onBackground: Colors.white,
   error: Colors.red,
   onError: Colors.white,
   onSecondary: Colors.white,
@@ -29,16 +27,16 @@ AppBarTheme appBarTheme = const AppBarTheme(
 
 ElevatedButtonThemeData elevatedButtonTheme = ElevatedButtonThemeData(
   style: ButtonStyle(
-    backgroundColor: MaterialStateProperty.all<Color>(
+    backgroundColor: WidgetStateProperty.all<Color>(
       colorScheme.primary,
     ),
-    foregroundColor: MaterialStateProperty.all<Color>(
-      colorScheme.background,
+    foregroundColor: WidgetStateProperty.all<Color>(
+      colorScheme.surface,
     ),
-    shadowColor: MaterialStateProperty.all<Color>(
+    shadowColor: WidgetStateProperty.all<Color>(
       colorScheme.primary,
     ),
-    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
       RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(50.0),
       ),
@@ -48,18 +46,18 @@ ElevatedButtonThemeData elevatedButtonTheme = ElevatedButtonThemeData(
 
 OutlinedButtonThemeData outlinedButtonTheme = OutlinedButtonThemeData(
   style: ButtonStyle(
-    shadowColor: MaterialStateProperty.all<Color>(
+    shadowColor: WidgetStateProperty.all<Color>(
       colorScheme.primary,
     ),
-    foregroundColor: MaterialStateProperty.all<Color>(
+    foregroundColor: WidgetStateProperty.all<Color>(
       colorScheme.primary,
     ),
-    side: MaterialStateProperty.all<BorderSide>(
+    side: WidgetStateProperty.all<BorderSide>(
       BorderSide(
         color: colorScheme.primary,
       ),
     ),
-    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+    shape: WidgetStateProperty.all<RoundedRectangleBorder>(
       RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(50.0),
       ),
@@ -71,8 +69,8 @@ CheckboxThemeData checkboxTheme = CheckboxThemeData(
   side: BorderSide(
     color: colorScheme.primary,
   ),
-  checkColor: MaterialStateProperty.all<Color>(
-    colorScheme.background,
+  checkColor: WidgetStateProperty.all<Color>(
+    colorScheme.surface,
   ),
 );
 ThemeData darkTheme = ThemeData(

@@ -6,7 +6,6 @@ enum AuthErrorType {
   emailOrPhone,
   password,
   networkError,
-
 }
 
 class AuthError {
@@ -63,10 +62,10 @@ class AuthState {
     return AuthState(
       isLoading: isLoading ?? this.isLoading,
       user: user ?? this.user,
-      error: error,
+      error: error ?? this.error,
     );
   }
-
+  
   @override
   String toString() {
     return 'AuthState{isLoading: $isLoading, user: $user , error: $error}';

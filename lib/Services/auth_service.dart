@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mahattaty/Exceptions/auth_exceptions.dart';
 
 class AuthService {
@@ -9,15 +11,66 @@ class AuthService {
   Stream<User?> get authStateChanges => _auth.authStateChanges();
   User? get currentUser => _auth.currentUser;
 
+  Future<User?> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+      if (googleUser != null) {
+        final GoogleSignInAuthentication googleAuth =
+            await googleUser.authentication;
+
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+        UserCredential userCredential =
+            await FirebaseAuth.instance.signInWithCredential(credential);
+        return userCredential.user;
+      }
+    } on FirebaseAuthException catch (e) {
+      throw AuthException.fromFirebaseAuthException(e);
+    } catch (e) {
+      throw AuthException(
+        message:
+            'An unexpected error occurred during Google Sign-in: ${e.toString()}',
+        type: AuthExceptionType.unknown,
+      );
+    }
+    return null;
+  }
+
+  Future<User?> signInWithFacebook() async {
+    try {
+      final LoginResult result = await FacebookAuth.instance.login();
+      if (result.status == LoginStatus.success) {
+        final OAuthCredential facebookAuthCredential =
+            FacebookAuthProvider.credential(result.accessToken!.tokenString);
+        UserCredential userCredential = await FirebaseAuth.instance
+            .signInWithCredential(facebookAuthCredential);
+        return userCredential.user;
+      } else {
+        throw AuthException(
+          message: 'Facebook Sign-in failed, please try again',
+          type: AuthExceptionType.unknown,
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      throw AuthException.fromFirebaseAuthException(e);
+    } catch (e) {
+      throw AuthException(
+        message:
+            'An unexpected error occurred during Facebook Sign-in: ${e.toString()}',
+        type: AuthExceptionType.unknown,
+      );
+    }
+  }
+
   Future<User?> signIn(String email, String password) async {
-    log(email + password);
     try {
       UserCredential userCredential = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
-
-      log(userCredential.user!.email!);
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
+      log(e.toString());
       throw AuthException.fromFirebaseAuthException(e);
     }
   }
@@ -34,7 +87,7 @@ class AuthService {
         return updatedUser;
       } else {
         throw AuthException(
-            message: 'User creation failed, no user returned.',
+            message: 'User creation failed, please try again',
             type: AuthExceptionType.unknown);
       }
     } on FirebaseAuthException catch (e) {
