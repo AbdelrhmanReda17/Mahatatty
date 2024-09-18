@@ -5,6 +5,7 @@ enum AuthExceptionType {
   wrongPassword,
   userDisabled,
   unknown,
+  networkError,
 }
 
 class AuthException implements Exception {
@@ -18,13 +19,9 @@ class AuthException implements Exception {
 
   AuthException.fromFirebaseAuthException(FirebaseAuthException e) {
     switch (e.code) {
-      case 'wrong-password':
+      case 'wrong-password'://not working
         type = AuthExceptionType.wrongPassword;
         message = 'Wrong password provided for that user.';
-        break;
-      case 'invalid-credential':
-        type = AuthExceptionType.wrongEmail;
-        message = 'Invalid credential provided for that user.';
         break;
       case 'user-not-found':
         type = AuthExceptionType.wrongEmail;
@@ -52,6 +49,9 @@ class AuthException implements Exception {
         type = AuthExceptionType.wrongPassword;
         message = 'The password provided is too weak.';
         break;
+      case 'network-request-failed':
+        type = AuthExceptionType.networkError;
+        message = 'Network error. Please check your connection.';
       default:
         type = AuthExceptionType.unknown;
         message = 'An error occurred, please try again later.';
