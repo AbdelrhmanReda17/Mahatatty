@@ -101,8 +101,16 @@ class LoginForm extends ConsumerWidget {
                   authNotifier.submitLogin(
                     emailOrPhone: _loginControllers[0].text,
                     password: _loginControllers[1].text,
+                    context: context, // Pass the context
                   );
                 }
+               /* if (authState.user != null) {
+                  openScreen(
+                    context: context,
+                    routeName: const TempScreen().routeName,
+                    isReplace: true,
+                  );
+                }*/
               },
               height: 60,
             ),
