@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mahattaty/Providers/States/auth_state.dart';
 import 'package:mahattaty/Services/auth_service.dart';
@@ -23,6 +22,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
     _authService.authStateChanges.listen((user) {
       state = state.copyWith(user: user, isLoading: false);
     });
+  }
+
+  void sendOTP({required String recipient, required String otp}) async {
+    try {
+      await _authService.sendPasswordResetEmail(recipient: recipient);
+    } on AuthException catch (e) {
+      setError(AuthError.fromAuthException(e));
+    }
   }
 
   void setError(AuthError error) {

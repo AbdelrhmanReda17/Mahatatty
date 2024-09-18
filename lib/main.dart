@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:email_otp/email_otp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,7 +14,23 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // Ensure Flutter binding is initialized
+  WidgetsFlutterBinding
+      .ensureInitialized(); // Ensure Flutter binding is initialized
+  // EmailOTP.config(
+  //   appName: 'Mahattaty',
+  //   otpType: OTPType.numeric,
+  //   expiry: 30000,
+  //   emailTheme: EmailTheme.v6,
+  //   appEmail: 'mahattaty@gamil.com',
+  //   otpLength: 6,
+  // );
+  // EmailOTP.setSMTP(
+  //   host: 'smtp.freesmtpservers.com',
+  //   emailPort: EmailPort.port25,
+  //   secureType: SecureType.tls,
+  //   username: 'abdelrhmantp115@gmail.com',
+  //   password: '15975312312322aA',
+  // );
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   ).then((value) => log('Firebase initialized'));
@@ -49,15 +66,15 @@ class MyApp extends StatelessWidget {
       routes: {
         const SplashScreen().routeName: (context) => const SplashScreen(),
         const OnboardingScreen().routeName: (context) =>
-        const OnboardingScreen(),
+            const OnboardingScreen(),
         const AuthenticationScreen().loginRouteName: (context) =>
-        const AuthenticationScreen(
-          key: Key('login_screen'),
-        ),
+            const AuthenticationScreen(
+              key: Key('login_screen'),
+            ),
         const AuthenticationScreen().registerRouteName: (context) =>
-        const AuthenticationScreen(
-          key: Key('register_screen'),
-        ),
+            const AuthenticationScreen(
+              key: Key('register_screen'),
+            ),
         const TempScreen().routeName: (context) => const TempScreen(),
       },
     );

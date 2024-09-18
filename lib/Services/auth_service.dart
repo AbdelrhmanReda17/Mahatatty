@@ -1,5 +1,5 @@
 import 'dart:developer';
-
+import 'package:email_otp/email_otp.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -7,10 +7,8 @@ import 'package:mahattaty/Exceptions/auth_exceptions.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
   Stream<User?> get authStateChanges => _auth.authStateChanges();
   User? get currentUser => _auth.currentUser;
-
   Future<User?> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
@@ -36,6 +34,18 @@ class AuthService {
       );
     }
     return null;
+  }
+
+  Future<bool> sendPasswordResetEmail({required String recipient}) async {
+    try {
+      return true;
+    } catch (e) {
+      throw AuthException(
+        message:
+            'An unexpected error occurred during sending OTP: ${e.toString()}',
+        type: AuthExceptionType.unknown,
+      );
+    }
   }
 
   Future<User?> signInWithFacebook() async {

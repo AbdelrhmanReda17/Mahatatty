@@ -2,15 +2,20 @@ import 'package:flutter/material.dart';
 
 void openDialog({required BuildContext context, required Widget dialog}) {
   showModalBottomSheet(
-    backgroundColor: Theme.of(context).colorScheme.background,
+    backgroundColor: Theme.of(context).colorScheme.surface,
     elevation: 0,
+    isScrollControlled: true,
     context: context,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
     ),
-    isScrollControlled: true,
     builder: (BuildContext context) {
-      return dialog;
+      return Padding(
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: dialog,
+      );
     },
   );
 }
