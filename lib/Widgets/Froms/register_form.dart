@@ -92,7 +92,10 @@ class RegisterFormState extends ConsumerState<RegisterForm> {
                 validator: (value) => value!.isValidPassword
                     ? null
                     : 'Invalid Input , must be at least 8 characters With at least one uppercase letter, one lowercase letter',
-                onChanged: (value) => _registerKeys[2].currentState!.validate(),
+                onChanged: (value) {
+                  _registerKeys[2].currentState!.validate();
+                  _registerKeys[3].currentState!.validate();
+                },
               ),
               const SizedBox(height: 20),
               MahattatyTextFormField(
@@ -149,12 +152,21 @@ class RegisterFormState extends ConsumerState<RegisterForm> {
                 style: MahattatyButtonStyle.primary,
                 disabled: authState.isLoading,
                 onPressed: () {
-                  if (!_registerFromKey.currentState!.validate() ||
-                      !isAcceptTerms) return;
+                  // checked
+                  if (!isAcceptTerms) {
+                    log('Terms checkbox is not checked');
+                    mahattatyAlertDialog(
+                      context,
+                      message: 'You must accept the Terms & Conditions & Privacy Policy to sign up.',
+                      type: MahattatyAlertType.warning,
+                    );
+                    return;
+                  }
                   authNotifier.submitRegister(
                     name: _registerControllers[0].text,
                     email: _registerControllers[1].text,
                     password: _registerControllers[2].text,
+                    context: context,
                   );
                 },
                 height: 60,
