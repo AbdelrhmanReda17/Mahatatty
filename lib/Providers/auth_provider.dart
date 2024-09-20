@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mahattaty/Providers/States/auth_state.dart';
 import 'package:mahattaty/Services/auth_service.dart';
@@ -24,16 +27,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
     });
   }
 
-  void sendOTP({required String recipient, required String otp}) async {
-    try {
-      await _authService.sendPasswordResetEmail(recipient: recipient);
-    } on AuthException catch (e) {
-      setError(AuthError.fromAuthException(e));
-    }
-  }
-
-  void setError(AuthError error) {
-    state = state.copyWith(error: error);
+  void resetError() {
+    state = state.copyWith(error: null, resetError: true);
   }
 
   void setLoading(
@@ -52,46 +47,57 @@ class AuthNotifier extends StateNotifier<AuthState> {
     resetState();
   }
 
-  Future<void> submitLogin({
+  Future<bool> submitLogin({
     String? emailOrPhone,
     String? password,
     bool isGoogleLogin = false,
     bool isFacebookLogin = false,
   }) async {
     resetState();
-    setLoading(true);
+    state = state.copyWith(isLoading: true);
     try {
       final user = isGoogleLogin
           ? await _authService.signInWithGoogle()
           : isFacebookLogin
               ? await _authService.signInWithFacebook()
               : await _authService.signIn(emailOrPhone!, password!);
+
       if (user != null) {
         state = state.copyWith(user: user);
+        return true;
       }
+      return false;
     } on AuthException catch (e) {
-      setError(AuthError.fromAuthException(e));
-    } finally {
-      setLoading(false);
+      state = state.copyWith(
+        error: AuthError.fromAuthException(e),
+        resetError: false,
+        isLoading: false,
+      );
+      return false;
     }
   }
 
-  Future<void> submitRegister({
+  Future<bool> submitRegister({
     required String name,
     required String email,
     required String password,
   }) async {
     resetState();
-    setLoading(true);
+    state = state.copyWith(isLoading: true);
     try {
       final user = await _authService.signUp(name, email, password);
       if (user != null) {
         state = state.copyWith(user: user);
+        return true;
       }
+      return false;
     } on AuthException catch (e) {
-      setError(AuthError.fromAuthException(e));
-    } finally {
-      setLoading(false);
+      state = state.copyWith(
+        error: AuthError.fromAuthException(e),
+        resetError: false,
+        isLoading: false,
+      );
+      return false;
     }
   }
 }

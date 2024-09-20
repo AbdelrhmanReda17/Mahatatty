@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mahattaty/Providers/States/auth_state.dart';
 import 'package:mahattaty/Providers/auth_provider.dart';
+import 'package:mahattaty/Screens/temp_screen.dart';
+import 'package:mahattaty/Utils/open_screens.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_alert.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_button.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_text_form_field.dart';
@@ -27,16 +29,19 @@ class LoginForm extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authProvider);
     final authNotifier = ref.read(authProvider.notifier);
-    if (authState.error != null &&
-        (authState.error!.type == AuthErrorType.unknown ||
-            authState.error!.type == AuthErrorType.networkError ||
-            authState.error!.type == AuthErrorType.networkError)) {
-      mahattatyAlertDialog(
-        context,
-        message: authState.error?.message ?? 'An error occurred',
-        type: MahattatyAlertType.error,
-      );
-    }
+
+    ref.listen<AuthState>(authProvider, (previous, next) {
+      if (next.error != null &&
+          (next.error!.type == AuthErrorType.unknown ||
+              next.error!.type == AuthErrorType.networkError)) {
+        mahattatyAlertDialog(
+          context,
+          message: next.error!.message ?? 'An error occurred',
+          type: MahattatyAlertType.error,
+          onOk: () => authNotifier.resetState(),
+        );
+      }
+    });
     return Form(
       onPopInvokedWithResult: (_, __) {
         authNotifier.resetState();
@@ -101,13 +106,20 @@ class LoginForm extends ConsumerWidget {
               text: 'Sign In',
               style: MahattatyButtonStyle.primary,
               disabled: authState.isLoading,
-              onPressed: () {
+              onPressed: () async {
                 if (_loginFormKey.currentState!.validate()) {
-                  authNotifier.submitLogin(
+                  bool isLogined = await authNotifier.submitLogin(
                     emailOrPhone: _loginControllers[0].text,
                     password: _loginControllers[1].text,
                     isGoogleLogin: false,
                   );
+                  if (isLogined) {
+                    openScreen(
+                      context: context,
+                      routeName: const TempScreen().routeName,
+                      isReplace: true,
+                    );
+                  }
                 }
               },
               height: 60,

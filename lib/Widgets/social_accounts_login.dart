@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mahattaty/Providers/auth_provider.dart';
+import 'package:mahattaty/Screens/temp_screen.dart';
 import 'package:mahattaty/Themes/dark_theme.dart';
 import 'package:mahattaty/Utils/constant.dart';
+import 'package:mahattaty/Utils/open_screens.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_button.dart';
 
 class SocialAccountsLogin extends ConsumerWidget {
@@ -29,8 +31,16 @@ class SocialAccountsLogin extends ConsumerWidget {
               MahattatyButton(
                 text: 'Continue with Google',
                 elevation: 1,
-                onPressed: () {
-                  authNotifier.submitLogin(isGoogleLogin: true);
+                onPressed: () async {
+                  bool isLogined =
+                      await authNotifier.submitLogin(isGoogleLogin: true);
+                  if (isLogined) {
+                    openScreen(
+                      context: context,
+                      routeName: const TempScreen().routeName,
+                      isReplace: true,
+                    );
+                  }
                 },
                 borderColor: colorScheme.onPrimaryContainer,
                 style: MahattatyButtonStyle.secondary,
@@ -44,8 +54,16 @@ class SocialAccountsLogin extends ConsumerWidget {
               MahattatyButton(
                 elevation: 1,
                 text: 'Continue with Facebook',
-                onPressed: () {
-                  authNotifier.submitLogin(isFacebookLogin: true);
+                onPressed: () async {
+                  bool isLogined =
+                      await authNotifier.submitLogin(isFacebookLogin: true);
+                  if (isLogined) {
+                    openScreen(
+                      context: context,
+                      routeName: const TempScreen().routeName,
+                      isReplace: true,
+                    );
+                  }
                 },
                 borderColor: colorScheme.onPrimaryContainer,
                 textStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(

@@ -21,6 +21,7 @@ class AuthException implements Exception {
     switch (e.code) {
       case 'invalid-email':
       case 'user-not-found':
+      case 'email-already-in-use':
         type = AuthExceptionType.wrongEmail;
         break;
       case 'user-disabled':

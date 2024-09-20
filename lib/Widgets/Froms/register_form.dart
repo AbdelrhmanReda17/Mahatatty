@@ -1,18 +1,17 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mahattaty/Providers/States/auth_state.dart';
 import 'package:mahattaty/Providers/auth_provider.dart';
+import 'package:mahattaty/Screens/temp_screen.dart';
+import 'package:mahattaty/Utils/open_screens.dart';
 import 'package:mahattaty/Utils/validate.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_alert.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_button.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_text_form_field.dart';
 
 class RegisterForm extends ConsumerWidget {
-  RegisterForm(
-      {super.key, required this.isAcceptTerms, required this.handleCheckBox});
+  RegisterForm({super.key});
 
   final List<TextEditingController> _registerControllers =
       List.generate(4, (_) => TextEditingController());
@@ -20,23 +19,23 @@ class RegisterForm extends ConsumerWidget {
       List.generate(4, (_) => GlobalKey<FormFieldState>());
   final GlobalKey<FormState> _registerFromKey = GlobalKey<FormState>();
 
-  final bool isAcceptTerms;
-  final void Function(bool?) handleCheckBox;
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authProvider);
     final authNotifier = ref.read(authProvider.notifier);
-    if (authState.error != null &&
-        (authState.error!.type == AuthErrorType.unknown ||
-            authState.error!.type == AuthErrorType.networkError ||
-            authState.error!.type == AuthErrorType.networkError)) {
-      mahattatyAlertDialog(
-        context,
-        message: authState.error!.message ?? 'An error occurred',
-        type: MahattatyAlertType.error,
-      );
-    }
+
+    ref.listen<AuthState>(authProvider, (previous, next) {
+      if (next.error != null &&
+          (next.error!.type == AuthErrorType.unknown ||
+              next.error!.type == AuthErrorType.networkError)) {
+        mahattatyAlertDialog(
+          context,
+          message: next.error!.message ?? 'An error occurred',
+          type: MahattatyAlertType.error,
+          onOk: () => authNotifier.resetState(),
+        );
+      }
+    });
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return Form(
@@ -107,62 +106,24 @@ class RegisterForm extends ConsumerWidget {
                 onChanged: (value) => _registerKeys[3].currentState!.validate(),
               ),
               const SizedBox(height: 20),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Checkbox(
-                    value: isAcceptTerms,
-                    onChanged: handleCheckBox,
-                  ),
-                  Expanded(
-                    child: RichText(
-                      textAlign: TextAlign.left,
-                      text: TextSpan(
-                        text: 'I accept the ',
-                        style: Theme.of(context).textTheme.titleSmall,
-                        children: [
-                          TextSpan(
-                            text: 'Terms & Conditions & Privacy\nPolicy',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall
-                                ?.apply(
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                          ),
-                          TextSpan(
-                            text: ' set out by Mahattaty',
-                            style: Theme.of(context).textTheme.titleSmall,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                ],
-              ),
-              const SizedBox(height: 20),
               MahattatyButton(
                 text: 'Sign Up',
                 style: MahattatyButtonStyle.primary,
                 disabled: authState.isLoading,
-                onPressed: () {
-                  if (!isAcceptTerms) {
-                    log('Terms checkbox is not checked');
-                    mahattatyAlertDialog(
-                      context,
-                      message:
-                          'You must accept the Terms & Conditions & Privacy Policy to sign up.',
-                      type: MahattatyAlertType.warning,
-                    );
-                    return;
-                  }
+                onPressed: () async {
                   if (_registerFromKey.currentState!.validate()) {
-                    authNotifier.submitRegister(
+                    bool isRegistered = await authNotifier.submitRegister(
                       name: _registerControllers[0].text,
                       email: _registerControllers[1].text,
                       password: _registerControllers[2].text,
                     );
+                    if (isRegistered) {
+                      openScreen(
+                        context: context,
+                        routeName: const TempScreen().routeName,
+                        isReplace: true,
+                      );
+                    }
                   }
                 },
                 height: 60,

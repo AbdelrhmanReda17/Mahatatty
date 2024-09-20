@@ -14,7 +14,6 @@ class ForgetPasswordDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final AuthNotifier authNotifier = ref.read(authProvider.notifier);
     return MahattatyDialog(
       title: 'Forget Password',
       description: 'Enter your email to reset your password',
@@ -33,10 +32,6 @@ class ForgetPasswordDialog extends ConsumerWidget {
       buttonText: 'Send Email',
       contentPlacement: ContentPlacement.afterTitle,
       onButtonPressed: () {
-        authNotifier.sendOTP(
-          recipient: emailController.text,
-          otp: '1234',
-        );
         Navigator.of(context).pop();
         openDialog(context: context, dialog: OTPDialog());
       },

@@ -16,14 +16,6 @@ class AuthenticationScreen extends StatefulWidget {
 class _AuthenticationScreenState extends State<AuthenticationScreen>
     with SingleTickerProviderStateMixin {
   AnimationController? _controller;
-  bool isAcceptTerms = false;
-
-  void _handleCheckBox(bool? value) {
-    if (value == null) return;
-    setState(() {
-      isAcceptTerms = value;
-    });
-  }
 
   @override
   void initState() {
@@ -40,7 +32,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen>
     bool isLogin =
         ModalRoute.of(context)!.settings.name == widget.loginRouteName ||
             widget.key == const Key('login_screen');
-    Widget content = isLogin ? LoginForm() : RegisterForm(isAcceptTerms : isAcceptTerms , handleCheckBox : _handleCheckBox);
+    Widget content = isLogin ? LoginForm() : RegisterForm();
 
     return Scaffold(
       body: FadeTransition(
@@ -108,6 +100,28 @@ class _AuthenticationScreenState extends State<AuthenticationScreen>
               ],
             ),
             const SocialAccountsLogin(),
+            const SizedBox(height: 20),
+            isLogin
+                ? const SizedBox()
+                : RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      text: 'by signing up you agree to the ',
+                      style: Theme.of(context).textTheme.titleSmall,
+                      children: [
+                        TextSpan(
+                          text: 'Terms & Conditions & Privacy\nPolicy',
+                          style: Theme.of(context).textTheme.titleSmall?.apply(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                        ),
+                        TextSpan(
+                          text: ' set out by Mahattaty',
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                      ],
+                    ),
+                  ),
           ],
         ),
       ),

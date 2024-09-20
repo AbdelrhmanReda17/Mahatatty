@@ -58,14 +58,15 @@ class AuthState {
     bool? isLoading,
     User? user,
     AuthError? error,
+    bool resetError = false,
   }) {
     return AuthState(
       isLoading: isLoading ?? this.isLoading,
       user: user ?? this.user,
-      error: error ?? this.error,
+      error: resetError ? null : error ?? this.error,
     );
   }
-  
+
   @override
   String toString() {
     return 'AuthState{isLoading: $isLoading, user: $user , error: $error}';
