@@ -50,6 +50,7 @@ class AuthService {
 
   Future<User?> signInWithFacebook() async {
     try {
+      log('Signing in with Facebook');
       final LoginResult result = await FacebookAuth.instance.login();
       if (result.status == LoginStatus.success) {
         final OAuthCredential facebookAuthCredential =

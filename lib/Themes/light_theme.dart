@@ -53,11 +53,13 @@ ElevatedButtonThemeData elevatedButtonTheme = ElevatedButtonThemeData(
 
 OutlinedButtonThemeData outlinedButtonTheme = OutlinedButtonThemeData(
   style: ButtonStyle(
-    shadowColor: WidgetStateProperty.all<Color>(
-      colorScheme.primary,
-    ),
+    elevation: WidgetStateProperty.all<double>(0.0),
+    shadowColor: WidgetStateProperty.all<Color>(colorScheme.primary),
     foregroundColor: WidgetStateProperty.all<Color>(
       colorScheme.primary,
+    ),
+    backgroundColor: WidgetStateProperty.all<Color>(
+      colorScheme.surface,
     ),
     side: WidgetStateProperty.all<BorderSide>(
       BorderSide(

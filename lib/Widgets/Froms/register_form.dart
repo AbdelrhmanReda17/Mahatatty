@@ -10,30 +10,21 @@ import 'package:mahattaty/Widgets/Generics/mahattaty_alert.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_button.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_text_form_field.dart';
 
-class RegisterForm extends ConsumerStatefulWidget {
-  const RegisterForm({super.key});
+class RegisterForm extends ConsumerWidget {
+  RegisterForm(
+      {super.key, required this.isAcceptTerms, required this.handleCheckBox});
 
-  @override
-  RegisterFormState createState() => RegisterFormState();
-}
-
-class RegisterFormState extends ConsumerState<RegisterForm> {
   final List<TextEditingController> _registerControllers =
       List.generate(4, (_) => TextEditingController());
   final List<GlobalKey<FormFieldState>> _registerKeys =
       List.generate(4, (_) => GlobalKey<FormFieldState>());
   final GlobalKey<FormState> _registerFromKey = GlobalKey<FormState>();
 
-  bool isAcceptTerms = false;
-  void _handleCheckBox(bool? value) {
-    if (value == null) return;
-    setState(() {
-      isAcceptTerms = value;
-    });
-  }
+  final bool isAcceptTerms;
+  final void Function(bool?) handleCheckBox;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authProvider);
     final authNotifier = ref.read(authProvider.notifier);
     if (authState.error != null &&
@@ -121,7 +112,7 @@ class RegisterFormState extends ConsumerState<RegisterForm> {
                 children: [
                   Checkbox(
                     value: isAcceptTerms,
-                    onChanged: _handleCheckBox,
+                    onChanged: handleCheckBox,
                   ),
                   Expanded(
                     child: RichText(
@@ -166,11 +157,13 @@ class RegisterFormState extends ConsumerState<RegisterForm> {
                     );
                     return;
                   }
-                  authNotifier.submitRegister(
-                    name: _registerControllers[0].text,
-                    email: _registerControllers[1].text,
-                    password: _registerControllers[2].text,
-                  );
+                  if (_registerFromKey.currentState!.validate()) {
+                    authNotifier.submitRegister(
+                      name: _registerControllers[0].text,
+                      email: _registerControllers[1].text,
+                      password: _registerControllers[2].text,
+                    );
+                  }
                 },
                 height: 60,
               ),

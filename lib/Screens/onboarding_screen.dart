@@ -33,6 +33,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
                 controller: _controller,
               ),
+
               MahattatyOnboarding(
                 onBoardingData: OnBoardingData(
                   image: onboardingScreenImage2,
@@ -54,7 +55,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ],
           ),
           Positioned(
-            bottom: 195,
+            bottom: 190, // Adjust this value as needed
             width: MediaQuery.of(context).size.width,
             child: Center(
               child: SmoothPageIndicator(
@@ -70,7 +71,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 10),
         ],
       ),
     );

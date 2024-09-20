@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 enum MahattatyButtonStyle {
   primary,
@@ -20,12 +21,14 @@ class MahattatyButton extends StatelessWidget {
     this.width = double.infinity,
     this.height = 50.0,
     this.iconData,
+    this.svgPicture,
     this.iconPosition = MahattatyIconPosition.start,
     this.spacing = 10.0,
     this.textStyle,
     this.elevation = 0.0,
     this.verticalPadding = 10.0,
     this.horizontalPadding = 20.0,
+    this.borderColor,
   });
 
   final MahattatyButtonStyle style;
@@ -35,28 +38,35 @@ class MahattatyButton extends StatelessWidget {
   final String text;
   final void Function()? onPressed;
   final IconData? iconData;
+  final String? svgPicture;
   final MahattatyIconPosition iconPosition;
   final double spacing;
   final TextStyle? textStyle;
   final double elevation;
   final double verticalPadding;
   final double horizontalPadding;
+  final Color? borderColor;
 
   List<Widget> mahattatyButtonIcon(BuildContext context) => [
         if (iconPosition == MahattatyIconPosition.end) SizedBox(width: spacing),
-        Icon(
-          iconData,
-          size: textStyle?.fontSize ??
-              Theme.of(context).textTheme.bodyLarge!.fontSize,
-          weight: textStyle?.fontWeight?.value.toDouble() ??
-              Theme.of(context)
-                  .textTheme
-                  .bodyLarge!
-                  .fontWeight!
-                  .value
-                  .toDouble(),
-          color: textStyle?.color,
-        ),
+        iconData == null
+            ? SvgPicture.asset(
+                svgPicture!,
+                height: 24,
+              )
+            : Icon(
+                iconData,
+                size: textStyle?.fontSize ??
+                    Theme.of(context).textTheme.bodyLarge!.fontSize,
+                weight: textStyle?.fontWeight?.value.toDouble() ??
+                    Theme.of(context)
+                        .textTheme
+                        .bodyLarge!
+                        .fontWeight!
+                        .value
+                        .toDouble(),
+                color: textStyle?.color,
+              ),
         if (iconPosition == MahattatyIconPosition.start)
           SizedBox(width: spacing),
       ];
@@ -68,6 +78,7 @@ class MahattatyButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           minimumSize: Size(width, height),
           elevation: elevation,
+          shadowColor: Colors.transparent,
           padding: EdgeInsets.symmetric(
             vertical: verticalPadding,
             horizontal: horizontalPadding,
@@ -81,6 +92,9 @@ class MahattatyButton extends StatelessWidget {
         onPressed: disabled ? null : onPressed,
         style: OutlinedButton.styleFrom(
           minimumSize: Size(width, height),
+          side: BorderSide(
+            color: borderColor ?? Theme.of(context).colorScheme.primary,
+          ),
           elevation: elevation,
           padding: EdgeInsets.symmetric(
             vertical: verticalPadding,
@@ -104,22 +118,24 @@ class MahattatyButton extends StatelessWidget {
       disabled
           ? const CircularProgressIndicator(
               color: Colors.white,
-        strokeWidth: 3.0,
-      )
-          :
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (iconPosition == MahattatyIconPosition.start &&
-              iconData != null) ...[...mahattatyButtonIcon(context)],
-          Text(
-            text,
-            style: textStyle,
-          ),
-          if (iconPosition == MahattatyIconPosition.end && iconData != null)
-            ...mahattatyButtonIcon(context)
-        ],
-      ),
+              strokeWidth: 3.0,
+            )
+          : Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (iconPosition == MahattatyIconPosition.start &&
+                    (iconData != null || svgPicture != null)) ...[
+                  ...mahattatyButtonIcon(context)
+                ],
+                Text(
+                  text,
+                  style: textStyle,
+                ),
+                if (iconPosition == MahattatyIconPosition.end &&
+                    (iconData != null || svgPicture != null))
+                  ...mahattatyButtonIcon(context)
+              ],
+            ),
     );
   }
 }

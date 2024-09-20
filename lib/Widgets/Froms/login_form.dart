@@ -37,7 +37,6 @@ class LoginForm extends ConsumerWidget {
         type: MahattatyAlertType.error,
       );
     }
-    log(authState.toString());
     return Form(
       onPopInvokedWithResult: (_, __) {
         authNotifier.resetState();

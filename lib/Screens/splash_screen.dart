@@ -12,38 +12,46 @@ import '../Providers/auth_provider.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
+
   String get routeName => '/splash';
 
   @override
-  ConsumerState<SplashScreen> createState() => _SplashScreenState();
+  SplashScreenState createState() => SplashScreenState();
 }
 
-class _SplashScreenState extends ConsumerState<SplashScreen> {
+class SplashScreenState extends ConsumerState<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  void navigate() {
+    final authState = ref.read(authProvider);
+    if (authState.user != null) {
+      openScreen(
+          context: context,
+          routeName: const TempScreen().routeName,
+          isReplace: true);
+    } else {
+      openScreen(
+        context: context,
+        routeName: const OnboardingScreen().routeName,
+        isReplace: true,
+      );
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    _controller =
+        AnimationController(duration: const Duration(seconds: 3), vsync: this);
+    _controller.forward();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-
-    Future.delayed(const Duration(seconds: 3), () {
-      final authState = ref.read(authProvider);
-      if (authState.user != null) {
-        openScreen(
-          context: context,
-          routeName: const TempScreen().routeName,
-          isReplace: true,
-        );
-      } else {
-        openScreen(
-          context: context,
-          routeName: const OnboardingScreen().routeName,
-          isReplace: true,
-        );
-      }
-    });
+    Future.delayed(const Duration(seconds: 4), () => navigate());
   }
 
   @override
   void dispose() {
+    _controller.dispose();
     SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.manual,
       overlays: SystemUiOverlay.values,
@@ -57,34 +65,26 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       appBar: AppBar(
         toolbarHeight: 0.0,
       ),
-      body: SizedBox(
-        width: double.infinity,
-        height: double.infinity,
-        child: Stack(
-          children: [
-            Image.asset(
-              splashScreenImage,
-              width: double.infinity,
-              height: double.infinity,
-              fit: BoxFit.cover,
+      body: FadeTransition(
+        opacity: Tween<double>(begin: 0, end: 1).animate(_controller).drive(
+              CurveTween(curve: Curves.easeInOut),
             ),
-            Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.only(top: 150.0),
-                    child: Text(
-                      "Mahattaty",
-                      style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                            color: Colors.white,
-                          ),
-                    ),
-                  ),
-                ],
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                mahattatyLogo,
               ),
-            ),
-          ],
+              Text("Mahattaty",
+                  style: Theme.of(context)
+                      .textTheme
+                      .displayLarge!
+                      .copyWith(fontWeight: FontWeight.bold)),
+            ],
+          ),
         ),
       ),
     );

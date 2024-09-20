@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mahattaty/Providers/auth_provider.dart';
+import 'package:mahattaty/Themes/dark_theme.dart';
+import 'package:mahattaty/Utils/constant.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_button.dart';
 
 class SocialAccountsLogin extends ConsumerWidget {
@@ -23,25 +24,36 @@ class SocialAccountsLogin extends ConsumerWidget {
           ),
           const SizedBox(height: 15),
           Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               MahattatyButton(
-                text: 'Google',
+                text: 'Continue with Google',
+                elevation: 1,
                 onPressed: () {
                   authNotifier.submitLogin(isGoogleLogin: true);
                 },
+                borderColor: colorScheme.onPrimaryContainer,
                 style: MahattatyButtonStyle.secondary,
-                iconData: FontAwesomeIcons.google,
+                textStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
+                svgPicture: googleIcon,
+                width: 150,
               ),
               const SizedBox(height: 10, width: 10),
               MahattatyButton(
-                text: 'Facebook',
+                elevation: 1,
+                text: 'Continue with Facebook',
                 onPressed: () {
                   authNotifier.submitLogin(isFacebookLogin: true);
                 },
+                borderColor: colorScheme.onPrimaryContainer,
+                textStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                      fontWeight: FontWeight.w500,
+                    ),
                 style: MahattatyButtonStyle.secondary,
-                iconData: FontAwesomeIcons.facebook,
+                svgPicture: facebookIcon,
+                width: 150,
               ),
             ],
           ),

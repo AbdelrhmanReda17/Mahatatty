@@ -13,50 +13,68 @@ class AuthenticationScreen extends StatefulWidget {
   State<AuthenticationScreen> createState() => _AuthenticationScreenState();
 }
 
-class _AuthenticationScreenState extends State<AuthenticationScreen> {
-  TextEditingController emailController = TextEditingController();
+class _AuthenticationScreenState extends State<AuthenticationScreen>
+    with SingleTickerProviderStateMixin {
+  AnimationController? _controller;
+  bool isAcceptTerms = false;
+
+  void _handleCheckBox(bool? value) {
+    if (value == null) return;
+    setState(() {
+      isAcceptTerms = value;
+    });
+  }
 
   @override
-  void dispose() {
-    super.dispose();
-    emailController.dispose();
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    );
+    _controller!.forward();
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget content = widget.key == const Key('login_screen')
-        ? LoginForm()
-        : const RegisterForm();
+    bool isLogin =
+        ModalRoute.of(context)!.settings.name == widget.loginRouteName ||
+            widget.key == const Key('login_screen');
+    Widget content = isLogin ? LoginForm() : RegisterForm(isAcceptTerms : isAcceptTerms , handleCheckBox : _handleCheckBox);
 
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 80,
-        title: RichText(
-          text: TextSpan(
-            text: widget.key == const Key('login_screen')
-                ? "Login Account\n"
-                : "Create Account\n",
-            style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-            children: [
-              TextSpan(
-                text: widget.key == const Key('login_screen')
-                    ? "Please login with registered account"
-                    : "Start learning with create your account",
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimaryContainer,
-                    ),
-              ),
-            ],
-          ),
-        ),
-        automaticallyImplyLeading: false,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
+      body: FadeTransition(
+        opacity: Tween<double>(begin: 0, end: 1).animate(_controller!).drive(
+              CurveTween(curve: Curves.easeInOut),
+            ),
         child: ListView(
+          padding: const EdgeInsets.all(20),
           children: [
+            AppBar(
+              titleSpacing: 0,
+              toolbarHeight: 80,
+              title: RichText(
+                text: TextSpan(
+                  text: isLogin ? "Login Account\n" : "Create Account\n",
+                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                  children: [
+                    TextSpan(
+                      text: isLogin
+                          ? "Please login with registered account"
+                          : "Start learning with create your account",
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onPrimaryContainer,
+                          ),
+                    ),
+                  ],
+                ),
+              ),
+              automaticallyImplyLeading: false,
+            ),
             const SizedBox(height: 20),
             content,
             const SizedBox(height: 10),
@@ -65,7 +83,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  widget.key == const Key('login_screen')
+                  isLogin
                       ? "Don't have an account?"
                       : "Already have an account?",
                   style: Theme.of(context).textTheme.bodyMedium,
@@ -75,15 +93,13 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                     Navigator.of(context).pop();
                     openScreen(
                       context: context,
-                      routeName: widget.key == const Key('login_screen')
+                      routeName: isLogin
                           ? widget.registerRouteName
                           : widget.loginRouteName,
                     );
                   },
                   child: Text(
-                    widget.key == const Key('login_screen')
-                        ? 'Sign Up'
-                        : 'Sign In',
+                    isLogin ? 'Sign Up' : 'Sign In',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: Theme.of(context).colorScheme.primary,
                         ),

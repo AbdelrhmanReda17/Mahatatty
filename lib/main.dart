@@ -14,23 +14,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding
-      .ensureInitialized(); // Ensure Flutter binding is initialized
-  // EmailOTP.config(
-  //   appName: 'Mahattaty',
-  //   otpType: OTPType.numeric,
-  //   expiry: 30000,
-  //   emailTheme: EmailTheme.v6,
-  //   appEmail: 'mahattaty@gamil.com',
-  //   otpLength: 6,
-  // );
-  // EmailOTP.setSMTP(
-  //   host: 'smtp.freesmtpservers.com',
-  //   emailPort: EmailPort.port25,
-  //   secureType: SecureType.tls,
-  //   username: 'abdelrhmantp115@gmail.com',
-  //   password: '15975312312322aA',
-  // );
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   ).then((value) => log('Firebase initialized'));
@@ -60,9 +44,9 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: lightTheme,
       darkTheme: darkTheme,
-      themeMode: ThemeMode.system, // Uses system theme (light/dark)
+      themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
-      initialRoute: const SplashScreen().routeName, // Set initial route
+      initialRoute: const SplashScreen().routeName,
       routes: {
         const SplashScreen().routeName: (context) => const SplashScreen(),
         const OnboardingScreen().routeName: (context) =>
