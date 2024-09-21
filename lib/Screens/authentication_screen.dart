@@ -15,7 +15,7 @@ class AuthenticationScreen extends StatefulWidget {
 
 class _AuthenticationScreenState extends State<AuthenticationScreen>
     with SingleTickerProviderStateMixin {
-  AnimationController? _controller;
+  late AnimationController? _controller;
 
   @override
   void initState() {
@@ -24,7 +24,15 @@ class _AuthenticationScreenState extends State<AuthenticationScreen>
       duration: const Duration(seconds: 1),
       vsync: this,
     );
-    _controller!.forward();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _controller!.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller!.dispose();
+    super.dispose();
   }
 
   @override

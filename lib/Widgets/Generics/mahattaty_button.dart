@@ -19,6 +19,7 @@ class MahattatyButton extends StatelessWidget {
     required this.onPressed,
     this.disabled = false,
     this.width = double.infinity,
+    this.backgroundColor,
     this.height = 50.0,
     this.iconData,
     this.svgPicture,
@@ -36,6 +37,7 @@ class MahattatyButton extends StatelessWidget {
   final bool disabled;
   final double height;
   final String text;
+  final Color? backgroundColor;
   final void Function()? onPressed;
   final IconData? iconData;
   final String? svgPicture;
@@ -78,6 +80,8 @@ class MahattatyButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           minimumSize: Size(width, height),
           elevation: elevation,
+          backgroundColor:
+              backgroundColor ?? Theme.of(context).colorScheme.primary,
           shadowColor: Colors.transparent,
           padding: EdgeInsets.symmetric(
             vertical: verticalPadding,

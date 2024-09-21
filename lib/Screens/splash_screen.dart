@@ -33,7 +33,7 @@ class SplashScreenState extends ConsumerState<SplashScreen>
     } else {
       openScreen(
         context: context,
-        routeName: const OnboardingScreen().routeName,
+        routeName: OnboardingScreen().routeName,
         isReplace: true,
       );
     }
