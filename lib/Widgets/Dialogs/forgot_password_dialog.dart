@@ -1,3 +1,4 @@
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -5,6 +6,7 @@ import 'package:mahattaty/Providers/auth_provider.dart';
 import 'package:mahattaty/Utils/open_dialog.dart';
 import 'package:mahattaty/Utils/validate.dart';
 import 'package:mahattaty/Widgets/Dialogs/otp_dialog.dart';
+import 'package:share/share.dart';
 import '../Generics/mahattaty_dialog.dart';
 import '../Generics/mahattaty_text_form_field.dart';
 
@@ -31,47 +33,31 @@ class ForgetPasswordDialog extends ConsumerWidget {
       ],
       buttonText: 'Send Email',
       contentPlacement: ContentPlacement.afterTitle,
-      onButtonPressed: () {
-        Navigator.of(context).pop();
-        openDialog(context: context, dialog: OTPDialog());
+      onButtonPressed: () async {
+        final email = emailController.text.trim();
+        if (email.isValidEmail) {
+          String dynamicLink = await _createDynamicLink(email);
+          Share.share("Reset your password: $dynamicLink");
+
+        }
       },
     );
   }
 }
-  // Future<void> _handlePasswordReset(BuildContext context, {bool isResend = false}) async {
-  //   final email = emailController.text.trim();
 
-  //   if (email.isEmpty) {
-  //     mahattatyAlertDialog(
-  //       context,
-  //       message: 'Email cannot be empty',
-  //       type: MahattatyAlertType.error,
-  //       onOk: () => Navigator.of(context).pop(),
-  //     );
-  //     return;
-  //   }
-
-  //   try {
-  //     await _firebaseAuth.sendPasswordResetEmail(email: email);
-
-  //     mahattatyAlertDialog(
-  //       context,
-  //       message: isResend
-  //           ? 'Resent password reset link to $email'
-  //           : 'Password reset link sent to $email',
-  //       type: MahattatyAlertType.success,
-  //     );
-
-  //     if (!emailSent) {
-  //       setState(() {
-  //         emailSent = true;
-  //       });
-  //     }
-  //   } on FirebaseAuthException catch (e) {
-  //     mahattatyAlertDialog(
-  //       context,
-  //       message: e.message ?? 'Failed to send reset email',
-  //       type: MahattatyAlertType.error,
-  //     );
-  //   }
-  // }
+Future<String> _createDynamicLink(String email) async {
+  final DynamicLinkParameters parameters = DynamicLinkParameters(
+    uriPrefix: "https://mahattaty.page.link",
+    link: Uri.parse("https://mahattaty.com/reset?email=$email"),
+    androidParameters: const AndroidParameters(
+      packageName: "com.example.mahattaty",
+      minimumVersion: 0,
+    ),
+    iosParameters: const IOSParameters(
+      bundleId: "com.example.mahattaty",
+      minimumVersion: "0",
+    ),
+  );
+  final shortLink = await FirebaseDynamicLinks.instance.buildShortLink(parameters);
+  return shortLink.shortUrl.toString();
+}

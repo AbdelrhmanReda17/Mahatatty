@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mahattaty/Utils/open_dialog.dart';
@@ -17,8 +18,25 @@ class NewPasswordDialog extends StatelessWidget {
       TextEditingController();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
+  void initializeDynamicLinks(BuildContext context) async {
+    FirebaseDynamicLinks.instance.onLink.listen((PendingDynamicLinkData? data) {
+      final Uri? deepLink = data?.link;
+      if (deepLink != null) {
+        String email = deepLink.queryParameters['email'] ?? '';
+        if (email.isNotEmpty) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => NewPasswordDialog()),
+          );
+        }
+      }
+    }).onError((error) {
+      print('Dynamic link failed: $error');
+    });
+  }
   @override
   Widget build(BuildContext context) {
+    initializeDynamicLinks(context);
     return MahattatyDialog(
       title: 'Create new password',
       description: 'Enter your new password and confirm it',

@@ -30,7 +30,9 @@ environment:
 dependencies:
     flutter:
         sdk: flutter
-
+    animated_text_kit: ^4.2.1
+    package_info_plus: ^4.0.0
+    share: ^2.0.4
     cupertino_icons: ^1.0.6
     google_fonts: ^6.2.1
     smooth_page_indicator: ^1.2.0+3
@@ -44,6 +46,7 @@ dependencies:
     flutter_facebook_auth: ^7.1.1
     email_otp: ^3.0.2
     flutter_svg: ^2.0.10+1
+    firebase_dynamic_links: ^6.0.7
 
 dev_dependencies:
     flutter_test:
