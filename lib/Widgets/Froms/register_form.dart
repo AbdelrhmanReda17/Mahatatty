@@ -64,7 +64,9 @@ class RegisterForm extends ConsumerWidget {
                 controller: _registerControllers[1],
                 iconData: FontAwesomeIcons.envelope,
                 hintText: 'Enter your email or phone number',
-                errorText: authState.error?.type == AuthErrorType.emailOrPhone
+                errorText: authState.error?.type == AuthErrorType.emailOrPhone &&
+                        authState.error?.action == AuthAction.signUp
+
                     ? authState.error?.message
                     : null,
                 validator: (value) => value!.isValidPhoneOrEmail

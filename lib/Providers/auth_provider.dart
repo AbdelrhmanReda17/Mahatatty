@@ -47,6 +47,23 @@ class AuthNotifier extends StateNotifier<AuthState> {
     resetState();
   }
 
+  Future<bool> submitForgetPassword({required String email}) async {
+    resetState();
+    state = state.copyWith(isLoading: true);
+    try {
+      final result = await _authService.sendPasswordResetEmail(recipient: email);
+      state = state.copyWith(isLoading: false);
+      return result;
+    } on AuthException catch (e) {
+      state = state.copyWith(
+        error: AuthError.fromAuthException(e , action: AuthAction.resetPassword),
+        resetError: false,
+        isLoading: false,
+      );
+      return false;
+    }
+  }
+
   Future<bool> submitLogin({
     String? emailOrPhone,
     String? password,
@@ -69,7 +86,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       return false;
     } on AuthException catch (e) {
       state = state.copyWith(
-        error: AuthError.fromAuthException(e),
+        error: AuthError.fromAuthException(e , action: AuthAction.signIn),
         resetError: false,
         isLoading: false,
       );
@@ -93,7 +110,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       return false;
     } on AuthException catch (e) {
       state = state.copyWith(
-        error: AuthError.fromAuthException(e),
+        error: AuthError.fromAuthException(e , action: AuthAction.signUp),
         resetError: false,
         isLoading: false,
       );

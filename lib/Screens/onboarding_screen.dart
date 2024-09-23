@@ -55,7 +55,7 @@ class OnboardingScreen extends StatelessWidget {
             ],
           ),
           Positioned(
-            bottom: 350,
+            bottom: MediaQuery.of(context).size.height * 0.35,
             width: MediaQuery.of(context).size.width,
             child: Center(
               child: SmoothPageIndicator(

@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 enum MahattatyAlertType { error, success, warning, info }
 
 void mahattatyAlertDialog(
-  BuildContext context, {
-  required String message,
-  required MahattatyAlertType type,
-  Function? onOk,
-}) {
+    BuildContext context, {
+      required String message,
+      required MahattatyAlertType type,
+      Function? onOk,
+      Function? onPop,
+    }) {
   Color? color;
   IconData? icon;
 
+  // Determine the color and icon based on the alert type
   switch (type) {
     case MahattatyAlertType.error:
       color = Colors.red;
@@ -29,7 +31,6 @@ void mahattatyAlertDialog(
       icon = Icons.info;
       break;
   }
-
   Widget okButton = TextButton(
     child: const Text("Ok"),
     onPressed: () {
@@ -40,35 +41,36 @@ void mahattatyAlertDialog(
     },
   );
 
-  AlertDialog alert = AlertDialog(
-    title: Row(
-      children: [
-        Icon(
-          icon,
-          color: color,
+  showDialog(
+    context: context,
+    barrierDismissible: true,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Row(
+          children: [
+            Icon(
+              icon,
+              color: color,
+            ),
+            const SizedBox(width: 10),
+            Text(
+              type.toString().split('.').last.toUpperCase(),
+              style: TextStyle(
+                color: color,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
-        const SizedBox(width: 10),
-        Text(
-          type.toString().split('.').last.toUpperCase(),
-          style: TextStyle(
-            color: color,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
-    ),
-    content: Text(message),
-    actions: [
-      okButton,
-    ],
-  );
-
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
+        content: Text(message),
+        actions: [
+          okButton,
+        ],
+      );
+    },
+  ).then((value) {
+    if (onPop != null) {
+      onPop();
+    }
   });
 }

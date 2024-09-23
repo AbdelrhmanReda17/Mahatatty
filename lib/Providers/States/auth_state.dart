@@ -8,19 +8,27 @@ enum AuthErrorType {
   networkError,
 }
 
+enum AuthAction {
+  signIn,
+  signUp,
+  signOut,
+  resetPassword,
+}
+
 class AuthError {
   String? message;
   AuthErrorType? type;
+  AuthAction? action;
 
-  AuthError({this.message, this.type});
+  AuthError({this.message, this.type , this.action});
 
-  AuthError copyWith({bool? isError, String? message}) {
+  AuthError copyWith({bool? isError, String? message , AuthAction? action}) {
     return AuthError(
       message: message ?? this.message,
     );
   }
 
-  AuthError.fromAuthException(AuthException exception) {
+  AuthError.fromAuthException(AuthException exception , {this.action}) {
     switch (exception.type) {
       case AuthExceptionType.wrongEmail:
         type = AuthErrorType.emailOrPhone;

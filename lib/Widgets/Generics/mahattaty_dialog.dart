@@ -12,6 +12,7 @@ class MahattatyDialog extends StatelessWidget {
   final List<Widget> content;
   final String buttonText;
   final VoidCallback onButtonPressed;
+  final bool disabled;
   final ContentPlacement contentPlacement;
   final TextAlign textAlign;
 
@@ -20,6 +21,7 @@ class MahattatyDialog extends StatelessWidget {
     required this.description,
     required this.content,
     required this.buttonText,
+    this.disabled = false,
     required this.onButtonPressed,
     this.contentPlacement = ContentPlacement.afterTitle,
     this.textAlign = TextAlign.start,
@@ -70,6 +72,7 @@ class MahattatyDialog extends StatelessWidget {
           MahattatyButton(
             text: buttonText,
             style: MahattatyButtonStyle.primary,
+            disabled: disabled,
             onPressed: onButtonPressed,
             height: 60,
           ),

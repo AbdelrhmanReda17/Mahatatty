@@ -16,27 +16,9 @@ class NewPasswordDialog extends StatelessWidget {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  void initializeDynamicLinks(BuildContext context) async {
-    FirebaseDynamicLinks.instance.onLink.listen((PendingDynamicLinkData? data) {
-      final Uri? deepLink = data?.link;
-      if (deepLink != null) {
-        String email = deepLink.queryParameters['email'] ?? '';
-        if (email.isNotEmpty) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => NewPasswordDialog()),
-          );
-        }
-      }
-    }).onError((error) {
-      print('Dynamic link failed: $error');
-    });
-  }
   @override
   Widget build(BuildContext context) {
-    initializeDynamicLinks(context);
     return MahattatyDialog(
       title: 'Create new password',
       description: 'Enter your new password and confirm it',

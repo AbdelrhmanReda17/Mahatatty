@@ -38,11 +38,14 @@ class AuthService {
 
   Future<bool> sendPasswordResetEmail({required String recipient}) async {
     try {
+      await _auth.sendPasswordResetEmail(email: recipient);
       return true;
+    } on FirebaseAuthException catch (e) {
+      throw AuthException.fromFirebaseAuthException(e);
     } catch (e) {
       throw AuthException(
         message:
-            'An unexpected error occurred during sending OTP: ${e.toString()}',
+            'An unexpected error occurred during sending password reset email: ${e.toString()}',
         type: AuthExceptionType.unknown,
       );
     }

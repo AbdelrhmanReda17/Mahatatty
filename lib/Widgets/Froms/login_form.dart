@@ -58,7 +58,8 @@ class LoginForm extends ConsumerWidget {
               labelText: 'Email or Phone Number',
               controller: _loginControllers[0],
               iconData: FontAwesomeIcons.envelope,
-              errorText: authState.error?.type == AuthErrorType.emailOrPhone
+              errorText: authState.error?.type == AuthErrorType.emailOrPhone &&
+                      authState.error?.action == AuthAction.signIn
                   ? authState.error?.message
                   : null,
               validator: (value) => value!.isValidPhoneOrEmail
@@ -73,7 +74,8 @@ class LoginForm extends ConsumerWidget {
               labelText: 'Password',
               controller: _loginControllers[1],
               isPassword: true,
-              errorText: authState.error?.type == AuthErrorType.password
+              errorText: authState.error?.type == AuthErrorType.password &&
+                      authState.error?.action == AuthAction.signIn
                   ? authState.error?.message
                   : null,
               iconData: FontAwesomeIcons.lock,

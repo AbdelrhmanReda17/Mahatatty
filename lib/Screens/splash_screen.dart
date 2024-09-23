@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,6 +9,7 @@ import 'package:mahattaty/Screens/onboarding_screen.dart';
 import 'package:mahattaty/Screens/temp_screen.dart';
 import 'package:mahattaty/Utils/constant.dart';
 import 'package:mahattaty/Utils/open_screens.dart';
+import 'package:mahattaty/Widgets/Dialogs/new_password_dialog.dart';
 
 import '../Providers/auth_provider.dart';
 
@@ -22,7 +25,7 @@ class SplashScreen extends ConsumerStatefulWidget {
 class SplashScreenState extends ConsumerState<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   void navigate() {
     final authState = ref.read(authProvider);
     if (authState.user != null) {
@@ -36,6 +39,30 @@ class SplashScreenState extends ConsumerState<SplashScreen>
         routeName: OnboardingScreen().routeName,
         isReplace: true,
       );
+    }
+  }
+
+  void initializeDynamicLinks(BuildContext context) async {
+    FirebaseDynamicLinks.instance.onLink.listen((PendingDynamicLinkData? data) {
+      final Uri? deepLink = data?.link;
+      if (deepLink != null) {
+        String email = deepLink.queryParameters['email'] ?? '';
+        if (email.isNotEmpty) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => NewPasswordDialog()),
+          );
+        }
+      }
+    }).onError((error) {
+      log('Dynamic link failed: $error');
+    });
+
+    // Check if app is launched with a dynamic link
+    final PendingDynamicLinkData? initialLink =
+        await FirebaseDynamicLinks.instance.getInitialLink();
+    if (initialLink?.link != null) {
+      log('App launched with dynamic link: ${initialLink!.link}');
     }
   }
 
@@ -61,6 +88,8 @@ class SplashScreenState extends ConsumerState<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
+    initializeDynamicLinks(context);
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 0.0,
