@@ -23,19 +23,6 @@ class RegisterForm extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authProvider);
     final authNotifier = ref.read(authProvider.notifier);
-
-    ref.listen<AuthState>(authProvider, (previous, next) {
-      if (next.error != null &&
-          (next.error!.type == AuthErrorType.unknown ||
-              next.error!.type == AuthErrorType.networkError)) {
-        mahattatyAlertDialog(
-          context,
-          message: next.error!.message ?? 'An error occurred',
-          type: MahattatyAlertType.error,
-          onOk: () => authNotifier.resetState(),
-        );
-      }
-    });
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return Form(

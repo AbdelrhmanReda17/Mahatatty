@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 enum MahattatyAlertType { error, success, warning, info }
 
 void mahattatyAlertDialog(
-    BuildContext context, {
-      required String message,
-      required MahattatyAlertType type,
-      Function? onOk,
-      Function? onPop,
-    }) {
+  BuildContext context, {
+  required String message,
+  required MahattatyAlertType type,
+  Function? onOk,
+  Function? onPop,
+}) {
   Color? color;
   IconData? icon;
 
@@ -43,7 +43,6 @@ void mahattatyAlertDialog(
 
   showDialog(
     context: context,
-    barrierDismissible: true,
     builder: (BuildContext context) {
       return AlertDialog(
         title: Row(

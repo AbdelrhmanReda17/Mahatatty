@@ -1,9 +1,7 @@
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mahattaty/Utils/validate.dart';
-import 'package:share/share.dart';
 import '../../Providers/States/auth_state.dart';
 import '../../Providers/auth_provider.dart';
 import '../Generics/mahattaty_alert.dart';

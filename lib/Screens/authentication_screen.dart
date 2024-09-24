@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mahattaty/Providers/States/auth_state.dart';
+import 'package:mahattaty/Providers/auth_provider.dart';
 import 'package:mahattaty/Utils/open_screens.dart';
 import 'package:mahattaty/Widgets/Froms/login_form.dart';
 import 'package:mahattaty/Widgets/Froms/register_form.dart';
+import 'package:mahattaty/Widgets/Generics/mahattaty_alert.dart';
 import 'package:mahattaty/Widgets/social_accounts_login.dart';
 
-class AuthenticationScreen extends StatefulWidget {
+class AuthenticationScreen extends ConsumerStatefulWidget {
   const AuthenticationScreen({super.key = const Key('login_screen')});
   String get loginRouteName => '/authentication/login';
   String get registerRouteName => '/authentication/register';
 
   @override
-  State<AuthenticationScreen> createState() => _AuthenticationScreenState();
+  AuthenticationScreenState createState() => AuthenticationScreenState();
 }
 
-class _AuthenticationScreenState extends State<AuthenticationScreen>
+class AuthenticationScreenState extends ConsumerState<AuthenticationScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController? _controller;
 
@@ -41,6 +45,20 @@ class _AuthenticationScreenState extends State<AuthenticationScreen>
         ModalRoute.of(context)!.settings.name == widget.loginRouteName ||
             widget.key == const Key('login_screen');
     Widget content = isLogin ? LoginForm() : RegisterForm();
+    final authNotifier = ref.read(authProvider.notifier);
+
+    ref.listen<AuthState>(authProvider, (previous, next) {
+      if (next.error != null &&
+          (next.error!.type == AuthErrorType.unknown ||
+              next.error!.type == AuthErrorType.networkError)) {
+        mahattatyAlertDialog(
+          context,
+          message: next.error!.message ?? 'An error occurred',
+          type: MahattatyAlertType.error,
+          onOk: () => authNotifier.resetState(),
+        );
+      }
+    });
 
     return Scaffold(
       body: FadeTransition(
