@@ -1,11 +1,10 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mahattaty/Providers/auth_provider.dart';
-import 'package:mahattaty/Widgets/Generics/mahattaty_button.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_scaffold.dart';
-import 'package:mahattaty/Widgets/Generics/mahattaty_switch.dart';
+import 'package:mahattaty/Widgets/train_search_form_selector.dart';
+import 'package:mahattaty/Widgets/train_search_form.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -15,18 +14,25 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class HomeScreenState extends ConsumerState<HomeScreen> {
-  bool isSwitched = false;
+  bool isFindTicketClicked = false;
+  bool isRoundTrip = false;
 
-  void onChanged(bool value) {
+  void onSearchClicked() {
     setState(() {
-      isSwitched = value;
+      isFindTicketClicked = !isFindTicketClicked;
+    });
+  }
+
+  void onRoundTripClicked(bool value) {
+    setState(() {
+      isRoundTrip = value;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final authState = ref.read(authProvider);
-    log(authState.toString());
+
     return MahattatyScaffold(
       appBarHeight: 50,
       appBarContent: Padding(
@@ -88,171 +94,22 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
               ],
             ),
-            Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Departure',
-                              style: TextStyle(color: Colors.blue),
-                            ),
-                            Text(
-                              'NYC',
-                              style: TextStyle(
-                                fontSize: 19,
-                                fontWeight: FontWeight.w900,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              ),
-                            ),
-                            Text('New York Station',
-                                style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimaryContainer)),
-                          ],
-                        ),
-                        const Icon(
-                          FontAwesomeIcons.rightLeft,
-                          color: Colors.blue,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            const Text(
-                              'Arrival',
-                              style: TextStyle(color: Colors.blue),
-                            ),
-                            Text(
-                              'VIT',
-                              style: TextStyle(
-                                  fontSize: 19,
-                                  fontWeight: FontWeight.w900,
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary),
-                            ),
-                            Text(
-                              'Vietnam Station',
-                              style: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimaryContainer),
-                            ),
-                          ],
-                        ),
-                      ],
+            AnimatedSwitcher(
+              switchInCurve: Curves.easeIn,
+              switchOutCurve: Curves.easeOut,
+              duration: const Duration(milliseconds: 300),
+              transitionBuilder: (Widget child, Animation<double> animation) {
+                return FadeTransition(opacity: animation, child: child);
+              },
+              child: !isFindTicketClicked
+                  ? TrainSearchForm(
+                      onSearchClicked: onSearchClicked,
+                    )
+                  : TrainSearchFormSelector(
+                      onSearchClicked: onSearchClicked,
+                      onRoundTripClicked: onRoundTripClicked,
+                      isRoundTrip: isRoundTrip,
                     ),
-                    const SizedBox(height: 12.5),
-                    Divider(
-                      color: Theme.of(context).colorScheme.onPrimaryContainer,
-                      thickness: 1,
-                    ),
-                    const SizedBox(height: 12.5),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Date of departure',
-                              style: TextStyle(color: Colors.blue),
-                            ),
-                            Text(
-                              'Mon, 10 Sep 2023',
-                              style: TextStyle(
-                                  fontSize: 19,
-                                  fontWeight: FontWeight.w900,
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            MahattatySwitch(
-                              onChanged: onChanged,
-                              value: isSwitched,
-                              enableColor:
-                                  Theme.of(context).colorScheme.primary,
-                              height: 20,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              'Round-trip',
-                              style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 30),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Total passengers',
-                              style: TextStyle(color: Colors.blue),
-                            ),
-                            const SizedBox(width: 16),
-                            Row(
-                              children: [
-                                IconButton(
-                                  icon: Icon(
-                                    FontAwesomeIcons.circleMinus,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                                  onPressed: () {},
-                                ),
-                                Text(
-                                  '1',
-                                  style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.onPrimary,
-                                    fontSize: 19,
-                                  ),
-                                ),
-                                IconButton(
-                                  icon: Icon(
-                                    FontAwesomeIcons.circlePlus,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                  ),
-                                  onPressed: () {},
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.4,
-                          child: MahattatyButton(
-                            onPressed: () {},
-                            style: MahattatyButtonStyle.primary,
-                            text: 'Search for trains',
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
             ),
           ],
         ),
