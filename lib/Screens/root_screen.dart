@@ -5,6 +5,7 @@ import 'package:mahattaty/Providers/auth_provider.dart';
 import 'package:mahattaty/Screens/authentication_screen.dart';
 import 'package:mahattaty/Screens/home_screen.dart';
 import 'package:mahattaty/Utils/open_screens.dart';
+import 'explore_screen.dart';
 
 class RootScreen extends ConsumerStatefulWidget {
   const RootScreen({super.key});
@@ -28,7 +29,7 @@ class RootScreenState extends ConsumerState<RootScreen> {
 
   static const List<Widget> _screens = [
     HomeScreen(),
-    Placeholder(),
+    ExploreScreen(),
     Placeholder(),
     Placeholder(),
   ];
