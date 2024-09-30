@@ -47,6 +47,7 @@ dependencies:
     email_otp: ^3.0.2
     flutter_svg: ^2.0.10+1
     firebase_dynamic_links: ^6.0.7
+    shared_preferences: ^2.3.2
 
 dev_dependencies:
     flutter_test:

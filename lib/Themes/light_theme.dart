@@ -27,7 +27,7 @@ AppBarTheme lightAppBarTheme = const AppBarTheme(
     systemNavigationBarIconBrightness: Brightness.dark,
   ),
   backgroundColor: Colors.white,
-  foregroundColor: Colors.black,
+  foregroundColor: Color(0xFF181d31),
   scrolledUnderElevation: 0.0,
   elevation: 0.0,
 );
@@ -124,8 +124,8 @@ InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
 ThemeData lightTheme = ThemeData(
   colorScheme: colorScheme,
   textTheme: GoogleFonts.outfitTextTheme().apply(
-    displayColor: Colors.black,
-    bodyColor: Colors.black,
+    displayColor: const Color(0xFF181d31),
+    bodyColor: const Color(0xFF181d31),
   ),
   appBarTheme: lightAppBarTheme,
   elevatedButtonTheme: elevatedButtonTheme,

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mahattaty/Providers/States/auth_state.dart';
 import 'package:mahattaty/Providers/auth_provider.dart';
-import 'package:mahattaty/Screens/temp_screen.dart';
+import 'package:mahattaty/Screens/root_screen.dart';
 import 'package:mahattaty/Utils/open_screens.dart';
 import 'package:mahattaty/Utils/validate.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_alert.dart';
@@ -26,9 +26,6 @@ class RegisterForm extends ConsumerWidget {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         return Form(
-          onPopInvokedWithResult: (_, __) {
-            authNotifier.resetState();
-          },
           key: _registerFromKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,7 +106,7 @@ class RegisterForm extends ConsumerWidget {
                     if (isRegistered) {
                       openScreen(
                         context: context,
-                        routeName: const TempScreen().routeName,
+                        routeName: const RootScreen().homeRouteName,
                         isReplace: true,
                       );
                     }

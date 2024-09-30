@@ -5,9 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mahattaty/Providers/States/auth_state.dart';
 import 'package:mahattaty/Providers/auth_provider.dart';
-import 'package:mahattaty/Screens/temp_screen.dart';
+import 'package:mahattaty/Screens/root_screen.dart';
 import 'package:mahattaty/Utils/open_screens.dart';
-import 'package:mahattaty/Widgets/Generics/mahattaty_alert.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_button.dart';
 import 'package:mahattaty/Widgets/Generics/mahattaty_text_form_field.dart';
 import 'package:mahattaty/Widgets/Dialogs/forgot_password_dialog.dart';
@@ -31,9 +30,6 @@ class LoginForm extends ConsumerWidget {
     final authNotifier = ref.read(authProvider.notifier);
 
     return Form(
-      onPopInvokedWithResult: (_, __) {
-        authNotifier.resetState();
-      },
       key: _loginFormKey,
       child: SizedBox(
         width: double.infinity,
@@ -106,7 +102,7 @@ class LoginForm extends ConsumerWidget {
                   if (isLogined) {
                     openScreen(
                       context: context,
-                      routeName: const TempScreen().routeName,
+                      routeName: const RootScreen().homeRouteName,
                       isReplace: true,
                     );
                   }

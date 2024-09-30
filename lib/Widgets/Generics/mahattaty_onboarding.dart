@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:mahattaty/Screens/authentication_screen.dart';
 import 'package:mahattaty/Utils/open_screens.dart';

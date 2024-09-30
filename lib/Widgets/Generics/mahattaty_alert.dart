@@ -11,8 +11,6 @@ void mahattatyAlertDialog(
 }) {
   Color? color;
   IconData? icon;
-
-  // Determine the color and icon based on the alert type
   switch (type) {
     case MahattatyAlertType.error:
       color = Colors.red;

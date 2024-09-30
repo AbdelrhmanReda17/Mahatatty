@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mahattaty/Providers/auth_provider.dart';
-import 'package:mahattaty/Screens/temp_screen.dart';
+import 'package:mahattaty/Screens/root_screen.dart';
 import 'package:mahattaty/Themes/dark_theme.dart';
 import 'package:mahattaty/Utils/constant.dart';
 import 'package:mahattaty/Utils/open_screens.dart';
@@ -37,7 +37,7 @@ class SocialAccountsLogin extends ConsumerWidget {
                   if (isLogined) {
                     openScreen(
                       context: context,
-                      routeName: const TempScreen().routeName,
+                      routeName: const RootScreen().homeRouteName,
                       isReplace: true,
                     );
                   }
@@ -60,7 +60,7 @@ class SocialAccountsLogin extends ConsumerWidget {
                   if (isLogined) {
                     openScreen(
                       context: context,
-                      routeName: const TempScreen().routeName,
+                      routeName: const RootScreen().homeRouteName,
                       isReplace: true,
                     );
                   }

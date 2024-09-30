@@ -6,9 +6,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 class OnboardingScreen extends StatelessWidget {
   OnboardingScreen({super.key});
   String get routeName => '/onboarding';
-
   final PageController _controller = PageController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
