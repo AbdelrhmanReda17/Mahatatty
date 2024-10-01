@@ -166,7 +166,6 @@ class OrderSummaryScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Passenger Name
                   Text(
                     passengerName,
                     style: TextStyle(
