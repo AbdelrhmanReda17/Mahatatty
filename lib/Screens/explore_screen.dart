@@ -7,6 +7,8 @@ import 'package:mahattaty/Widgets/Helpers/train_station_details.dart';
 import '../Themes/light_theme.dart';
 import '../Widgets/Generics/weather_widget.dart';
 import '../Widgets/train_ticket_card.dart';
+import 'hot_news_screen.dart';
+import 'notification_screen.dart';
 
 class ExploreScreen extends ConsumerStatefulWidget {
   const ExploreScreen({super.key});
@@ -67,7 +69,10 @@ class ExploreScreenState extends ConsumerState<ExploreScreen> {
                 ],
               ),
               onPressed: () {
-                print("Notification icon tapped");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => NotificationPage()),
+                );
               },
             ),
           ],
@@ -132,7 +137,6 @@ class ExploreScreenState extends ConsumerState<ExploreScreen> {
               visibility: '2.3 km',
             ),
             const SizedBox(height: 20),
-
             Expanded(
               child: ListView(
                 children: const [
@@ -152,6 +156,15 @@ class ExploreScreenState extends ConsumerState<ExploreScreen> {
                   TrainTicketCard(),
                 ],
               ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HotNewsScreen()),
+                );
+              },
+              child: const Text('Go to Hot News'),
             ),
           ],
         ),
