@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mahattaty/features/train_booking/presentation/components/cards/train_card.dart';
-import 'package:mahattaty/features/train_booking/presentation/controllers/bestOffersTrainsController.dart';
+import 'package:mahattaty/features/train_booking/presentation/controllers/best_offers_trains_controller.dart';
 
 class BestOffers extends ConsumerWidget {
   const BestOffers({super.key});

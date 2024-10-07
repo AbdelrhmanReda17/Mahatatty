@@ -8,7 +8,7 @@ class GetTrainsBySearch {
 
   GetTrainsBySearch(this.repository);
 
-  Future<Train> call({
+  Future<List<Train>> call({
     required TicketType ticket,
     required TrainStations from,
     required TrainStations to,

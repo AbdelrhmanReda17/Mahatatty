@@ -4,7 +4,7 @@ import '../entities/train.dart';
 abstract class BaseTrainRepository {
   Future<List<Train>> getAllTrains();
 
-  Future<Train> getTrainsBySearch({
+  Future<List<Train>> getTrainsBySearch({
     required TicketType ticket,
     required TrainStations from,
     required TrainStations to,

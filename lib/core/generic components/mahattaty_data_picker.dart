@@ -5,7 +5,9 @@ import 'package:mahattaty/core/generic%20components/mahattaty_dialog.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class MahattatyDataPicker extends StatefulWidget {
-  const MahattatyDataPicker({super.key});
+  const MahattatyDataPicker({super.key, required this.onDateSelected});
+
+  final Function(DateTime args) onDateSelected;
 
   @override
   State<MahattatyDataPicker> createState() => _MahattatyDataPickerState();
@@ -43,12 +45,12 @@ class _MahattatyDataPickerState extends State<MahattatyDataPicker> {
           navigationMode: DateRangePickerNavigationMode.snap,
           showActionButtons: false,
           onSelectionChanged: _onSelectionChanged,
-          selectionMode: DateRangePickerSelectionMode.extendableRange,
+          selectionMode: DateRangePickerSelectionMode.single,
         ),
       ],
       buttonText: 'Select',
       onButtonPressed: () {
-        log('Selected Date: ${args.value}');
+        widget.onDateSelected(args.value);
         Navigator.of(context).pop();
       },
     );

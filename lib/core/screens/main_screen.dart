@@ -4,29 +4,10 @@ import 'package:mahattaty/features/news/presentation/components/latest_news.dart
 import 'package:mahattaty/features/train_booking/presentation/components/cards/train_ticket_card.dart';
 import 'package:mahattaty/features/train_booking/presentation/components/search_card.dart';
 import 'package:mahattaty/features/train_booking/presentation/components/search_card_form.dart';
+import 'package:mahattaty/features/train_booking/presentation/components/train_search.dart';
 
-class MainScreen extends StatefulWidget {
+class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
-
-  @override
-  State<MainScreen> createState() => _MainScreenState();
-}
-
-class _MainScreenState extends State<MainScreen> {
-  bool isFindTicketClicked = false;
-  bool isRoundTrip = false;
-
-  void onSearchClicked() {
-    setState(() {
-      isFindTicketClicked = !isFindTicketClicked;
-    });
-  }
-
-  void onRoundTripClicked(bool value) {
-    setState(() {
-      isRoundTrip = value;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,23 +68,7 @@ class _MainScreenState extends State<MainScreen> {
               ],
             ),
             const SizedBox(height: 10),
-            AnimatedSwitcher(
-              switchInCurve: Curves.easeIn,
-              switchOutCurve: Curves.easeOut,
-              duration: const Duration(milliseconds: 500),
-              transitionBuilder: (Widget child, Animation<double> animation) {
-                return FadeTransition(opacity: animation, child: child);
-              },
-              child: !isFindTicketClicked
-                  ? SearchCard(
-                      onSearchClicked: onSearchClicked,
-                    )
-                  : SearchCardForm(
-                      onSearchClicked: onSearchClicked,
-                      onRoundTripClicked: onRoundTripClicked,
-                      isRoundTrip: isRoundTrip,
-                    ),
-            ),
+            const TrainSearch(),
             const Expanded(
               child: LatestNews(
                 seeMoreEnabled: true,

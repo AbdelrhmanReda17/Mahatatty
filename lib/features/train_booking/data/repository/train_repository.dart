@@ -30,13 +30,12 @@ class TrainRepository implements BaseTrainRepository {
   }
 
   @override
-  Future<Train> getTrainsBySearch(
+  Future<List<Train>> getTrainsBySearch(
       {required TicketType ticket,
       required TrainStations from,
       required TrainStations to,
       DateTime? fromDateTime,
       DateTime? toDateTime}) {
-    // TODO: implement getTrainsBySearch
     throw UnimplementedError();
   }
 

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mahattaty/core/generic%20components/mahattaty_data_picker.dart';
 import 'package:mahattaty/core/utils/open_dialogs.dart';
@@ -10,21 +11,25 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 import '../../../../core/generic components/mahattaty_button.dart';
 import '../../../../core/utils/time_converter.dart';
+import '../controllers/search_train_controller.dart';
 
-class SearchCardForm extends StatelessWidget {
-  final VoidCallback onSearchClicked;
+class SearchCardForm extends ConsumerWidget {
+  final VoidCallback switchForms;
   final bool isRoundTrip;
   final Function(bool) onRoundTripClicked;
+  final VoidCallback onSearchClicked;
 
   const SearchCardForm({
     super.key,
-    required this.onSearchClicked,
+    required this.switchForms,
     required this.isRoundTrip,
     required this.onRoundTripClicked,
+    required this.onSearchClicked,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final searchQuery = ref.watch(searchProvider);
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
@@ -55,19 +60,19 @@ class SearchCardForm extends StatelessWidget {
             Stack(
               alignment: Alignment.centerRight,
               children: [
-                const Column(
+                Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     TrainStationDetails(
-                      code: 'NYC',
-                      location: 'New York City',
+                      code: searchQuery.fromStation!.code,
+                      location: searchQuery.fromStation!.name,
                       direction: TrainStationDirection.origin,
                       style: TrainStationDetailsStyle.secondary,
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     TrainStationDetails(
-                      code: 'VIT',
-                      location: 'Vitoria',
+                      code: searchQuery.toStation!.code,
+                      location: searchQuery.toStation!.name,
                       direction: TrainStationDirection.destination,
                       style: TrainStationDetailsStyle.secondary,
                     ),
@@ -106,7 +111,14 @@ class SearchCardForm extends StatelessWidget {
                 onTap: () async {
                   OpenDialogs.openCustomDialog(
                     context: context,
-                    dialog: const MahattatyDataPicker(),
+                    dialog: MahattatyDataPicker(
+                      onDateSelected: (DateTime date) {
+                        ref.read(searchProvider.notifier).state =
+                            ref.read(searchProvider).copyWith(
+                                  departureDate: Timestamp.fromDate(date),
+                                );
+                      },
+                    ),
                   );
                 },
                 child: RichText(
@@ -131,7 +143,8 @@ class SearchCardForm extends StatelessWidget {
                       ),
                       const WidgetSpan(child: SizedBox(width: 10)),
                       TextSpan(
-                        text: TimeConverter.convertTimeToDate(Timestamp.now()),
+                        text: TimeConverter.convertTimeToDate(
+                            searchQuery.departureDate),
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ],
@@ -160,7 +173,15 @@ class SearchCardForm extends StatelessWidget {
                             onTap: () async {
                               OpenDialogs.openCustomDialog(
                                 context: context,
-                                dialog: const Text('Departure Date'),
+                                dialog: MahattatyDataPicker(
+                                  onDateSelected: (DateTime date) {
+                                    ref.read(searchProvider.notifier).state =
+                                        ref.read(searchProvider).copyWith(
+                                              arrivalDate:
+                                                  Timestamp.fromDate(date),
+                                            );
+                                  },
+                                ),
                               );
                             },
                             child: RichText(
@@ -188,10 +209,11 @@ class SearchCardForm extends StatelessWidget {
                                     ),
                                   ),
                                   const WidgetSpan(child: SizedBox(width: 10)),
-                                  const TextSpan(
-                                    text: ' 2-5-2022',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
+                                  TextSpan(
+                                    text: TimeConverter.convertTimeToDate(
+                                        searchQuery.arrivalDate),
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
@@ -202,59 +224,12 @@ class SearchCardForm extends StatelessWidget {
                     )
                   : const SizedBox(),
             ),
-            // if (isRoundTrip) ...[
-            //   const SizedBox(height: 16),
-            //   Container(
-            //     padding: const EdgeInsets.all(8),
-            //     width: double.infinity,
-            //     decoration: BoxDecoration(
-            //       border: Border.all(
-            //         color: Theme.of(context).colorScheme.onPrimaryContainer,
-            //       ),
-            //       borderRadius: BorderRadius.circular(8),
-            //     ),
-            //     child: InkWell(
-            //       onTap: () async {
-            //         OpenDialogs.openCustomDialog(
-            //           context: context,
-            //           dialog: const Text('Departure Date'),
-            //         );
-            //       },
-            //       child: RichText(
-            //         text: TextSpan(
-            //           style: TextStyle(
-            //               color: Theme.of(context).colorScheme.onPrimary),
-            //           children: [
-            //             TextSpan(
-            //               text: 'Return Date\n',
-            //               style: TextStyle(
-            //                 color: Theme.of(context)
-            //                     .colorScheme
-            //                     .onPrimaryContainer,
-            //               ),
-            //             ),
-            //             const WidgetSpan(child: SizedBox(height: 25)),
-            //             WidgetSpan(
-            //               alignment: PlaceholderAlignment.middle,
-            //               child: Icon(
-            //                 FontAwesomeIcons.solidCalendarDays,
-            //                 color: Theme.of(context).colorScheme.primary,
-            //               ),
-            //             ),
-            //             const WidgetSpan(child: SizedBox(width: 10)),
-            //             const TextSpan(
-            //               text: ' 2-5-2022',
-            //               style: TextStyle(fontWeight: FontWeight.bold),
-            //             ),
-            //           ],
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ],
             const SizedBox(height: 16),
             MahattatyButton(
-              onPressed: onSearchClicked,
+              onPressed: () {
+                onSearchClicked();
+                // switchForms();
+              },
               style: MahattatyButtonStyle.primary,
               text: 'Search for trains',
             ),
