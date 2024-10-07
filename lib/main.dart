@@ -1,15 +1,17 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mahattaty/Screens/authentication_screen.dart';
-import 'package:mahattaty/Screens/onboarding_screen.dart';
-import 'package:mahattaty/Screens/splash_screen.dart';
-import 'package:mahattaty/Screens/root_screen.dart';
-import 'package:mahattaty/Themes/dark_theme.dart';
-import 'package:mahattaty/Themes/light_theme.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:mahattaty/authentication/presentation/screens/authentication_screen.dart';
+import 'package:mahattaty/core/screens/root_screen.dart';
+import 'package:mahattaty/features/news/presentation/screens/news_screen.dart';
+import 'package:mahattaty/onboarding/presentation/screens/splash_screen.dart';
+import 'package:mahattaty/themes/dark_theme.dart';
+import 'package:mahattaty/themes/light_theme.dart';
 import 'firebase_options.dart';
+import 'dart:developer';
+
+import 'onboarding/presentation/screens/onboarding_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,6 +20,7 @@ Future<void> main() async {
   ).then((value) => log('Firebase initialized'));
   runApp(const ProviderScope(child: MyApp()));
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -43,22 +46,28 @@ class MyApp extends StatelessWidget {
       darkTheme: darkTheme,
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
+      // home: const NewsScreen(),
       initialRoute: const SplashScreen().routeName,
       routes: {
+        const RootScreen().homeRouteName: (context) => const RootScreen(
+              key: Key('home_screen'),
+            ),
+        const RootScreen().exploreRouteName: (context) => const RootScreen(
+              key: Key('explore_screen'),
+            ),
+        const RootScreen().profileRouteName: (context) => const RootScreen(
+              key: Key('profile_screen'),
+            ),
+        const RootScreen().myTicketRouteName: (context) => const RootScreen(
+              key: Key('my_ticket_screen'),
+            ),
         const SplashScreen().routeName: (context) => const SplashScreen(),
-        OnboardingScreen().routeName: (context) => OnboardingScreen(),
+        const OnboardingScreen().routeName: (context) =>
+            const OnboardingScreen(),
         const AuthenticationScreen().loginRouteName: (context) =>
-            const AuthenticationScreen(
-              key: Key('login_screen'),
-            ),
+            const AuthenticationScreen(key: Key('login_screen')),
         const AuthenticationScreen().registerRouteName: (context) =>
-            const AuthenticationScreen(
-              key: Key('register_screen'),
-            ),
-        const RootScreen().homeRouteName: (context) => const RootScreen(),
-        const RootScreen().exploreRouteName: (context) => const RootScreen(),
-        const RootScreen().profileRouteName: (context) => const RootScreen(),
-        const RootScreen().myTicketRouteName: (context) => const RootScreen(),
+            const AuthenticationScreen(key: Key('register_screen')),
       },
     );
   }
