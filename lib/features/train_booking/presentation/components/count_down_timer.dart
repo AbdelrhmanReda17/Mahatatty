@@ -6,14 +6,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class CountdownTimer extends ConsumerStatefulWidget {
   final DateTime targetDateTime; // Assuming target is of type DateTime
 
-  const CountdownTimer({Key? key, required this.targetDateTime})
-      : super(key: key);
+  const CountdownTimer({super.key, required this.targetDateTime});
 
   @override
-  _CountdownTimerState createState() => _CountdownTimerState();
+  CountdownTimerState createState() => CountdownTimerState();
 }
 
-class _CountdownTimerState extends ConsumerState<CountdownTimer> {
+class CountdownTimerState extends ConsumerState<CountdownTimer> {
   late Duration remainingDuration;
   late Timer _timer;
 

@@ -26,45 +26,45 @@ class TrainModel extends Train {
   });
 
   factory TrainModel.fromFireStore(Map<String, dynamic> map, String id) {
-    // log(
-    //   'TrainModel.fromFireStore: ${map.toString()} ${double.parse(map['seatDiscount'])})',
-    // );
-    return TrainModel(
-      id,
-      trainName: map['trainName'],
-      trainNumber: map['trainNumber'],
-      trainType: TrainType.values.firstWhere(
-        (element) => element.toString() == 'TrainType.${map["trainType"]}',
-      ),
-      trainSeats: (map['trainSeats'] as List)
-          .map((e) => TrainSeatModel.fromFireStore(e))
-          .toList(),
-      trainDepartureTime: map['trainDepartureTime'],
-      trainArrivalTime: map['trainArrivalTime'],
-      trainSeatsStatus: TrainSeatsStatus.values.firstWhere(
-        (element) =>
-            element.toString() == 'TrainSeatsStatus.${map["trainSeatsStatus"]}',
-      ),
-      trainDepartureStation: TrainStations.values.firstWhere(
-        (element) =>
-            element.toString() ==
-            'TrainStations.${map["trainDepartureStation"]}',
-      ),
-      trainArrivalStation: TrainStations.values.firstWhere(
-        (element) =>
-            element.toString() == 'TrainStations.${map["trainArrivalStation"]}',
-      ),
-      trainBookedSeats: map['trainBookedSeats'],
-      trainTotalSeats: map['trainTotalSeats'],
-      trainDepartureDate: map['trainDepartureDate'],
-      trainArrivalDate: map['trainArrivalDate'],
-      trainDuration: map['trainDuration'],
-      trainStatus: TrainStatus.values.firstWhere(
-        (element) => element.toString() == 'TrainStatus.${map["trainStatus"]}',
-      ),
-      seatDiscountDate: map['seatDiscountEndDate'],
-      seatDiscount: double.parse(map['seatDiscount'].toString()),
-    );
+    log('TrainModel.fromFireStore: $map');
+    log(map["trainArrivalStation"].toString());
+    log(map["trainDepartureStation"].toString());
+    return TrainModel(id,
+        trainName: map['trainName'],
+        trainNumber: map['trainNumber'],
+        trainType: TrainType.values.firstWhere(
+          (element) => element.toString() == 'TrainType.${map["trainType"]}',
+        ),
+        trainSeats: (map['trainSeats'] as List)
+            .map((e) => TrainSeatModel.fromFireStore(e))
+            .toList(),
+        trainDepartureTime: map['trainDepartureTime'] ?? '',
+        trainArrivalTime: map['trainArrivalTime'] ?? '',
+        trainSeatsStatus: TrainSeatsStatus.values.firstWhere(
+          (element) => element.name.toString() == '${map["trainSeatsStatus"]}',
+          orElse: () => TrainSeatsStatus.booked,
+        ), trainDepartureStation: TrainStations.values.firstWhere(
+      (element) {
+        return element.name.toLowerCase() ==
+            '${map["trainDepartureStation"].toLowerCase()}';
+      },
+    ), trainArrivalStation: TrainStations.values.firstWhere(
+      (element) {
+        return element.name.toLowerCase() ==
+            '${map["trainArrivalStation"].toLowerCase()}';
+      },
+    ),
+        trainBookedSeats: map['trainBookedSeats'],
+        trainTotalSeats: map['trainTotalSeats'],
+        trainDepartureDate: map['trainDepartureDate'],
+        trainArrivalDate: map['trainArrivalDate'],
+        trainDuration: map['trainDuration'],
+        trainStatus: TrainStatus.values.firstWhere(
+          (element) =>
+              element.toString() == 'TrainStatus.${map["trainStatus"]}',
+        ),
+        seatDiscountDate: map['seatDiscountEndDate'],
+        seatDiscount: double.parse(map['seatDiscount'].toString()));
   }
 
   @override

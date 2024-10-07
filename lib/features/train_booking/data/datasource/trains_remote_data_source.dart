@@ -174,13 +174,12 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
           .where('seatDiscount', isGreaterThan: 0)
           .where('seatDiscountEndDate', isGreaterThan: Timestamp.now())
           .get();
-
       final trains = result.docs
           .map((doc) => TrainModel.fromFireStore(doc.data(), doc.id))
           .toList();
+      log('getBestOffersTrains: $trains');
       return trains;
     } catch (e) {
-      log('getBestOffersTrains: $e');
       throw Exception(e);
     }
   }

@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mahattaty/features/train_booking/presentation/components/cards/train_card.dart';
-import 'package:mahattaty/features/train_booking/presentation/components/cards/train_ticket_card.dart';
 import 'package:mahattaty/features/train_booking/presentation/controllers/bestOffersTrainsController.dart';
 
 class BestOffers extends ConsumerWidget {
@@ -34,28 +33,24 @@ class BestOffers extends ConsumerWidget {
                 scrollDirection: Axis.horizontal,
                 itemCount: trains.length,
                 itemBuilder: (context, index) {
-                  return TrainCard(
-                    train: trains[index],
-                    onTrainSelected: (_) {},
-                    displayTrainTicketCard: false,
+                  return Column(
+                    children: [
+                      TrainCard(
+                        train: trains[index],
+                        onTrainSelected: (_) {},
+                        displayTrainTicketCard: false,
+                      ),
+                    ],
                   );
                 },
               );
             },
             loading: () {
-              return ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 3,
-                itemBuilder: (context, index) {
-                  return const Padding(
-                    padding: EdgeInsets.only(right: 5),
-                    child: const Text(''),
-                  );
-                },
+              return const Center(
+                child: CircularProgressIndicator(),
               );
             },
             error: (error, stackTrace) {
-              log('Error: $error');
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,

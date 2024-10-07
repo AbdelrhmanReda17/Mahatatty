@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mahattaty/features/train_booking/presentation/components/cards/train_ticket_card.dart';
@@ -7,17 +6,24 @@ import '../../../../../core/utils/time_converter.dart';
 import '../../../domain/entities/train.dart';
 import '../../../domain/entities/train_seat.dart';
 import '../count_down_timer.dart';
+import 'helpers/custom_line.dart';
+import 'helpers/semi_circle_clipper.dart';
+import 'helpers/train_price.dart';
+import 'helpers/train_time_information.dart';
 
 class TrainCard extends StatelessWidget {
   final Train train;
   final Function(Train) onTrainSelected;
   final bool displayTrainTicketCard;
+  final bool isLoading;
 
-  const TrainCard(
-      {super.key,
-      required this.train,
-      required this.onTrainSelected,
-      this.displayTrainTicketCard = false});
+  const TrainCard({
+    super.key,
+    required this.train,
+    required this.onTrainSelected,
+    this.displayTrainTicketCard = false,
+    this.isLoading = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +38,7 @@ class TrainCard extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.9,
       child: ClipPath(
         clipper: SemiCircleClipper(
-            fromTop: displayTrainTicketCard ? 245 : 155, radius: 15),
+            fromTop: displayTrainTicketCard ? 245 : 165, radius: 15),
         child: Container(
           margin: !displayTrainTicketCard
               ? const EdgeInsets.only(bottom: 10)
@@ -76,7 +82,7 @@ class TrainCard extends StatelessWidget {
                               ),
                             ],
                           ),
-                          TrainPriceDisplay(
+                          TrainPrice(
                             trainPrice: trainPrice,
                             discountTrainPrice: discountTrainPrice,
                             seatDiscount: train.seatDiscount,
@@ -128,9 +134,9 @@ class TrainCard extends StatelessWidget {
                       ),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * 0.015),
-                      DashedDivider(
-                        height: 1,
-                        color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      const CustomLine(
+                        isDashed: true,
+                        size: 1,
                         dashWidth: 5,
                         dashSpace: 3,
                       ),
@@ -158,227 +164,6 @@ class TrainCard extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class TrainPriceDisplay extends StatelessWidget {
-  final double trainPrice;
-  final double discountTrainPrice;
-  final double seatDiscount;
-
-  const TrainPriceDisplay({
-    super.key,
-    required this.trainPrice,
-    required this.discountTrainPrice,
-    required this.seatDiscount,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (seatDiscount > 0)
-              Text(
-                trainPrice.toStringAsFixed(2),
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimary,
-                  fontWeight: FontWeight.bold,
-                  decoration: TextDecoration.lineThrough,
-                  fontSize: 12,
-                ),
-              ),
-            RichText(
-              text: TextSpan(
-                text: discountTrainPrice.toStringAsFixed(2),
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-                children: [
-                  TextSpan(
-                    text: ' EGP',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onPrimaryContainer,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class TrainTicketCard extends StatelessWidget {
-  const TrainTicketCard(
-      {super.key, required this.ticketType, required this.ticketClass});
-
-  final String ticketType;
-  final String ticketClass;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(15),
-      ),
-      margin: const EdgeInsets.only(top: 0),
-      child: Column(
-        children: [
-          DashedDivider(
-            height: 1,
-            color: Theme.of(context).colorScheme.onPrimaryContainer,
-            dashWidth: 5,
-            dashSpace: 3,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: 'Type\n',
-                        style: TextStyle(
-                          color:
-                              Theme.of(context).colorScheme.onPrimaryContainer,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: ticketType,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                              color: Theme.of(context).colorScheme.onPrimary,
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                const CustomLine(
-                  size: 30,
-                  vertical: true,
-                ),
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: 'Class\n',
-                        style: TextStyle(
-                          color:
-                              Theme.of(context).colorScheme.onPrimaryContainer,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: ticketClass,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 18,
-                              color: Theme.of(context).colorScheme.onPrimary,
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class SemiCircleClipper extends CustomClipper<Path> {
-  SemiCircleClipper({
-    required this.fromTop,
-    required this.radius,
-  });
-
-  final double fromTop;
-  final double radius;
-
-  @override
-  Path getClip(Size size) {
-    var path = Path();
-    path
-      ..moveTo(0, 0)
-      ..lineTo(0, max(fromTop - radius, 0))
-      ..arcToPoint(Offset(radius, fromTop),
-          clockwise: true, radius: Radius.circular(radius))
-      ..arcToPoint(Offset(0, fromTop + radius),
-          clockwise: true, radius: Radius.circular(radius))
-      ..lineTo(0, size.height)
-      ..lineTo(size.width, size.height)
-      ..lineTo(size.width, fromTop + radius)
-      ..arcToPoint(Offset(size.width - radius, fromTop),
-          clockwise: true, radius: Radius.circular(radius))
-      ..arcToPoint(Offset(size.width, max(fromTop - radius, 0)),
-          radius: Radius.circular(radius))
-      ..lineTo(size.width, 0)
-      ..close();
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => oldClipper != this;
-}
-
-class DashedDivider extends StatelessWidget {
-  final double height;
-  final Color color;
-  final double dashWidth;
-  final double dashSpace;
-
-  const DashedDivider({
-    super.key,
-    this.height = 1,
-    this.color = Colors.black,
-    this.dashWidth = 5,
-    this.dashSpace = 3,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: height,
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final boxWidth = constraints.constrainWidth();
-          final dashCount = (boxWidth / (dashWidth + dashSpace)).floor();
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: List.generate(dashCount, (_) {
-              return SizedBox(
-                width: dashWidth,
-                height: height,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(color: color),
-                ),
-              );
-            }),
-          );
-        },
       ),
     );
   }

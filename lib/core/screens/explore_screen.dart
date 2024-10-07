@@ -57,7 +57,7 @@ class ExploreScreenState extends ConsumerState<ExploreScreen> {
           ),
           const SizedBox(height: 22),
           const SizedBox(
-            height: 320,
+            height: 360,
             child: BestOffers(),
           ),
         ],
