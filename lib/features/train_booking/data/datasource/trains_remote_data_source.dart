@@ -79,7 +79,7 @@ import '../models/train_model.dart';
 abstract class BaseTrainsRemoteDataSource {
   Future<List<TrainModel>> getAllTrains();
 
-  Future<TrainModel> getTrainsBySearch(
+  Future<List<TrainModel>> getTrainsBySearch(
       {required TicketType ticket,
       required TrainStations from,
       required TrainStations to,
@@ -153,7 +153,7 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
     try {
       return fireStore
           .collection('trains')
-          .where('trainStatus', isEqualTo: 'available')
+          .where('trainSeatsStatus', isEqualTo: 'available')
           .get()
           .then((snapshot) {
         return snapshot.docs.map((doc) {
@@ -191,12 +191,47 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
   }
 
   @override
-  Future<TrainModel> getTrainsBySearch(
+  Future<List<TrainModel>> getTrainsBySearch(
       {required TicketType ticket,
       required TrainStations from,
       required TrainStations to,
       DateTime? fromDateTime,
-      DateTime? toDateTime}) {
-    throw UnimplementedError();
+      DateTime? toDateTime}) async {
+    try {
+      log('getTrainsBySearch: $from, $to, $fromDateTime, $toDateTime');
+      final trains = await fireStore
+          .collection('trains')
+          .where('trainDepartureStation', isEqualTo: from.name.toLowerCase())
+          .where('trainArrivalStation', isEqualTo: to.name.toLowerCase())
+          .get()
+          .then((snapshot) {
+        return snapshot.docs.map((doc) {
+          return TrainModel.fromFireStore(doc.data(), doc.id);
+        }).toList();
+      });
+
+      log('getTrainsBySearch: $trains');
+      final result;
+      if (ticket == TicketType.oneWay) {
+        result = trains.where((train) {
+          if (fromDateTime != null) {
+            return train.trainDepartureDate.toDate().isAfter(fromDateTime);
+          }
+          return false;
+        }).toList();
+      } else {
+        result = trains.where((train) {
+          if (fromDateTime != null && toDateTime != null) {
+            return train.trainDepartureDate.toDate().isAfter(fromDateTime) &&
+                train.trainArrivalDate.toDate().isBefore(toDateTime);
+          }
+          return false;
+        }).toList();
+      }
+
+      return result;
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 }

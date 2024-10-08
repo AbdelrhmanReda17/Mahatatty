@@ -1,21 +1,29 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../../core/generic components/mahattaty_alert.dart';
 import '../../../../core/generic components/mahattaty_button.dart';
-import '../../../../core/generic components/mahattaty_switch.dart';
 import '../../domain/entities/train.dart';
-import '../controllers/search_train_controller.dart';
 
-class SearchCard extends ConsumerWidget {
+class SearchCard extends StatelessWidget {
   final VoidCallback switchForms;
+  final TrainStations fromStation;
+  final TrainStations toStation;
 
-  const SearchCard({super.key, required this.switchForms});
+  final Function(
+      {TrainStations? from,
+      TrainStations? to,
+      DateTime? fromTime,
+      DateTime? toTime}) onHandleChange;
+
+  const SearchCard(
+      {super.key,
+      required this.switchForms,
+      required this.fromStation,
+      required this.toStation,
+      required this.onHandleChange});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final searchQuery = ref.watch(searchProvider);
+  Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
@@ -36,9 +44,10 @@ class SearchCard extends ConsumerWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TrainStationSelector(
+                  defaultVal: fromStation,
                   direction: TrainStationDirection.origin,
                   onSelected: (station) {
-                    ref.read(searchProvider).fromStation = station!;
+                    onHandleChange(from: station);
                   },
                 ),
                 Icon(
@@ -47,9 +56,10 @@ class SearchCard extends ConsumerWidget {
                   size: 30,
                 ),
                 TrainStationSelector(
+                  defaultVal: toStation,
                   direction: TrainStationDirection.destination,
                   onSelected: (station) {
-                    ref.read(searchProvider).toStation = station!;
+                    onHandleChange(to: station);
                   },
                 ),
               ],
@@ -57,20 +67,13 @@ class SearchCard extends ConsumerWidget {
             const SizedBox(height: 12.5),
             MahattatyButton(
               onPressed: () {
-                log('Search for trains');
-                log(searchQuery.fromStation.toString());
-                log(searchQuery.toStation.toString());
-                if (searchQuery.fromStation != null &&
-                    searchQuery.toStation != null &&
-                    searchQuery.fromStation != searchQuery.toStation) {
+                if (fromStation != toStation) {
                   switchForms();
                 } else {
                   mahattatyAlertDialog(
                     context,
-                    message: searchQuery.fromStation != null &&
-                            searchQuery.toStation != null
-                        ? 'Please select both departure and arrival stations'
-                        : 'Departure and arrival stations cannot be the same',
+                    message:
+                        'Departure and arrival stations cannot be the same',
                     type: MahattatyAlertType.error,
                   );
                 }
@@ -195,8 +198,10 @@ class TrainStationDetails extends StatelessWidget {
 class TrainStationSelector extends StatelessWidget {
   final TrainStationDirection direction;
   final Function(TrainStations? station) onSelected;
+  final TrainStations defaultVal;
 
   const TrainStationSelector({
+    required this.defaultVal,
     super.key,
     required this.direction,
     required this.onSelected,
@@ -215,6 +220,7 @@ class TrainStationSelector extends StatelessWidget {
         ),
         const SizedBox(height: 5),
         DropdownMenu(
+          initialSelection: defaultVal,
           onSelected: (value) {
             if (value != null) onSelected(value);
           },

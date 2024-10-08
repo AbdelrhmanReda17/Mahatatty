@@ -3,30 +3,30 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/entities/ticket.dart';
 import '../../domain/entities/train.dart';
 
-class SearchState {
-  TicketType ticketType;
-  TrainStations? fromStation;
-  TrainStations? toStation;
+class TrainSearchState {
+  TicketType ticketType = TicketType.oneWay;
+  TrainStations fromStation;
+  TrainStations toStation;
   Timestamp arrivalDate;
   Timestamp departureDate;
 
-  SearchState({
+  TrainSearchState({
     this.ticketType = TicketType.oneWay,
-    this.fromStation,
-    this.toStation,
+    this.fromStation = TrainStations.alexandria,
+    this.toStation = TrainStations.cairo,
     Timestamp? arrivalDate,
     Timestamp? departureDate,
   })  : arrivalDate = arrivalDate ?? Timestamp.now(),
         departureDate = departureDate ?? Timestamp.now();
 
-  SearchState copyWith({
+  TrainSearchState copyWith({
     TicketType? ticketType,
     TrainStations? fromStation,
     TrainStations? toStation,
     Timestamp? arrivalDate,
     Timestamp? departureDate,
   }) {
-    return SearchState(
+    return TrainSearchState(
       ticketType: ticketType ?? this.ticketType,
       fromStation: fromStation ?? this.fromStation,
       toStation: toStation ?? this.toStation,
@@ -41,6 +41,6 @@ class SearchState {
   }
 }
 
-final searchProvider = StateProvider<SearchState>((ref) {
-  return SearchState();
+final trainSearchProvider = StateProvider<TrainSearchState>((ref) {
+  return TrainSearchState();
 });

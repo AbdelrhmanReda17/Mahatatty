@@ -36,12 +36,17 @@ class TrainRepository implements BaseTrainRepository {
       required TrainStations to,
       DateTime? fromDateTime,
       DateTime? toDateTime}) {
-    throw UnimplementedError();
+    return remoteDataSource.getTrainsBySearch(
+      ticket: ticket,
+      from: from,
+      to: to,
+      fromDateTime: fromDateTime,
+      toDateTime: toDateTime,
+    );
   }
 
   @override
   Future<List<Ticket>> getUserBookedTrains(String userId) {
-    // TODO: implement getUserBookedTrains
-    throw UnimplementedError();
+    return remoteDataSource.getUserBookedTrains(userId);
   }
 }

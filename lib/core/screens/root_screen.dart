@@ -4,10 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mahattaty/authentication/presentation/controllers/auth_controller.dart';
 import 'package:mahattaty/core/screens/explore_screen.dart';
 import 'package:mahattaty/core/screens/main_screen.dart';
-import 'package:mahattaty/core/utils/open_screens.dart';
 import 'package:mahattaty/features/news/presentation/screens/news_screen.dart';
-
-import '../../authentication/presentation/screens/authentication_screen.dart';
 
 class RootScreen extends ConsumerStatefulWidget {
   const RootScreen({super.key});

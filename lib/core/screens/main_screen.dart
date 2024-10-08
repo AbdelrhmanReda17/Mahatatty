@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mahattaty/core/generic%20components/mahattaty_scaffold.dart';
 import 'package:mahattaty/features/news/presentation/components/latest_news.dart';
-import 'package:mahattaty/features/train_booking/presentation/components/cards/train_ticket_card.dart';
-import 'package:mahattaty/features/train_booking/presentation/components/search_card.dart';
 import 'package:mahattaty/features/train_booking/presentation/components/search_card_form.dart';
-import 'package:mahattaty/features/train_booking/presentation/components/train_search.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});
@@ -68,7 +65,7 @@ class MainScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 10),
-            const TrainSearch(),
+            const SearchCardForm(),
             const Expanded(
               child: LatestNews(
                 seeMoreEnabled: true,

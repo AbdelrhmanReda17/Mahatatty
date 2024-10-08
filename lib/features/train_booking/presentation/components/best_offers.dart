@@ -29,21 +29,34 @@ class BestOffers extends ConsumerWidget {
         Expanded(
           child: trainsState.when(
             data: (trains) {
-              return ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: trains.length,
-                itemBuilder: (context, index) {
-                  return Column(
-                    children: [
-                      TrainCard(
-                        train: trains[index],
-                        onTrainSelected: (_) {},
-                        displayTrainTicketCard: false,
-                      ),
-                    ],
-                  );
-                },
-              );
+              if (trains.isEmpty) {
+                return Center(
+                  child: Text(
+                    'No Offer Available',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                );
+              } else {
+                return ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: trains.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+                        TrainCard(
+                          train: trains[index],
+                          onTrainSelected: (_) {},
+                          displayTrainTicketCard: false,
+                        ),
+                      ],
+                    );
+                  },
+                );
+              }
             },
             loading: () {
               return const Center(

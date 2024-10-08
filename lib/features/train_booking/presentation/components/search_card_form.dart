@@ -1,35 +1,27 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mahattaty/core/generic%20components/mahattaty_data_picker.dart';
+import 'package:mahattaty/core/generic%20components/mahattaty_train_station_picker.dart';
+import 'package:mahattaty/core/screens/search_screen.dart';
 import 'package:mahattaty/core/utils/open_dialogs.dart';
+import 'package:mahattaty/core/utils/open_screens.dart';
 import 'package:mahattaty/features/train_booking/presentation/components/search_card.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
-
+import 'package:mahattaty/features/train_booking/presentation/controllers/search_train_controller.dart';
 import '../../../../core/generic components/mahattaty_button.dart';
 import '../../../../core/utils/time_converter.dart';
-import '../controllers/search_train_controller.dart';
+import '../../domain/entities/ticket.dart';
+import '../controllers/get_trains_by_search_controller.dart';
 
 class SearchCardForm extends ConsumerWidget {
-  final VoidCallback switchForms;
-  final bool isRoundTrip;
-  final Function(bool) onRoundTripClicked;
-  final VoidCallback onSearchClicked;
-
-  const SearchCardForm({
-    super.key,
-    required this.switchForms,
-    required this.isRoundTrip,
-    required this.onRoundTripClicked,
-    required this.onSearchClicked,
-  });
+  const SearchCardForm({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final searchQuery = ref.watch(searchProvider);
+    final searchState = ref.watch(trainSearchProvider);
+
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
@@ -41,40 +33,81 @@ class SearchCardForm extends ConsumerWidget {
           children: [
             Row(
               children: [
-                ChoiceChip.elevated(
-                  label: const Text('One Way'),
-                  selected: !isRoundTrip,
-                  selectedColor: Theme.of(context).colorScheme.primary,
-                  onSelected: (_) => onRoundTripClicked(false),
+                Consumer(
+                  builder: (context, ref, child) {
+                    return ChoiceChip.elevated(
+                      label: const Text('One Way'),
+                      selected: searchState.ticketType == TicketType.oneWay,
+                      selectedColor: Theme.of(context).colorScheme.primary,
+                      onSelected: (_) => ref
+                              .read(trainSearchProvider.notifier)
+                              .state =
+                          searchState.copyWith(ticketType: TicketType.oneWay),
+                    );
+                  },
                 ),
                 const SizedBox(width: 10),
-                ChoiceChip.elevated(
-                  label: const Text('Round-trip'),
-                  selected: isRoundTrip,
-                  selectedColor: Theme.of(context).colorScheme.primary,
-                  onSelected: (_) => onRoundTripClicked(true),
+                Consumer(
+                  builder: (context, ref, child) {
+                    return ChoiceChip.elevated(
+                      label: const Text('Round-trip'),
+                      selected: searchState.ticketType == TicketType.roundTrip,
+                      selectedColor: Theme.of(context).colorScheme.primary,
+                      onSelected: (_) =>
+                          ref.read(trainSearchProvider.notifier).state =
+                              searchState.copyWith(
+                                  ticketType: TicketType.roundTrip),
+                    );
+                  },
                 ),
               ],
             ),
             const SizedBox(height: 16),
+            // From and To Station Picker
             Stack(
               alignment: Alignment.centerRight,
               children: [
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    TrainStationDetails(
-                      code: searchQuery.fromStation!.code,
-                      location: searchQuery.fromStation!.name,
-                      direction: TrainStationDirection.origin,
-                      style: TrainStationDetailsStyle.secondary,
+                    InkWell(
+                      onTap: () {
+                        OpenDialogs.openCustomDialog(
+                          context: context,
+                          dialog: MahattatyTrainStationPicker(
+                            onSelected: (station) {
+                              ref.read(trainSearchProvider.notifier).state =
+                                  searchState.copyWith(fromStation: station);
+                            },
+                          ),
+                        );
+                      },
+                      child: TrainStationDetails(
+                        code: searchState.fromStation.code,
+                        location: searchState.fromStation.name,
+                        direction: TrainStationDirection.origin,
+                        style: TrainStationDetailsStyle.secondary,
+                      ),
                     ),
                     const SizedBox(height: 16),
-                    TrainStationDetails(
-                      code: searchQuery.toStation!.code,
-                      location: searchQuery.toStation!.name,
-                      direction: TrainStationDirection.destination,
-                      style: TrainStationDetailsStyle.secondary,
+                    InkWell(
+                      onTap: () {
+                        OpenDialogs.openCustomDialog(
+                          context: context,
+                          dialog: MahattatyTrainStationPicker(
+                            onSelected: (station) {
+                              ref.read(trainSearchProvider.notifier).state =
+                                  searchState.copyWith(toStation: station);
+                            },
+                          ),
+                        );
+                      },
+                      child: TrainStationDetails(
+                        code: searchState.toStation.code,
+                        location: searchState.toStation.name,
+                        direction: TrainStationDirection.destination,
+                        style: TrainStationDetailsStyle.secondary,
+                      ),
                     ),
                   ],
                 ),
@@ -88,7 +121,7 @@ class SearchCardForm extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(50),
                     ),
                     child: Icon(
-                      isRoundTrip
+                      searchState.ticketType == TicketType.roundTrip
                           ? FontAwesomeIcons.arrowsUpDown
                           : FontAwesomeIcons.arrowDown,
                       color: Colors.white,
@@ -98,137 +131,158 @@ class SearchCardForm extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(8),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
-                ),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: InkWell(
-                onTap: () async {
-                  OpenDialogs.openCustomDialog(
-                    context: context,
-                    dialog: MahattatyDataPicker(
-                      onDateSelected: (DateTime date) {
-                        ref.read(searchProvider.notifier).state =
-                            ref.read(searchProvider).copyWith(
-                                  departureDate: Timestamp.fromDate(date),
-                                );
-                      },
+            // Departure Date Picker
+            Consumer(
+              builder: (context, ref, child) {
+                return Container(
+                  padding: const EdgeInsets.all(8),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
                     ),
-                  );
-                },
-                child: RichText(
-                  text: TextSpan(
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.onPrimary),
-                    children: [
-                      TextSpan(
-                        text: 'Train Date\n',
-                        style: TextStyle(
-                          color:
-                              Theme.of(context).colorScheme.onPrimaryContainer,
-                        ),
-                      ),
-                      const WidgetSpan(child: SizedBox(height: 25)),
-                      WidgetSpan(
-                        alignment: PlaceholderAlignment.middle,
-                        child: Icon(
-                          FontAwesomeIcons.solidCalendarDays,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      ),
-                      const WidgetSpan(child: SizedBox(width: 10)),
-                      TextSpan(
-                        text: TimeConverter.convertTimeToDate(
-                            searchQuery.departureDate),
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                    ],
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                ),
-              ),
-            ),
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 500),
-              child: isRoundTrip
-                  ? Column(
-                      children: [
-                        const SizedBox(height: 16),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            border: Border.all(
+                  child: InkWell(
+                    onTap: () async {
+                      OpenDialogs.openCustomDialog(
+                        context: context,
+                        dialog: MahattatyDataPicker(
+                          onDateSelected: (DateTime date) {
+                            ref.read(trainSearchProvider.notifier).state =
+                                searchState.copyWith(
+                              departureDate: Timestamp.fromDate(date),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    child: RichText(
+                      text: TextSpan(
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onPrimary),
+                        children: [
+                          TextSpan(
+                            text: 'Train Date\n',
+                            style: TextStyle(
                               color: Theme.of(context)
                                   .colorScheme
                                   .onPrimaryContainer,
                             ),
-                            borderRadius: BorderRadius.circular(8),
                           ),
-                          child: InkWell(
-                            onTap: () async {
-                              OpenDialogs.openCustomDialog(
-                                context: context,
-                                dialog: MahattatyDataPicker(
-                                  onDateSelected: (DateTime date) {
-                                    ref.read(searchProvider.notifier).state =
-                                        ref.read(searchProvider).copyWith(
-                                              arrivalDate:
-                                                  Timestamp.fromDate(date),
-                                            );
-                                  },
-                                ),
-                              );
-                            },
-                            child: RichText(
-                              text: TextSpan(
-                                style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimary),
-                                children: [
-                                  TextSpan(
-                                    text: 'Return Date\n',
-                                    style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimaryContainer,
-                                    ),
-                                  ),
-                                  const WidgetSpan(child: SizedBox(height: 25)),
-                                  WidgetSpan(
-                                    alignment: PlaceholderAlignment.middle,
-                                    child: Icon(
-                                      FontAwesomeIcons.solidCalendarDays,
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                    ),
-                                  ),
-                                  const WidgetSpan(child: SizedBox(width: 10)),
-                                  TextSpan(
-                                    text: TimeConverter.convertTimeToDate(
-                                        searchQuery.arrivalDate),
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
+                          const WidgetSpan(child: SizedBox(height: 25)),
+                          WidgetSpan(
+                            alignment: PlaceholderAlignment.middle,
+                            child: Icon(
+                              FontAwesomeIcons.solidCalendarDays,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
+                          const WidgetSpan(child: SizedBox(width: 10)),
+                          TextSpan(
+                            text: TimeConverter.convertTimeToDate(
+                                searchState.departureDate),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+            // Return Date Picker for Round-trip
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 500),
+              child: searchState.ticketType == TicketType.roundTrip
+                  ? Column(
+                      children: [
+                        const SizedBox(height: 16),
+                        Consumer(
+                          builder: (context, ref, child) {
+                            return Container(
+                              padding: const EdgeInsets.all(8),
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: InkWell(
+                                onTap: () async {
+                                  OpenDialogs.openCustomDialog(
+                                    context: context,
+                                    dialog: MahattatyDataPicker(
+                                      onDateSelected: (DateTime date) {
+                                        ref
+                                            .read(trainSearchProvider.notifier)
+                                            .state = searchState.copyWith(
+                                          arrivalDate: Timestamp.fromDate(date),
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
+                                child: RichText(
+                                  text: TextSpan(
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary),
+                                    children: [
+                                      TextSpan(
+                                        text: 'Return Date\n',
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimaryContainer,
+                                        ),
+                                      ),
+                                      const WidgetSpan(
+                                          child: SizedBox(height: 25)),
+                                      WidgetSpan(
+                                        alignment: PlaceholderAlignment.middle,
+                                        child: Icon(
+                                          FontAwesomeIcons.solidCalendarDays,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                        ),
+                                      ),
+                                      const WidgetSpan(
+                                          child: SizedBox(width: 10)),
+                                      TextSpan(
+                                        text: TimeConverter.convertTimeToDate(
+                                            searchState.arrivalDate),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ],
                     )
                   : const SizedBox(),
             ),
             const SizedBox(height: 16),
+            // Search Button
             MahattatyButton(
               onPressed: () {
-                onSearchClicked();
-                // switchForms();
+                if (searchState.fromStation == searchState.toStation) {
+                  return;
+                }
+                OpenScreen.openScreenWithSmoothAnimation(
+                  context,
+                  const SearchScreen(key: Key('train_search')),
+                  false,
+                );
               },
               style: MahattatyButtonStyle.primary,
               text: 'Search for trains',

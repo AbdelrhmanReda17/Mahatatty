@@ -1,10 +1,4 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../features/news/presentation/screens/news_search_screen.dart';
-import '../utils/open_screens.dart';
 
 class MahattatySearch extends StatelessWidget {
   const MahattatySearch({

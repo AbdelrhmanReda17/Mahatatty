@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mahattaty/core/screens/search_screen.dart';
 import 'package:mahattaty/core/utils/open_screens.dart';
 import 'package:mahattaty/features/news/presentation/components/latest_news.dart';
-import 'package:mahattaty/features/news/presentation/screens/news_search_screen.dart';
 import '../../../../core/generic components/mahattaty_scaffold.dart';
 import '../../../../core/generic components/mahattaty_search.dart';
 import '../components/trending_topics.dart';
 import '../controllers/all_news_controller.dart';
 import '../controllers/latest_news_controller.dart';
+import '../controllers/search_news_controller.dart';
 
 class NewsScreen extends ConsumerWidget {
   const NewsScreen({super.key});
@@ -43,9 +44,13 @@ class NewsScreen extends ConsumerWidget {
             children: [
               MahattatySearch(
                 onPressed: (value) {
+                  ref.read(newsSearchProvider.notifier).state =
+                      ref.read(newsSearchProvider).copyWith(query: value);
                   OpenScreen.openScreenWithSmoothAnimation(
                     context,
-                    NewsSearchScreen(searchQuery: value),
+                    const SearchScreen(
+                      key: Key('news_search'),
+                    ),
                     false,
                   );
                 },
