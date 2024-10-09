@@ -5,12 +5,14 @@ class TrainPrice extends StatelessWidget {
   final double trainPrice;
   final double discountTrainPrice;
   final double seatDiscount;
+  final bool isShowDiscount;
 
   const TrainPrice({
     super.key,
     required this.trainPrice,
     required this.discountTrainPrice,
     required this.seatDiscount,
+    required this.isShowDiscount,
   });
 
   @override
@@ -21,7 +23,7 @@ class TrainPrice extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (seatDiscount > 0)
+            if (isShowDiscount)
               RichText(
                 textAlign: TextAlign.center,
                 text: TextSpan(
@@ -36,7 +38,9 @@ class TrainPrice extends StatelessWidget {
               ),
             RichText(
               text: TextSpan(
-                text: discountTrainPrice.toStringAsFixed(2),
+                text: isShowDiscount
+                    ? ' ${discountTrainPrice.toStringAsFixed(2)}'
+                    : ' ${trainPrice.toStringAsFixed(2)}',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onPrimary,
                   fontWeight: FontWeight.bold,

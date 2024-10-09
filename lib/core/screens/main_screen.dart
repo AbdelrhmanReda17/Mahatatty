@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mahattaty/core/generic%20components/mahattaty_scaffold.dart';
 import 'package:mahattaty/features/news/presentation/components/latest_news.dart';
-import 'package:mahattaty/features/train_booking/presentation/components/search_card_form.dart';
+import 'package:mahattaty/features/train_booking/presentation/components/search_card.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});

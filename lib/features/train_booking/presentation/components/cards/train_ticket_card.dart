@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:mahattaty/features/train_booking/domain/entities/ticket.dart';
+import 'package:mahattaty/features/train_booking/domain/entities/train_seat.dart';
 import 'package:mahattaty/features/train_booking/presentation/components/cards/helpers/custom_line.dart';
 import 'package:mahattaty/features/train_booking/presentation/components/cards/train_card.dart';
 
 class TrainTicketCard extends StatelessWidget {
   const TrainTicketCard(
-      {super.key, required this.ticketType, required this.ticketClass});
+      {super.key, required this.ticketType, required this.seatType});
 
-  final String ticketType;
-  final String ticketClass;
+  final TicketType ticketType;
+  final SeatType seatType;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +23,7 @@ class TrainTicketCard extends StatelessWidget {
         children: [
           const CustomLine(
             isDashed: true,
-            dashWidth: 5,
+            dashWidth: 3,
             dashSpace: 3,
             size: 1,
           ),
@@ -42,7 +44,7 @@ class TrainTicketCard extends StatelessWidget {
                         ),
                         children: [
                           TextSpan(
-                            text: ticketType,
+                            text: ticketType.name,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
@@ -70,7 +72,7 @@ class TrainTicketCard extends StatelessWidget {
                         ),
                         children: [
                           TextSpan(
-                            text: ticketClass,
+                            text: seatType.name,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,

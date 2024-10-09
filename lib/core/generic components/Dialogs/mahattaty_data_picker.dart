@@ -30,6 +30,13 @@ class _MahattatyDataPickerState extends State<MahattatyDataPicker> {
       description: 'Select the date you want to travel',
       content: [
         SfDateRangePicker(
+          view: DateRangePickerView.year,
+          // Set the view to Year
+          selectionMode: DateRangePickerSelectionMode.single,
+          // Single selection mode
+          showNavigationArrow: false,
+          allowViewNavigation: false,
+          // Disable view navigation to prevent selecting specific dates
           headerStyle: DateRangePickerHeaderStyle(
             textStyle: TextStyle(
               color: Theme.of(context).colorScheme.onPrimary,
@@ -37,15 +44,18 @@ class _MahattatyDataPickerState extends State<MahattatyDataPicker> {
             ),
             backgroundColor: Theme.of(context).colorScheme.surface,
           ),
-          enableMultiView: false,
           backgroundColor: Theme.of(context).colorScheme.surface,
           todayHighlightColor: Theme.of(context).colorScheme.primary,
           enablePastDates: false,
-          showNavigationArrow: false,
-          navigationMode: DateRangePickerNavigationMode.snap,
-          showActionButtons: false,
-          onSelectionChanged: _onSelectionChanged,
-          selectionMode: DateRangePickerSelectionMode.single,
+          onSelectionChanged: (DateRangePickerSelectionChangedArgs args) {
+            if (args.value != null) {
+              final DateTime selectedDate = args.value;
+              final int selectedMonth = selectedDate.month;
+              final int selectedYear = selectedDate.year;
+              widget.onDateSelected(DateTime(selectedYear, selectedMonth));
+              Navigator.of(context).pop();
+            }
+          },
         ),
       ],
       buttonText: 'Select',

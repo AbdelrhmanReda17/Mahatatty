@@ -1,82 +1,290 @@
+import 'dart:developer';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../../../../core/generic components/mahattaty_alert.dart';
+import 'package:mahattaty/core/generic%20components/Dialogs/mahattaty_data_picker.dart';
+import 'package:mahattaty/core/generic%20components/Dialogs/mahattaty_train_station_picker.dart';
+import 'package:mahattaty/core/screens/search_screen.dart';
+import 'package:mahattaty/core/utils/open_dialogs.dart';
+import 'package:mahattaty/core/utils/open_screens.dart';
+import 'package:mahattaty/features/train_booking/presentation/controllers/search_train_controller.dart';
 import '../../../../core/generic components/mahattaty_button.dart';
-import '../../domain/entities/train.dart';
+import '../../../../core/utils/time_converter.dart';
+import '../../domain/entities/ticket.dart';
+import '../controllers/get_trains_by_search_controller.dart';
+import 'cards/helpers/train_station_details.dart';
 
-class SearchCard extends StatelessWidget {
-  final VoidCallback switchForms;
-  final TrainStations fromStation;
-  final TrainStations toStation;
-
-  final Function(
-      {TrainStations? from,
-      TrainStations? to,
-      DateTime? fromTime,
-      DateTime? toTime}) onHandleChange;
-
-  const SearchCard(
-      {super.key,
-      required this.switchForms,
-      required this.fromStation,
-      required this.toStation,
-      required this.onHandleChange});
+class SearchCardForm extends ConsumerWidget {
+  const SearchCardForm({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final searchState = ref.watch(trainSearchProvider);
+
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.1),
-            blurRadius: 10,
-            spreadRadius: 5,
-          ),
-        ],
       ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TrainStationSelector(
-                  defaultVal: fromStation,
-                  direction: TrainStationDirection.origin,
-                  onSelected: (station) {
-                    onHandleChange(from: station);
+                Consumer(
+                  builder: (context, ref, child) {
+                    return ChoiceChip.elevated(
+                      label: const Text('One Way'),
+                      selected: searchState.ticketType == TicketType.oneWay,
+                      selectedColor: Theme.of(context).colorScheme.primary,
+                      onSelected: (_) => ref
+                              .read(trainSearchProvider.notifier)
+                              .state =
+                          searchState.copyWith(ticketType: TicketType.oneWay),
+                    );
                   },
                 ),
-                Icon(
-                  FontAwesomeIcons.rightLeft,
-                  color: Theme.of(context).colorScheme.primary,
-                  size: 30,
-                ),
-                TrainStationSelector(
-                  defaultVal: toStation,
-                  direction: TrainStationDirection.destination,
-                  onSelected: (station) {
-                    onHandleChange(to: station);
+                const SizedBox(width: 10),
+                Consumer(
+                  builder: (context, ref, child) {
+                    return ChoiceChip.elevated(
+                      label: const Text('Round-trip'),
+                      selected: searchState.ticketType == TicketType.roundTrip,
+                      selectedColor: Theme.of(context).colorScheme.primary,
+                      onSelected: (_) =>
+                          ref.read(trainSearchProvider.notifier).state =
+                              searchState.copyWith(
+                                  ticketType: TicketType.roundTrip),
+                    );
                   },
                 ),
               ],
             ),
-            const SizedBox(height: 12.5),
+            const SizedBox(height: 16),
+            // From and To Station Picker
+            Stack(
+              alignment: Alignment.centerRight,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        OpenDialogs.openCustomDialog(
+                          context: context,
+                          dialog: MahattatyTrainStationPicker(
+                            onSelected: (station) {
+                              ref.read(trainSearchProvider.notifier).state =
+                                  searchState.copyWith(fromStation: station);
+                            },
+                          ),
+                        );
+                      },
+                      child: TrainStationDetails(
+                        code: searchState.fromStation.code,
+                        location: searchState.fromStation.name,
+                        direction: TrainStationDirection.origin,
+                        style: TrainStationDetailsStyle.secondary,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    InkWell(
+                      onTap: () {
+                        OpenDialogs.openCustomDialog(
+                          context: context,
+                          dialog: MahattatyTrainStationPicker(
+                            onSelected: (station) {
+                              ref.read(trainSearchProvider.notifier).state =
+                                  searchState.copyWith(toStation: station);
+                            },
+                          ),
+                        );
+                      },
+                      child: TrainStationDetails(
+                        code: searchState.toStation.code,
+                        location: searchState.toStation.name,
+                        direction: TrainStationDirection.destination,
+                        style: TrainStationDetailsStyle.secondary,
+                      ),
+                    ),
+                  ],
+                ),
+                Positioned(
+                  right: 40,
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primary,
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: Icon(
+                      searchState.ticketType == TicketType.roundTrip
+                          ? FontAwesomeIcons.arrowsUpDown
+                          : FontAwesomeIcons.arrowDown,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            // Departure Date Picker
+            Consumer(
+              builder: (context, ref, child) {
+                return Container(
+                  padding: const EdgeInsets.all(8),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    ),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: InkWell(
+                    onTap: () async {
+                      OpenDialogs.openCustomDialog(
+                        context: context,
+                        dialog: MahattatyDataPicker(
+                          onDateSelected: (DateTime date) {
+                            ref.read(trainSearchProvider.notifier).state =
+                                searchState.copyWith(
+                              departureDate: Timestamp.fromDate(date),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    child: RichText(
+                      text: TextSpan(
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onPrimary),
+                        children: [
+                          TextSpan(
+                            text: 'Train Date\n',
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimaryContainer,
+                            ),
+                          ),
+                          const WidgetSpan(child: SizedBox(height: 25)),
+                          WidgetSpan(
+                            alignment: PlaceholderAlignment.middle,
+                            child: Icon(
+                              FontAwesomeIcons.solidCalendarDays,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
+                          const WidgetSpan(child: SizedBox(width: 10)),
+                          TextSpan(
+                            text: TimeConverter.convertTimeToDate(
+                                searchState.departureDate,
+                                isDay: true),
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+            // Return Date Picker for Round-trip
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 500),
+              child: searchState.ticketType == TicketType.roundTrip
+                  ? Column(
+                      children: [
+                        const SizedBox(height: 16),
+                        Consumer(
+                          builder: (context, ref, child) {
+                            return Container(
+                              padding: const EdgeInsets.all(8),
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onPrimaryContainer,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: InkWell(
+                                onTap: () async {
+                                  OpenDialogs.openCustomDialog(
+                                    context: context,
+                                    dialog: MahattatyDataPicker(
+                                      onDateSelected: (DateTime date) {
+                                        ref
+                                            .read(trainSearchProvider.notifier)
+                                            .state = searchState.copyWith(
+                                          arrivalDate: Timestamp.fromDate(date),
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
+                                child: RichText(
+                                  text: TextSpan(
+                                    style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary),
+                                    children: [
+                                      TextSpan(
+                                        text: 'Return Date\n',
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimaryContainer,
+                                        ),
+                                      ),
+                                      const WidgetSpan(
+                                          child: SizedBox(height: 25)),
+                                      WidgetSpan(
+                                        alignment: PlaceholderAlignment.middle,
+                                        child: Icon(
+                                          FontAwesomeIcons.solidCalendarDays,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                        ),
+                                      ),
+                                      const WidgetSpan(
+                                          child: SizedBox(width: 10)),
+                                      TextSpan(
+                                        text: TimeConverter.convertTimeToDate(
+                                            searchState.arrivalDate,
+                                            isDay: true),
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    )
+                  : const SizedBox(),
+            ),
+            const SizedBox(height: 16),
+            // Search Button
             MahattatyButton(
               onPressed: () {
-                if (fromStation != toStation) {
-                  switchForms();
-                } else {
-                  mahattatyAlertDialog(
-                    context,
-                    message:
-                        'Departure and arrival stations cannot be the same',
-                    type: MahattatyAlertType.error,
-                  );
+                if (searchState.fromStation == searchState.toStation) {
+                  return;
                 }
+                OpenScreen.openScreenWithSmoothAnimation(
+                  context,
+                  const SearchScreen(key: Key('train_search')),
+                  false,
+                );
               },
               style: MahattatyButtonStyle.primary,
               text: 'Search for trains',
@@ -84,155 +292,6 @@ class SearchCard extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-enum TrainStationDetailsAlignment { start, end }
-
-enum TrainStationDirection { origin, destination }
-
-enum TrainStationDetailsStyle { primary, secondary }
-
-class TrainStationDetails extends StatelessWidget {
-  const TrainStationDetails({
-    super.key,
-    required this.code,
-    required this.location,
-    this.alignment = TrainStationDetailsAlignment.start,
-    this.style = TrainStationDetailsStyle.primary,
-    required this.direction,
-  });
-
-  final String code;
-  final String location;
-  final TrainStationDetailsAlignment alignment;
-  final TrainStationDetailsStyle style;
-  final TrainStationDirection direction;
-
-  @override
-  Widget build(BuildContext context) {
-    var primaryContent = Column(
-      crossAxisAlignment: alignment == TrainStationDetailsAlignment.start
-          ? CrossAxisAlignment.start
-          : CrossAxisAlignment.end,
-      children: [
-        Text(
-          direction == TrainStationDirection.origin
-              ? style == TrainStationDetailsStyle.primary
-                  ? 'Departure'
-                  : 'From'
-              : style == TrainStationDetailsStyle.primary
-                  ? 'Arrival'
-                  : 'To',
-          style: const TextStyle(color: Colors.blue),
-        ),
-        const SizedBox(height: 5),
-        Text(
-          code,
-          style: TextStyle(
-            fontSize: 19,
-            fontWeight: FontWeight.w900,
-            color: Theme.of(context).colorScheme.onPrimary,
-          ),
-        ),
-        Text(
-          location,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onPrimaryContainer,
-          ),
-        ),
-      ],
-    );
-
-    var secondaryContent = Container(
-      padding: const EdgeInsets.all(8.0),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Theme.of(context).colorScheme.onPrimaryContainer,
-        ),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: RichText(
-        text: TextSpan(
-          text: 'From\n',
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.onPrimaryContainer,
-          ),
-          children: [
-            const WidgetSpan(child: SizedBox(height: 25)),
-            WidgetSpan(
-              alignment: PlaceholderAlignment.middle,
-              child: Icon(
-                FontAwesomeIcons.locationArrow,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            ),
-            const WidgetSpan(child: SizedBox(width: 10)),
-            TextSpan(
-              text: location,
-              style: TextStyle(
-                fontWeight: FontWeight.w900,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-            ),
-            const WidgetSpan(child: SizedBox(width: 10)),
-            TextSpan(
-              text: code,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onPrimaryContainer,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-
-    return style == TrainStationDetailsStyle.primary
-        ? primaryContent
-        : secondaryContent;
-  }
-}
-
-class TrainStationSelector extends StatelessWidget {
-  final TrainStationDirection direction;
-  final Function(TrainStations? station) onSelected;
-  final TrainStations defaultVal;
-
-  const TrainStationSelector({
-    required this.defaultVal,
-    super.key,
-    required this.direction,
-    required this.onSelected,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          direction == TrainStationDirection.origin ? 'Departure' : 'Arrival',
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.primary,
-          ),
-        ),
-        const SizedBox(height: 5),
-        DropdownMenu(
-          initialSelection: defaultVal,
-          onSelected: (value) {
-            if (value != null) onSelected(value);
-          },
-          width: 150,
-          dropdownMenuEntries: TrainStations.allStations.map((station) {
-            return DropdownMenuEntry<TrainStations>(
-              value: station,
-              label: station.name,
-            );
-          }).toList(),
-        )
-      ],
     );
   }
 }

@@ -5,8 +5,11 @@ import '../../features/news/presentation/components/Cards/news_card.dart';
 import '../../features/news/presentation/components/cards/skeletons/news_card_skeleton.dart';
 import '../../features/news/presentation/controllers/news_by_query_controller.dart';
 import '../../features/news/presentation/controllers/search_news_controller.dart';
+import '../../features/train_booking/domain/entities/ticket.dart';
+import '../../features/train_booking/domain/entities/train.dart';
+import '../../features/train_booking/domain/entities/train_seat.dart';
 import '../../features/train_booking/presentation/components/cards/train_card.dart';
-import '../../features/train_booking/presentation/components/search_card_form.dart';
+import '../../features/train_booking/presentation/components/search_card.dart';
 import '../../features/train_booking/presentation/controllers/get_trains_by_search_controller.dart';
 import '../../features/train_booking/presentation/controllers/search_train_controller.dart';
 import '../generic components/mahattaty_scaffold.dart';
@@ -19,6 +22,7 @@ class SearchScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     bool isTrain = super.key == const Key('train_search');
     final Widget screenBody;
+
     if (isTrain) {
       final trainState =
           ref.watch(trainsBySearchController(ref.watch(trainSearchProvider)));
@@ -38,9 +42,15 @@ class SearchScreen extends ConsumerWidget {
           }
           return ListView.builder(
             itemCount: trains.length,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             itemBuilder: (context, index) {
               final train = trains[index];
-              return TrainCard(train: train, onTrainSelected: (_) {});
+              return TrainCard(
+                train: train,
+                departureStation: train.trainDepartureStation,
+                arrivalStation: train.trainArrivalStation,
+                onTrainSelected: (_) {},
+              );
             },
           );
         },
@@ -80,7 +90,7 @@ class SearchScreen extends ConsumerWidget {
           if (news.isEmpty) {
             return Center(
               child: Text(
-                'No results found for ""',
+                'No results found',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.onSurface,
                   fontSize: 20,
@@ -153,7 +163,14 @@ class SearchScreen extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             child: (isTrain)
-                ? SearchCardForm()
+                ? TrainCard(
+                    departureStation:
+                        ref.watch(trainSearchProvider).fromStation,
+                    arrivalStation: ref.watch(trainSearchProvider).toStation,
+                    ticketType: ref.watch(trainSearchProvider).ticketType,
+                    seatType: SeatType.business,
+                    displayTrainTicketCard: true,
+                  )
                 : MahattatySearch(
                     onPressed: (value) {
                       ref.read(newsSearchProvider.notifier).state =

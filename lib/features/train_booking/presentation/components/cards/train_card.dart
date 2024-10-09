@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mahattaty/features/train_booking/presentation/components/cards/train_ticket_card.dart';
 
 import '../../../../../core/utils/time_converter.dart';
+import '../../../domain/entities/ticket.dart';
 import '../../../domain/entities/train.dart';
 import '../../../domain/entities/train_seat.dart';
 import '../count_down_timer.dart';
@@ -12,39 +13,61 @@ import 'helpers/train_price.dart';
 import 'helpers/train_time_information.dart';
 
 class TrainCard extends StatelessWidget {
-  final Train train;
-  final Function(Train) onTrainSelected;
+  final Train? train;
+  final TicketType? ticketType;
+  final SeatType? seatType;
+  final TrainStations departureStation;
+  final TrainStations arrivalStation;
+
+  final Function(Train)? onTrainSelected;
   final bool displayTrainTicketCard;
   final bool isLoading;
 
   const TrainCard({
     super.key,
-    required this.train,
-    required this.onTrainSelected,
+    this.train,
+    this.ticketType,
+    this.seatType,
+    this.onTrainSelected,
+    required this.departureStation,
+    required this.arrivalStation,
     this.displayTrainTicketCard = false,
     this.isLoading = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    var trainPrice = train.trainSeats
-        .firstWhere((element) => element.seatType == SeatType.business)
-        .seatPrice;
-    var discountTrainPrice =
-        trainPrice - (trainPrice * (train.seatDiscount / 100));
-    const String ticketType = "One Way";
-    const String ticketClass = "Business";
+    var trainPrice = 0.0, discountTrainPrice = 0.0, isShowDiscount = false;
+    if (train != null) {
+      trainPrice = train!.trainSeats
+          .firstWhere((element) => element.seatType == SeatType.business)
+          .seatPrice;
+      discountTrainPrice =
+          trainPrice - (trainPrice * (train!.seatDiscount / 100));
+
+      isShowDiscount = train!.seatDiscount != 0 &&
+          train!.seatDiscountDate.toDate().isAfter(DateTime.now());
+    }
+
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.9,
       child: ClipPath(
         clipper: SemiCircleClipper(
-            fromTop: displayTrainTicketCard ? 245 : 165, radius: 15),
+            fromTop: displayTrainTicketCard && train != null
+                ? 245
+                : train != null && !isShowDiscount
+                    ? 120
+                    : train != null && isShowDiscount
+                        ? 165
+                        : 90,
+            radius: 15),
         child: Container(
           margin: !displayTrainTicketCard
               ? const EdgeInsets.only(bottom: 10)
               : const EdgeInsets.only(bottom: 0),
           child: InkWell(
-            onTap: () => onTrainSelected(train),
+            onTap:
+                onTrainSelected != null ? () => onTrainSelected!(train!) : null,
             child: Column(
               children: [
                 Container(
@@ -56,41 +79,45 @@ class TrainCard extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      if (train.seatDiscount > 0) ...[
+                      if (train != null && isShowDiscount) ...[
                         CountdownTimer(
-                          targetDateTime: train.seatDiscountDate.toDate(),
+                          targetDateTime: train!.seatDiscountDate.toDate(),
                         ),
                         const SizedBox(height: 10),
                       ],
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Icon(
-                                FontAwesomeIcons.trainSubway,
-                                color: Theme.of(context).colorScheme.onPrimary,
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                train.trainName,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
+                      if (train != null) ...[
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  FontAwesomeIcons.trainSubway,
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
                                 ),
-                              ),
-                            ],
-                          ),
-                          TrainPrice(
-                            trainPrice: trainPrice,
-                            discountTrainPrice: discountTrainPrice,
-                            seatDiscount: train.seatDiscount,
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.015),
+                                const SizedBox(width: 8),
+                                Text(
+                                  train!.trainName,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            TrainPrice(
+                              trainPrice: trainPrice,
+                              discountTrainPrice: discountTrainPrice,
+                              seatDiscount: train!.seatDiscount,
+                              isShowDiscount: isShowDiscount,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.015),
+                      ],
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -98,14 +125,14 @@ class TrainCard extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                train.trainDepartureStation.name,
+                                departureStation.name,
                                 style: TextStyle(
                                     color: Theme.of(context)
                                         .colorScheme
                                         .onPrimaryContainer),
                               ),
                               Text(
-                                train.trainDepartureStation.code,
+                                departureStation.code,
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18,
@@ -117,14 +144,14 @@ class TrainCard extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Text(
-                                train.trainArrivalStation.name,
+                                arrivalStation.name,
                                 style: TextStyle(
                                     color: Theme.of(context)
                                         .colorScheme
                                         .onPrimaryContainer),
                               ),
                               Text(
-                                train.trainArrivalStation.code,
+                                arrivalStation.code,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 18),
                               ),
@@ -134,30 +161,35 @@ class TrainCard extends StatelessWidget {
                       ),
                       SizedBox(
                           height: MediaQuery.of(context).size.height * 0.015),
-                      const CustomLine(
-                        isDashed: true,
-                        size: 1,
-                        dashWidth: 5,
-                        dashSpace: 3,
-                      ),
-                      SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.015),
-                      TimeInformation(
-                        departureTime: train.trainDepartureTime,
-                        departureDate: TimeConverter.convertTimeToDate(
-                            train.trainArrivalDate),
-                        duration: train.trainDuration,
-                        arrivalTime: train.trainArrivalTime,
-                        arrivalDate: TimeConverter.convertTimeToDate(
-                            train.trainArrivalDate),
-                      ),
+                      if (train != null) ...[
+                        const CustomLine(
+                          isDashed: true,
+                          size: 1,
+                          dashWidth: 3,
+                          dashSpace: 3,
+                        ),
+                        SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.015),
+                        TimeInformation(
+                          departureTime: train!.trainDepartureTime,
+                          departureDate: TimeConverter.convertTimeToDate(
+                              train!.trainArrivalDate),
+                          duration: train!.trainDuration,
+                          arrivalTime: train!.trainArrivalTime,
+                          arrivalDate: TimeConverter.convertTimeToDate(
+                            train!.trainArrivalDate,
+                          ),
+                        ),
+                      ]
                     ],
                   ),
                 ),
-                if (displayTrainTicketCard) ...[
-                  const TrainTicketCard(
-                    ticketType: ticketType,
-                    ticketClass: ticketClass,
+                if (ticketType != null &&
+                    seatType != null &&
+                    displayTrainTicketCard) ...[
+                  TrainTicketCard(
+                    ticketType: ticketType!,
+                    seatType: seatType!,
                   ),
                 ]
               ],

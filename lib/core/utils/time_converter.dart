@@ -19,11 +19,18 @@ class TimeConverter {
     }
   }
 
-  static String convertTimeToDate(Timestamp time, {bool isNumber = false}) {
+  static String convertTimeToDate(Timestamp time,
+      {bool isNumber = false, bool isDay = false}) {
     DateTime dateTime = time.toDate();
     if (isNumber) {
+      if (isDay) {
+        return '${dateTime.month}/${dateTime.year}';
+      }
       return '${dateTime.day}/${dateTime.month}/${dateTime.year}';
     } else {
+      if (isDay) {
+        return '${_changeMonthNumberToText(dateTime.month)} ${dateTime.year}';
+      }
       return '${dateTime.day} ${_changeMonthNumberToText(dateTime.month)} ${dateTime.year}';
     }
   }

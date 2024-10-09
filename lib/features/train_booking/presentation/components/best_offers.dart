@@ -50,6 +50,8 @@ class BestOffers extends ConsumerWidget {
                         TrainCard(
                           train: trains[index],
                           onTrainSelected: (_) {},
+                          departureStation: trains[index].trainDepartureStation,
+                          arrivalStation: trains[index].trainArrivalStation,
                           displayTrainTicketCard: false,
                         ),
                       ],

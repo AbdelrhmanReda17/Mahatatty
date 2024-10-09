@@ -1,10 +1,11 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CountdownTimer extends ConsumerStatefulWidget {
-  final DateTime targetDateTime; // Assuming target is of type DateTime
+  final DateTime targetDateTime;
 
   const CountdownTimer({super.key, required this.targetDateTime});
 
@@ -51,6 +52,7 @@ class CountdownTimerState extends ConsumerState<CountdownTimer> {
       return "$twoDigitHours:$twoDigitMinutes:$twoDigitSeconds";
     }
 
+    log('Remaining duration: ${remainingDuration.inSeconds} a');
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(7),
