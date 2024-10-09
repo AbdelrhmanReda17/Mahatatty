@@ -3,7 +3,7 @@ import 'package:mahattaty/core/utils/open_screens.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../../../../../core/utils/time_converter.dart';
 import '../../../domain/entities/news.dart';
-import '../../screens/details_news.dart';
+import '../../screens/news_details_screen.dart';
 
 class NewsCard extends StatelessWidget {
   final News news;

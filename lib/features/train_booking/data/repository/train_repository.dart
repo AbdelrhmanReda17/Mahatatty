@@ -34,14 +34,12 @@ class TrainRepository implements BaseTrainRepository {
       {required TicketType ticket,
       required TrainStations from,
       required TrainStations to,
-      DateTime? fromDateTime,
-      DateTime? toDateTime}) {
+      DateTime? fromDateTime}) {
     return remoteDataSource.getTrainsBySearch(
       ticket: ticket,
       from: from,
       to: to,
       fromDateTime: fromDateTime,
-      toDateTime: toDateTime,
     );
   }
 

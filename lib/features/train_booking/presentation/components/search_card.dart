@@ -5,10 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mahattaty/core/generic%20components/Dialogs/mahattaty_data_picker.dart';
 import 'package:mahattaty/core/generic%20components/Dialogs/mahattaty_train_station_picker.dart';
-import 'package:mahattaty/core/screens/search_screen.dart';
 import 'package:mahattaty/core/utils/open_dialogs.dart';
 import 'package:mahattaty/core/utils/open_screens.dart';
 import 'package:mahattaty/features/train_booking/presentation/controllers/search_train_controller.dart';
+import 'package:mahattaty/features/train_booking/presentation/screens/train_search_screen.dart';
+import '../../../../core/generic components/mahattaty_alert.dart';
 import '../../../../core/generic components/mahattaty_button.dart';
 import '../../../../core/utils/time_converter.dart';
 import '../../domain/entities/ticket.dart';
@@ -192,97 +193,21 @@ class SearchCardForm extends ConsumerWidget {
                 );
               },
             ),
-            // Return Date Picker for Round-trip
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 500),
-              child: searchState.ticketType == TicketType.roundTrip
-                  ? Column(
-                      children: [
-                        const SizedBox(height: 16),
-                        Consumer(
-                          builder: (context, ref, child) {
-                            return Container(
-                              padding: const EdgeInsets.all(8),
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimaryContainer,
-                                ),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: InkWell(
-                                onTap: () async {
-                                  OpenDialogs.openCustomDialog(
-                                    context: context,
-                                    dialog: MahattatyDataPicker(
-                                      onDateSelected: (DateTime date) {
-                                        ref
-                                            .read(trainSearchProvider.notifier)
-                                            .state = searchState.copyWith(
-                                          arrivalDate: Timestamp.fromDate(date),
-                                        );
-                                      },
-                                    ),
-                                  );
-                                },
-                                child: RichText(
-                                  text: TextSpan(
-                                    style: TextStyle(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onPrimary),
-                                    children: [
-                                      TextSpan(
-                                        text: 'Return Date\n',
-                                        style: TextStyle(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onPrimaryContainer,
-                                        ),
-                                      ),
-                                      const WidgetSpan(
-                                          child: SizedBox(height: 25)),
-                                      WidgetSpan(
-                                        alignment: PlaceholderAlignment.middle,
-                                        child: Icon(
-                                          FontAwesomeIcons.solidCalendarDays,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                        ),
-                                      ),
-                                      const WidgetSpan(
-                                          child: SizedBox(width: 10)),
-                                      TextSpan(
-                                        text: TimeConverter.convertTimeToDate(
-                                            searchState.arrivalDate,
-                                            isDay: true),
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    )
-                  : const SizedBox(),
-            ),
             const SizedBox(height: 16),
             // Search Button
             MahattatyButton(
               onPressed: () {
                 if (searchState.fromStation == searchState.toStation) {
+                  mahattatyAlertDialog(
+                    context,
+                    message: 'Please select different stations',
+                    type: MahattatyAlertType.error,
+                  );
                   return;
                 }
                 OpenScreen.openScreenWithSmoothAnimation(
                   context,
-                  const SearchScreen(key: Key('train_search')),
+                  const TrainSearchScreen(key: Key('train_search')),
                   false,
                 );
               },

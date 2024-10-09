@@ -10,10 +10,9 @@ final trainsBySearchController =
   try {
     final trains = ref.read(getTrainsBySearchUseCaseProvider).call(
           ticket: query.ticketType,
-          from: query.fromStation!,
-          to: query.toStation!,
+          from: query.fromStation,
+          to: query.toStation,
           fromDateTime: query.departureDate.toDate(),
-          toDateTime: query.arrivalDate.toDate(),
         );
     return trains;
   } catch (e) {

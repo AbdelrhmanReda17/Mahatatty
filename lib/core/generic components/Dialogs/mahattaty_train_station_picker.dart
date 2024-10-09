@@ -37,7 +37,6 @@ class _MahattatyTrainStationPickerState
                 selectedStation = TrainStations.values[index];
               });
             },
-            squeeze: 1.5,
             selectionOverlay: Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.primary.withOpacity(0.1),

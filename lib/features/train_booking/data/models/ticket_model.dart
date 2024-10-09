@@ -33,18 +33,6 @@ class TicketModel extends Ticket {
     );
   }
 
-  // Map<String, dynamic> toMap() {
-  //   return {
-  //     'trainId': trainId,
-  //     'userId': userId,
-  //     'seatType': seatType.toString().split('.').last,
-  //     'status': status.toString().split('.').last,
-  //     'type': type.toString().split('.').last,
-  //     'price': price,
-  //     'bookingDate': bookingDate,
-  //   };
-  // }
-
   @override
   String toString() {
     return 'TicketModel(id: $id, trainId: $trainId, userId: $userId, status: $status, type: $type, price: $price)';

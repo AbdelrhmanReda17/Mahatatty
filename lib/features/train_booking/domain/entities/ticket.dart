@@ -2,8 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mahattaty/features/train_booking/domain/entities/train_seat.dart';
 
 enum TicketType {
-  oneWay,
-  roundTrip,
+  oneWay('One Way'),
+  roundTrip('Round Trip');
+
+  final String name;
+
+  const TicketType(this.name);
 }
 
 enum TicketStatus {

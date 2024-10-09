@@ -54,12 +54,12 @@ class TrainCard extends StatelessWidget {
       child: ClipPath(
         clipper: SemiCircleClipper(
             fromTop: displayTrainTicketCard && train != null
-                ? 245
+                ? 235
                 : train != null && !isShowDiscount
-                    ? 120
+                    ? 110
                     : train != null && isShowDiscount
-                        ? 165
-                        : 90,
+                        ? 155
+                        : 85,
             radius: 15),
         child: Container(
           margin: !displayTrainTicketCard

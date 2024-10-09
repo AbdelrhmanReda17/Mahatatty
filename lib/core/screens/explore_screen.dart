@@ -4,8 +4,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mahattaty/core/generic%20components/mahattaty_search.dart';
 import 'package:mahattaty/features/train_booking/presentation/components/best_offers.dart';
 
+import '../../features/news/presentation/controllers/search_news_controller.dart';
+import '../../features/news/presentation/screens/news_search_screen.dart';
 import '../../features/train_booking/presentation/components/cards/train_ticket_card.dart';
 import '../generic components/mahattaty_scaffold.dart';
+import '../utils/open_screens.dart';
 
 class ExploreScreen extends ConsumerStatefulWidget {
   const ExploreScreen({super.key});
@@ -26,7 +29,6 @@ class ExploreScreenState extends ConsumerState<ExploreScreen> {
   @override
   Widget build(BuildContext context) {
     return MahattatyScaffold(
-      appBarHeight: 50,
       appBarContent: Center(
         child: Text(
           'Explore',
@@ -42,7 +44,15 @@ class ExploreScreenState extends ConsumerState<ExploreScreen> {
         padding: const EdgeInsets.only(left: 20, right: 20, top: 30),
         children: [
           MahattatySearch(
-            onPressed: (_) {},
+            onPressed: (value) {
+              ref.read(newsSearchProvider.notifier).state =
+                  ref.read(newsSearchProvider).copyWith(query: value);
+              OpenScreen.openScreenWithSmoothAnimation(
+                context,
+                const NewsSearchScreen(),
+                false,
+              );
+            },
           ),
           const SizedBox(height: 20),
           const WeatherWidget(

@@ -8,7 +8,6 @@ class MahattatyScaffold extends StatelessWidget {
   final Widget? appBarContent;
   final Widget? floatingActionButton;
   final Widget? bottomNavigationBar;
-  final double appBarHeight;
   final backgroundHeight bgHeight;
 
   const MahattatyScaffold({
@@ -17,7 +16,6 @@ class MahattatyScaffold extends StatelessWidget {
     this.appBarContent,
     this.floatingActionButton,
     this.bottomNavigationBar,
-    this.appBarHeight = 70,
     this.bgHeight = backgroundHeight.small,
   });
 
@@ -26,8 +24,10 @@ class MahattatyScaffold extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFf5f5f5),
       appBar: AppBar(
+        shadowColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        foregroundColor: Colors.transparent,
         titleSpacing: 0,
-        toolbarHeight: appBarHeight,
         backgroundColor: Theme.of(context).colorScheme.primary,
         iconTheme: const IconThemeData(color: Colors.white),
         elevation: 0.0,

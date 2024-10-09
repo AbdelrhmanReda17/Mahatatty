@@ -52,7 +52,13 @@ class _MahattatyDataPickerState extends State<MahattatyDataPicker> {
               final DateTime selectedDate = args.value;
               final int selectedMonth = selectedDate.month;
               final int selectedYear = selectedDate.year;
-              widget.onDateSelected(DateTime(selectedYear, selectedMonth));
+              final int selectedDay = selectedDate.month == DateTime.now().month
+                  ? DateTime.now().day - 1
+                  : 1;
+
+              log('selectedDate: $selectedDay - $selectedMonth - $selectedYear');
+              widget.onDateSelected(
+                  DateTime(selectedYear, selectedMonth, selectedDay));
               Navigator.of(context).pop();
             }
           },

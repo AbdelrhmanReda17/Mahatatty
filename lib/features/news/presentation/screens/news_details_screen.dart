@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mahattaty/core/utils/time_converter.dart';
 import 'package:mahattaty/features/news/domain/entities/news.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../../../../core/generic components/mahattaty_scaffold.dart';
 
@@ -16,7 +15,6 @@ class NewsDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MahattatyScaffold(
-      appBarHeight: 50,
       appBarContent: Padding(
         padding: const EdgeInsets.only(left: 10),
         child: Text(

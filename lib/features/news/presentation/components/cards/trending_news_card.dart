@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -8,7 +7,7 @@ import 'package:transparent_image/transparent_image.dart';
 import '../../../../../core/utils/open_screens.dart';
 import '../../../../../core/utils/time_converter.dart';
 import '../../../domain/entities/news.dart';
-import '../../screens/details_news.dart';
+import '../../screens/news_details_screen.dart';
 
 class TrendingNewsCard extends StatelessWidget {
   final News news;
@@ -36,6 +35,7 @@ class TrendingNewsCard extends StatelessWidget {
                 child: FadeInImage(
                   placeholder: MemoryImage(kTransparentImage),
                   image: NetworkImage(news.urlToImage),
+                  // color: Theme.of(context).colorScheme.primary,
                   imageErrorBuilder: (context, error, stackTrace) {
                     return Container(
                       color: Theme.of(context).colorScheme.error,

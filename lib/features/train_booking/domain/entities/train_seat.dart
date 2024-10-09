@@ -1,7 +1,11 @@
 enum SeatType {
-  economic,
-  business,
-  firstClass,
+  economic('Economic'),
+  business('Business'),
+  firstClass('First Class');
+
+  final String name;
+
+  const SeatType(this.name);
 }
 
 class TrainSeats {

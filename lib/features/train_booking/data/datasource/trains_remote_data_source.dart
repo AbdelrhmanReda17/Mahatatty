@@ -83,8 +83,7 @@ abstract class BaseTrainsRemoteDataSource {
       {required TicketType ticket,
       required TrainStations from,
       required TrainStations to,
-      DateTime? fromDateTime,
-      DateTime? toDateTime});
+      DateTime? fromDateTime});
 
   Future<void> bookTrainTicket(Ticket ticket);
 
@@ -195,10 +194,8 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
       {required TicketType ticket,
       required TrainStations from,
       required TrainStations to,
-      DateTime? fromDateTime,
-      DateTime? toDateTime}) async {
+      DateTime? fromDateTime}) async {
     try {
-      log('getTrainsBySearch: $from, $to, $fromDateTime, $toDateTime');
       final trains = await fireStore
           .collection('trains')
           .where('trainDepartureStation', isEqualTo: from.name.toLowerCase())
@@ -210,26 +207,12 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
         }).toList();
       });
 
-      log('getTrainsBySearch: $trains');
-      final result;
-      if (ticket == TicketType.oneWay) {
-        result = trains.where((train) {
-          if (fromDateTime != null) {
-            return train.trainDepartureDate.toDate().isAfter(fromDateTime);
-          }
-          return false;
-        }).toList();
-      } else {
-        result = trains.where((train) {
-          if (fromDateTime != null && toDateTime != null) {
-            return train.trainDepartureDate.toDate().isAfter(fromDateTime) &&
-                train.trainArrivalDate.toDate().isBefore(toDateTime);
-          }
-          return false;
-        }).toList();
-      }
-
-      return result;
+      return trains.where((train) {
+        if (fromDateTime != null) {
+          return train.trainDepartureDate.toDate().isAfter(fromDateTime);
+        }
+        return false;
+      }).toList();
     } catch (e) {
       throw Exception(e);
     }

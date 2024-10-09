@@ -13,14 +13,12 @@ class GetTrainsBySearch {
     required TrainStations from,
     required TrainStations to,
     DateTime? fromDateTime,
-    DateTime? toDateTime,
   }) async {
     return await repository.getTrainsBySearch(
       ticket: ticket,
       from: from,
       to: to,
       fromDateTime: fromDateTime,
-      toDateTime: toDateTime,
     );
   }
 }

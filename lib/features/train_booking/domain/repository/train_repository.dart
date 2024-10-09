@@ -9,7 +9,6 @@ abstract class BaseTrainRepository {
     required TrainStations from,
     required TrainStations to,
     DateTime? fromDateTime,
-    DateTime? toDateTime,
   });
 
   Future<List<Train>> getBestOffersTrains();

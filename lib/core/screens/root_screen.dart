@@ -5,8 +5,9 @@ import 'package:mahattaty/authentication/presentation/controllers/auth_controlle
 import 'package:mahattaty/core/screens/explore_screen.dart';
 import 'package:mahattaty/core/screens/main_screen.dart';
 import 'package:mahattaty/features/news/presentation/screens/news_screen.dart';
+import 'package:mahattaty/features/train_booking/presentation/screens/user_tickets_screen.dart';
 
-class RootScreen extends ConsumerStatefulWidget {
+class RootScreen extends StatefulWidget {
   const RootScreen({super.key});
 
   String get homeRouteName => '/root/home';
@@ -21,7 +22,7 @@ class RootScreen extends ConsumerStatefulWidget {
   RootScreenState createState() => RootScreenState();
 }
 
-class RootScreenState extends ConsumerState<RootScreen> {
+class RootScreenState extends State<RootScreen> {
   int _selectedPageIndex = 0;
 
   void _onItemTapped(int index) {
@@ -54,17 +55,15 @@ class RootScreenState extends ConsumerState<RootScreen> {
   static const List<Widget> _screens = [
     MainScreen(),
     ExploreScreen(),
-    NewsScreen(),
+    UserTicketsScreen(),
     Placeholder(),
   ];
 
   @override
   Widget build(BuildContext context) {
-    final authNotifier = ref.read(authControllerProvider.notifier);
-
     return Scaffold(
       body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 350),
         transitionBuilder: (Widget child, Animation<double> animation) {
           return FadeTransition(
             opacity: animation,

@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 class DateCard extends StatelessWidget {
   const DateCard({
     super.key,
+    required this.isEnabled,
     required this.day,
     required this.date,
     required this.isSelected,
     required this.onSelect,
   });
 
+  final bool isEnabled;
   final String date;
   final String day;
   final bool isSelected;
@@ -17,14 +19,19 @@ class DateCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onSelect,
+      onTap: isEnabled ? onSelect : null,
       child: Container(
         width: 50,
         height: 90,
         decoration: BoxDecoration(
-          color: isSelected
-              ? Theme.of(context).colorScheme.primary
-              : Theme.of(context).colorScheme.primaryContainer,
+          color: !isEnabled
+              ? Theme.of(context)
+                  .colorScheme
+                  .onPrimaryContainer
+                  .withOpacity(0.1)
+              : isSelected
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.primaryContainer,
           borderRadius: BorderRadius.circular(30),
         ),
         child: Padding(
@@ -35,18 +42,20 @@ class DateCard extends StatelessWidget {
                 date,
                 style: isSelected
                     ? TextStyle(
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w900,
                         color: Theme.of(context).colorScheme.onSecondary,
-                        fontSize: 18
-                      )
+                        fontSize: 20)
                     : const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 18),
+                        fontWeight: FontWeight.w900, fontSize: 20),
               ),
               Text(
                 day,
                 style: isSelected
-                    ? TextStyle(color: Theme.of(context).colorScheme.onSecondary)
-                    : TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer),
+                    ? TextStyle(
+                        color: Theme.of(context).colorScheme.onSecondary)
+                    : TextStyle(
+                        color:
+                            Theme.of(context).colorScheme.onPrimaryContainer),
               )
             ],
           ),
