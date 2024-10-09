@@ -11,19 +11,19 @@ class OnboardingLocalDataSource {
         title: 'Welcome to Mahattaty',
         description:
             'Mahattaty is a platform that connects you with the best tutors in the country.',
-        image: 'assets/images/onboarding1.png',
+        image: 'images/onboarding1.png',
       ),
       OnboardingStepData(
         title: 'Find the best tutors',
         description:
             'Search for tutors based on your preferences and requirements.',
-        image: 'assets/images/onboarding2.png',
+        image: 'images/onboarding2.png',
       ),
       OnboardingStepData(
         title: 'Book a session',
         description:
             'Book a session with your preferred tutor and start learning.',
-        image: 'assets/images/onboarding3.png',
+        image: 'images/onboarding3.png',
       ),
     ];
   }
