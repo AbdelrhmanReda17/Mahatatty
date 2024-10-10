@@ -1,3 +1,4 @@
+import 'package:mahattaty/features/train_booking/domain/entities/train.dart';
 import 'package:mahattaty/features/train_booking/domain/repository/train_repository.dart';
 
 import '../entities/ticket.dart';
@@ -7,7 +8,7 @@ class GetUserBookedTrainsUseCase {
 
   GetUserBookedTrainsUseCase(this.repository);
 
-  Future<List<Ticket>> call(String userId) async {
+  Future<Map<Ticket, Train>> call(String userId) async {
     return repository.getUserBookedTrains(userId);
   }
 }

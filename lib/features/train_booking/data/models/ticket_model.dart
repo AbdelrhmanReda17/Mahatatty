@@ -14,9 +14,9 @@ class TicketModel extends Ticket {
     required super.bookingDate,
   });
 
-  factory TicketModel.fromFireStore(Map<String, dynamic> map) {
+  factory TicketModel.fromFireStore(Map<String, dynamic> map, String id) {
     return TicketModel(
-      id: map['id'],
+      id: id,
       trainId: map['trainId'],
       userId: map['userId'],
       seatType: SeatType.values.firstWhere(

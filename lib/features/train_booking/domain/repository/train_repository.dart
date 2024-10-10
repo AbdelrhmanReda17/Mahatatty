@@ -13,7 +13,7 @@ abstract class BaseTrainRepository {
 
   Future<List<Train>> getBestOffersTrains();
 
-  Future<List<Ticket>> getUserBookedTrains(String userId);
+  Future<Map<Ticket, Train>> getUserBookedTrains(String userId);
 
   Future<void> bookTrainTicket(Ticket ticket);
 

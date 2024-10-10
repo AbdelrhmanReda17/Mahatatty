@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mahattaty/features/train_booking/presentation/components/cards/train_ticket_card.dart';
@@ -14,6 +16,7 @@ import 'helpers/train_time_information.dart';
 
 class TrainCard extends StatelessWidget {
   final Train? train;
+  final Ticket? ticket;
   final TicketType? ticketType;
   final SeatType? seatType;
   final TrainStations departureStation;
@@ -26,6 +29,7 @@ class TrainCard extends StatelessWidget {
   const TrainCard({
     super.key,
     this.train,
+    this.ticket,
     this.ticketType,
     this.seatType,
     this.onTrainSelected,
@@ -40,7 +44,7 @@ class TrainCard extends StatelessWidget {
     var trainPrice = 0.0, discountTrainPrice = 0.0, isShowDiscount = false;
     if (train != null) {
       trainPrice = train!.trainSeats
-          .firstWhere((element) => element.seatType == SeatType.business)
+          .firstWhere((element) => element.seatType == SeatType.economic)
           .seatPrice;
       discountTrainPrice =
           trainPrice - (trainPrice * (train!.seatDiscount / 100));
@@ -48,13 +52,17 @@ class TrainCard extends StatelessWidget {
       isShowDiscount = train!.seatDiscount != 0 &&
           train!.seatDiscountDate.toDate().isAfter(DateTime.now());
     }
-
+    if (ticket != null) {
+      log('Ticket: $ticket');
+      trainPrice = ticket!.price;
+      isShowDiscount = false;
+    }
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.9,
       child: ClipPath(
         clipper: SemiCircleClipper(
             fromTop: displayTrainTicketCard && train != null
-                ? 235
+                ? 197
                 : train != null && !isShowDiscount
                     ? 110
                     : train != null && isShowDiscount

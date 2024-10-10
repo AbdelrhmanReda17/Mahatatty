@@ -55,7 +55,7 @@ class TimeInformation extends StatelessWidget {
                     radius: 6,
                     color: Theme.of(context).colorScheme.primary,
                   ),
-                  const CustomLine(size: 40),
+                  CustomLine(size: MediaQuery.of(context).size.width * 0.08),
                   Padding(
                     padding: const EdgeInsets.only(left: 8, right: 8),
                     child: Container(
@@ -70,7 +70,7 @@ class TimeInformation extends StatelessWidget {
                           color: Colors.white),
                     ),
                   ),
-                  const CustomLine(size: 40),
+                  CustomLine(size: MediaQuery.of(context).size.width * 0.08),
                   CustomCircle(
                     radius: 6,
                     color: Theme.of(context).colorScheme.primary,

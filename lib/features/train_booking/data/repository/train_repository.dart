@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import '../../domain/entities/ticket.dart';
 import '../../domain/entities/train.dart';
 import '../../domain/repository/train_repository.dart';
@@ -44,7 +46,7 @@ class TrainRepository implements BaseTrainRepository {
   }
 
   @override
-  Future<List<Ticket>> getUserBookedTrains(String userId) {
+  Future<Map<Ticket, Train>> getUserBookedTrains(String userId) {
     return remoteDataSource.getUserBookedTrains(userId);
   }
 }

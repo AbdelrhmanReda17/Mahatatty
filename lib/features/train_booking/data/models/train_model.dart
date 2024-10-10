@@ -26,9 +26,6 @@ class TrainModel extends Train {
   });
 
   factory TrainModel.fromFireStore(Map<String, dynamic> map, String id) {
-    log('TrainModel.fromFireStore: $map');
-    log(map["trainArrivalStation"].toString());
-    log(map["trainDepartureStation"].toString());
     return TrainModel(id,
         trainName: map['trainName'],
         trainNumber: map['trainNumber'],
@@ -38,8 +35,8 @@ class TrainModel extends Train {
         trainSeats: (map['trainSeats'] as List)
             .map((e) => TrainSeatModel.fromFireStore(e))
             .toList(),
-        trainDepartureTime: map['trainDepartureTime'] ?? '',
-        trainArrivalTime: map['trainArrivalTime'] ?? '',
+        trainDepartureTime: map['trainDepartureTime'],
+        trainArrivalTime: map['trainArrivalTime'],
         trainSeatsStatus: TrainSeatsStatus.values.firstWhere(
           (element) => element.name.toString() == '${map["trainSeatsStatus"]}',
           orElse: () => TrainSeatsStatus.booked,
@@ -54,8 +51,8 @@ class TrainModel extends Train {
             '${map["trainArrivalStation"].toLowerCase()}';
       },
     ),
-        trainBookedSeats: map['trainBookedSeats'],
-        trainTotalSeats: map['trainTotalSeats'],
+        trainBookedSeats: int.parse(map['trainBookedSeats'].toString()),
+        trainTotalSeats: int.parse(map['trainTotalSeats'].toString()),
         trainDepartureDate: map['trainDepartureDate'],
         trainArrivalDate: map['trainArrivalDate'],
         trainDuration: map['trainDuration'],

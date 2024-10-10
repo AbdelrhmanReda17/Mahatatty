@@ -1,14 +1,31 @@
-import 'package:flutter/gestures.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mahattaty/core/generic%20components/Dialogs/mahattaty_data_picker.dart';
 import 'package:mahattaty/core/generic%20components/mahattaty_search.dart';
+import 'package:mahattaty/core/utils/open_dialogs.dart';
+import 'package:mahattaty/features/train_booking/domain/entities/train.dart';
 
 import '../../../../core/generic components/mahattaty_scaffold.dart';
+import '../../domain/entities/ticket.dart';
+import '../components/cards/train_card.dart';
+import '../controllers/get_user_booked_trains_controller.dart';
 
-class UserTicketsScreen extends StatelessWidget {
+class UserTicketsScreen extends ConsumerStatefulWidget {
   const UserTicketsScreen({super.key});
 
   @override
+  UserTicketsScreenState createState() => UserTicketsScreenState();
+}
+
+class UserTicketsScreenState extends ConsumerState<UserTicketsScreen> {
+  DateTime? filterDate;
+  int filterTrainType = 0;
+
+  @override
   Widget build(BuildContext context) {
+    final userTickets = ref.watch(getUserBookedTrainsController);
     return MahattatyScaffold(
       appBarContent: Padding(
         padding: const EdgeInsets.only(left: 15),
@@ -21,7 +38,18 @@ class UserTicketsScreen extends StatelessWidget {
                   TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
             ),
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                OpenDialogs.openCustomDialog(
+                  context: context,
+                  dialog: MahattatyDataPicker(
+                    onDateSelected: (date) {
+                      setState(() {
+                        filterDate = date;
+                      });
+                    },
+                  ),
+                );
+              },
               icon: const Icon(
                 Icons.calendar_today,
                 color: Colors.white,
@@ -30,144 +58,47 @@ class UserTicketsScreen extends StatelessWidget {
           ],
         ),
       ),
-      bgHeight: backgroundHeight.medium,
-      body: const MyTicketScreenBody(),
-    );
-  }
-}
-
-class MyTicketScreenBody extends StatefulWidget {
-  const MyTicketScreenBody({super.key});
-
-  @override
-  State<MyTicketScreenBody> createState() => _MyTicketScreenBodyState();
-}
-
-class _MyTicketScreenBodyState extends State<MyTicketScreenBody> {
-  final TextEditingController _controller = TextEditingController();
-  List<String> filters = [
-    'All',
-    'Lenia Express',
-    'Jelingga Train',
-    'Jordan Les',
-    'Jordan Les',
-    'Jordan Les'
-  ];
-  int? _value = 1;
-  bool isSelected = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-          child: MahattatySearch(
-            onPressed: (String value) {},
-          ),
-        ),
-        SizedBox(
-          height: 80,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: filters.length,
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            itemBuilder: (BuildContext context, int index) {
-              isSelected = _value == index;
-              return Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: ChoiceChip(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  showCheckmark: false,
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  selectedColor: Colors.white,
-                  disabledColor: Colors.white,
-                  labelStyle: isSelected
-                      ? TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontSize: 17)
-                      : TextStyle(color: Theme.of(context).colorScheme.surface),
-                  label: Text(filters[index]),
-                  selected: isSelected,
-                  //_value == index,
-                  onSelected: (selected) {
-                    // filter change
-                    setState(
-                      () {
-                        selected ? _value = index : _value = null;
-                        isSelected = selected;
-                      },
-                    );
-                  },
-                ),
-              );
+      bgHeight: backgroundHeight.small,
+      body: Column(
+        children: [
+          FilterWidget(
+            selectedValue: filterTrainType,
+            onSelected: (val) {
+              setState(() {
+                filterTrainType = val!;
+              });
             },
           ),
-        ),
-        const Expanded(
-          child: MyTicketDetails(),
-        )
-      ],
-    );
-  }
-}
-
-class MyTicketDetails extends StatefulWidget {
-  const MyTicketDetails({super.key});
-
-  @override
-  State<MyTicketDetails> createState() => _MyTicketDetailsState();
-}
-
-class _MyTicketDetailsState extends State<MyTicketDetails>
-    with SingleTickerProviderStateMixin {
-  late TabController tabController;
-
-  @override
-  void initState() {
-    super.initState();
-    tabController = TabController(length: 2, vsync: this);
-  }
-
-  @override
-  void dispose() {
-    tabController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Column(
-        children: [
-          TabBar(
-            overlayColor: WidgetStateProperty.all<Color>(Colors.transparent),
-            isScrollable: false,
-            dividerHeight: 0,
-            indicatorSize: TabBarIndicatorSize.tab,
-            unselectedLabelColor: Colors.grey,
-            indicatorColor: Colors.transparent,
-            indicator: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(14),
+          userTickets.when(
+            data: (tickets) => Expanded(
+              child: MyTicketsTabsController(
+                tickets: tickets,
+                filterDate: filterDate,
+                filterTrainType: filterTrainType,
+              ),
             ),
-            controller: tabController,
-            tabs: const [
-              Tab(
-                text: 'Up Coming',
-              ),
-              Tab(
-                text: 'Done',
-              ),
-            ],
-          ),
-          Expanded(
-            child: TabBarView(
-              controller: tabController,
-              children: const [
-                MyTicketUpComingScreen(),
-                MyTicketDoneScreen(),
+            loading: () => const Center(
+              child: CircularProgressIndicator(),
+            ),
+            error: (error, _) => Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Text(
+                  'Error While Fetching Trains, Please Try Again !!',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.error,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    ref.refresh(getUserBookedTrainsController);
+                  },
+                  child: const Text('Retry'),
+                ),
               ],
             ),
           ),
@@ -177,39 +108,190 @@ class _MyTicketDetailsState extends State<MyTicketDetails>
   }
 }
 
-class MyTicketDoneScreen extends StatelessWidget {
-  const MyTicketDoneScreen({super.key});
+class FilterWidget extends StatelessWidget {
+  final int? selectedValue;
+  final ValueChanged<int?> onSelected;
+
+  const FilterWidget({
+    super.key,
+    required this.selectedValue,
+    required this.onSelected,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return const Column();
+    List<String> filters = [
+      'All',
+      for (final TrainType status in TrainType.values) status.name
+    ];
+
+    return SizedBox(
+      height: 70,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: filters.length,
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        itemBuilder: (BuildContext context, int index) {
+          bool isSelected = selectedValue == index;
+          return Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: ChoiceChip(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              showCheckmark: false,
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              selectedColor: Colors.white,
+              disabledColor: Colors.white,
+              labelStyle: isSelected
+                  ? TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 17,
+                    )
+                  : TextStyle(color: Theme.of(context).colorScheme.surface),
+              label: Text(filters[index]),
+              selected: isSelected,
+              onSelected: (bool selected) {
+                if (selected) {
+                  onSelected(
+                      index); // Notify the parent about the selected index
+                }
+              },
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class MyTicketsTabsController extends StatelessWidget {
+  const MyTicketsTabsController({
+    super.key,
+    required this.tickets,
+    required this.filterDate,
+    required this.filterTrainType,
+  });
+
+  final Map<Ticket, Train> tickets;
+  final DateTime? filterDate;
+  final int filterTrainType;
+
+  @override
+  Widget build(BuildContext context) {
+    final Map<Ticket, Train> upComingTickets = Map.fromEntries(
+      tickets.entries.where(
+        (entry) {
+          final train = entry.value;
+          bool dateMatches = filterDate == null ||
+              train.trainDepartureDate.toDate().isAfter(filterDate!);
+          bool typeMatches = filterTrainType == 0 ||
+              train.trainType.index == filterTrainType - 1;
+          return train.trainDepartureDate.toDate().isAfter(DateTime.now()) &&
+              dateMatches &&
+              typeMatches;
+        },
+      ),
+    );
+
+    final Map<Ticket, Train> doneTickets = Map.fromEntries(
+      tickets.entries.where(
+        (entry) {
+          final train = entry.value;
+          bool dateMatches = filterDate == null ||
+              train.trainDepartureDate.toDate().isAfter(filterDate!);
+          bool typeMatches = filterTrainType == 0 ||
+              train.trainType.index == filterTrainType - 1;
+          return train.trainDepartureDate.toDate().isBefore(DateTime.now()) &&
+              dateMatches &&
+              typeMatches;
+        },
+      ),
+    );
+
+    return DefaultTabController(
+      length: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: [
+            TabBar(
+              overlayColor:
+                  MaterialStateProperty.all<Color>(Colors.transparent),
+              isScrollable: false,
+              dividerColor: Colors.transparent,
+              indicatorSize: TabBarIndicatorSize.tab,
+              unselectedLabelColor: Colors.grey,
+              indicatorColor: Colors.transparent,
+              indicator: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(14),
+              ),
+              tabs: const [
+                Tab(text: 'Up Coming'),
+                Tab(text: 'Done'),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: TabBarView(
+                children: [
+                  MyTicketUpComingScreen(tickets: upComingTickets),
+                  MyTicketDoneScreen(tickets: doneTickets),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class MyTicketDoneScreen extends StatelessWidget {
+  const MyTicketDoneScreen({super.key, required this.tickets});
+
+  final Map<Ticket, Train> tickets;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: tickets.length,
+      itemBuilder: (BuildContext context, int index) {
+        return TrainCard(
+          train: tickets.values.elementAt(index),
+          ticketType: tickets.keys.elementAt(index).type,
+          seatType: tickets.keys.elementAt(index).seatType,
+          departureStation:
+              tickets.values.elementAt(index).trainDepartureStation,
+          arrivalStation: tickets.values.elementAt(index).trainArrivalStation,
+          displayTrainTicketCard: true,
+          ticket: tickets.keys.elementAt(index),
+        );
+      },
+    );
   }
 }
 
 class MyTicketUpComingScreen extends StatelessWidget {
-  const MyTicketUpComingScreen({super.key});
+  const MyTicketUpComingScreen({super.key, required this.tickets});
 
-  final List<String> date = const ['14 june 2023', '26 june 2023'];
+  final Map<Ticket, Train> tickets;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: ListView.builder(
-        itemCount: date.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                'Travel on ${date[index]}',
-                style: const TextStyle(fontWeight: FontWeight.w600),
-                textAlign: TextAlign.start,
-              ),
-            ],
-          );
-        },
-      ),
+    return ListView.builder(
+      itemCount: tickets.length,
+      itemBuilder: (BuildContext context, int index) {
+        return TrainCard(
+          train: tickets.values.elementAt(index),
+          ticketType: tickets.keys.elementAt(index).type,
+          seatType: tickets.keys.elementAt(index).seatType,
+          departureStation:
+              tickets.values.elementAt(index).trainDepartureStation,
+          arrivalStation: tickets.values.elementAt(index).trainArrivalStation,
+          displayTrainTicketCard: true,
+          ticket: tickets.keys.elementAt(index),
+        );
+      },
     );
   }
 }

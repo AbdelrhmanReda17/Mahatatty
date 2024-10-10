@@ -73,6 +73,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../domain/entities/ticket.dart';
 import '../../domain/entities/train.dart';
+import '../../domain/entities/train_seat.dart';
 import '../models/ticket_model.dart';
 import '../models/train_model.dart';
 
@@ -91,7 +92,7 @@ abstract class BaseTrainsRemoteDataSource {
 
   Future<List<TrainModel>> getBestOffersTrains();
 
-  Future<List<TicketModel>> getUserBookedTrains(String userId);
+  Future<Map<TicketModel, TrainModel>> getUserBookedTrains(String userId);
 }
 
 class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
@@ -108,7 +109,7 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
         final bookedSeats = train.trainBookedSeats + 1;
         fireStore.collection('trains').doc(ticket.trainId).update({
           'trainBookedSeats': bookedSeats,
-          'trainStatus':
+          'TrainSeatsStatus':
               bookedSeats == train.trainTotalSeats ? 'booked' : 'available',
         });
       });
@@ -130,15 +131,15 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
   Future<void> cancelTrainTicket(String ticketId) {
     try {
       return fireStore.collection('tickets').doc(ticketId).get().then((doc) {
-        final ticket =
-            TicketModel.fromFireStore(doc.data() as Map<String, dynamic>);
+        final ticket = TicketModel.fromFireStore(
+            doc.data() as Map<String, dynamic>, doc.id);
         fireStore.collection('trains').doc(ticket.trainId).get().then((doc) {
           final train = TrainModel.fromFireStore(
               doc.data() as Map<String, dynamic>, doc.id);
           final bookedSeats = train.trainBookedSeats - 1;
           fireStore.collection('trains').doc(ticket.trainId).update({
             'trainBookedSeats': bookedSeats,
-            'trainStatus': 'available',
+            'TrainSeatsStatus': 'available',
           });
         });
       });
@@ -184,12 +185,6 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
   }
 
   @override
-  Future<List<TicketModel>> getUserBookedTrains(String userId) {
-    // TODO: implement getUserBookedTrains
-    throw UnimplementedError();
-  }
-
-  @override
   Future<List<TrainModel>> getTrainsBySearch(
       {required TicketType ticket,
       required TrainStations from,
@@ -213,6 +208,32 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
         }
         return false;
       }).toList();
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<Map<TicketModel, TrainModel>> getUserBookedTrains(
+      String userId) async {
+    try {
+      final result = await fireStore
+          .collection('tickets')
+          .where('userId', isEqualTo: userId)
+          .get();
+      final tickets = result.docs
+          .map((doc) => TicketModel.fromFireStore(doc.data(), doc.id))
+          .toList();
+      final trains = <TrainModel>[];
+      for (var ticket in tickets) {
+        final train =
+            await fireStore.collection('trains').doc(ticket.trainId).get();
+        trains.add(
+          TrainModel.fromFireStore(
+              train.data() as Map<String, dynamic>, train.id),
+        );
+      }
+      return Map.fromIterables(tickets, trains);
     } catch (e) {
       throw Exception(e);
     }

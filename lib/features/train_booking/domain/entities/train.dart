@@ -93,8 +93,12 @@ enum TrainStations {
 }
 
 enum TrainType {
-  express,
-  ordinary,
+  express('Express'),
+  ordinary('Ordinary');
+
+  final String name;
+
+  const TrainType(this.name);
 }
 
 class Train {
