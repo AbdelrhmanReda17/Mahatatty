@@ -2,10 +2,20 @@ import 'package:flutter/material.dart';
 import '../../train_booking/domain/entities/ticket.dart';
 import '../../train_booking/presentation/components/detail_row.dart';
 
+
+import 'package:flutter/material.dart';
+import '../../train_booking/domain/entities/ticket.dart';
+import '../../train_booking/domain/entities/train.dart';
+
 class PaymentDetails extends StatelessWidget {
   final Ticket ticket;
+  final Train train;
 
-  const PaymentDetails({Key? key, required this.ticket}) : super(key: key);
+  const PaymentDetails({
+    Key? key,
+    required this.ticket,
+    required this.train,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +28,7 @@ class PaymentDetails extends StatelessWidget {
           BoxShadow(
             color: Colors.black26,
             blurRadius: 4,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -34,15 +44,16 @@ class PaymentDetails extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          DetailRow(label: 'Train Name:', value: 'Train ${ticket.trainId}'),
-          DetailRow(label: 'From:', value: ticket.from),
-          DetailRow(label: 'To:', value: ticket.to),
-          DetailRow(label: 'Departure:', value: ticket.departure),
-          DetailRow(label: 'Arrival:', value: ticket.arrival),
-          DetailRow(label: 'Duration:', value: ticket.duration),
-          DetailRow(label: 'Seat Number:', value: ticket.seatNumber),
+          DetailRow(label: 'Train Name:', value: train.trainName),
+          DetailRow(label: 'From:', value: train.trainDepartureStation.toString().split('.').last),
+          DetailRow(label: 'To:', value: train.trainArrivalStation.toString().split('.').last),
+          DetailRow(label: 'Departure Time:', value: train.trainDepartureTime),
+          DetailRow(label: 'Arrival Time:', value: train.trainArrivalTime),
+          DetailRow(label: 'Seat Type:', value: ticket.seatType.toString().split('.').last),
+          DetailRow(label: 'Ticket Status:', value: ticket.status.toString().split('.').last),
+          DetailRow(label: 'Booking Date:', value: ticket.bookingDate.toDate().toLocal().toString().split(' ')[0]),
           const SizedBox(height: 10),
-          Divider(),
+          const Divider(),
           const SizedBox(height: 10),
           Text(
             'Total Price:',
@@ -52,7 +63,7 @@ class PaymentDetails extends StatelessWidget {
             ),
           ),
           Text(
-            '\$${ticket.price}',
+            '\$${ticket.price.toStringAsFixed(2)}',
             style: TextStyle(
               fontSize: 20,
               color: Theme.of(context).colorScheme.secondary,

@@ -1,34 +1,83 @@
 import 'package:flutter/material.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../../Themes/dark_theme.dart';
+import '../../../Themes/light_theme.dart';
 import '../../../core/generic components/mahattaty_scaffold.dart';
 import '../../train_booking/domain/entities/ticket.dart';
+import '../../train_booking/domain/entities/train.dart';
+import '../../train_booking/domain/entities/train_seat.dart';
+import '../components/payment_screen_body.dart';
 
+void main() async {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Mahattaty Payment',
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: ThemeMode.system,
+      home: const PaymentScreen(),
+    );
+  }
+}
 
 class PaymentScreen extends StatelessWidget {
   const PaymentScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    Ticket sampleTicket = Ticket(
-      trainId: '12345',
-      userId: 'user_001',
-      from: 'Cairo',
-      to: 'Alexandria',
-      departure: '2024-10-24 08:30:00',
-      arrival: '2024-10-24 10:30:00',
-      duration: '2 hours',
-      price: '25.00',
-      type: TicketType.firstClass,
-      seatNumber: 'A5',
-      status: TicketStatus.booked,
+    TrainSeats sampleTrainSeat = TrainSeats(
+      numberOfSeats: 1,
+      seatType: SeatType.economic,
+      seatPrice: 25.00,
     );
 
-    String remainingTime = getRemainingTime(DateTime.parse(sampleTicket.departure));
+    Train sampleTrain = Train(
+      'train_001',
+      trainName: 'Express Train',
+      trainNumber: 'EX123',
+      trainType: TrainType.express,
+      trainDepartureTime: '08:30',
+      trainArrivalTime: '10:30',
+      trainSeats: [sampleTrainSeat],
+      trainBookedSeats: 1,
+      trainSeatsStatus: TrainSeatsStatus.booked,
+      trainTotalSeats: 100,
+      trainDepartureStation: TrainStations.cairo,
+      trainArrivalStation: TrainStations.alexandria,
+      seatDiscountDate: Timestamp.now(),
+      trainDepartureDate: Timestamp.fromDate(DateTime.parse('2024-10-24')),
+      trainArrivalDate: Timestamp.fromDate(DateTime.parse('2024-10-24')),
+      trainDuration: '2 hours',
+      trainStatus: TrainStatus.onTime,
+    );
+
+    Ticket sampleTicket = Ticket(
+      id: 'ticket_001',
+      trainId: sampleTrain.id,
+      userId: 'user_001',
+      seatType: SeatType.economic,
+      status: TicketStatus.booked,
+      type: TicketType.oneWay,
+      price: sampleTrainSeat.seatPrice,
+      bookingDate: Timestamp.now(),
+    );
+
+    String remainingTime = getRemainingTime(DateTime.parse('2024-10-24 08:30:00'));
     return MahattatyScaffold(
-      appBarHeight: 50,
       appBarContent: const CenterAppBarTitle(),
       bgHeight: backgroundHeight.large,
-      body: PaymentScreenBody(sampleTicket: sampleTicket, remainingTime: remainingTime),
+      body: PaymentScreenBody(
+        sampleTicket: sampleTicket,
+        remainingTime: remainingTime,
+        sampleTrain: sampleTrain,
+      ),
     );
   }
 }
