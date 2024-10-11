@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mahattaty/core/generic%20components/mahattaty_error.dart';
 import 'package:mahattaty/features/news/presentation/components/cards/skeletons/trending_news_card_skeleton.dart';
+import '../../../../core/generic components/mahattaty_empty_data.dart';
 import '../../../../core/utils/open_screens.dart';
 import '../controllers/all_news_controller.dart';
 import '../screens/news_screen.dart';
@@ -52,6 +54,9 @@ class TrendingTopics extends ConsumerWidget {
           height: 300,
           child: newsState.when(
             data: (news) {
+              if (news.isEmpty) {
+                return const MahattatyEmptyData(message: 'No News Available');
+              }
               return ListView.builder(
                 scrollDirection: Axis.horizontal,
                 itemCount: news.length,
@@ -75,28 +80,8 @@ class TrendingTopics extends ConsumerWidget {
                 },
               );
             },
-            error: (error, stackTrace) => Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Text(
-                    'Error While Fetching News, Please Try Again ',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.error,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      ref.refresh(allNewsController);
-                    },
-                    child: const Text('Retry'),
-                  ),
-                ],
-              ),
+            error: (error, stackTrace) => MahattatyError(
+              onRetry: () => ref.refresh(allNewsController),
             ),
           ),
         ),
