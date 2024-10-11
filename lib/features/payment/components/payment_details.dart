@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../domain/entities/ticket.dart';
-import 'detail_row.dart';
+import '../../train_booking/domain/entities/ticket.dart';
+import '../../train_booking/presentation/components/detail_row.dart';
 
 class PaymentDetails extends StatelessWidget {
   final Ticket ticket;

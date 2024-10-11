@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mahattaty/features/train_booking/presentation/components/payment_details.dart';
-import 'package:mahattaty/features/train_booking/presentation/components/payment_method_dialog.dart';
-import 'package:mahattaty/features/train_booking/presentation/components/remaining_time_widget.dart';
-import '../../../../core/generic components/mahattaty_button.dart';
-import '../../domain/entities/ticket.dart';
-import 'cards/train_ticket_card.dart';
+import 'package:mahattaty/features/payment/components/payment_details.dart';
+import 'package:mahattaty/features/payment/components/payment_method_dialog.dart';
+import 'package:mahattaty/features/payment/components/remaining_time_widget.dart';
+import '../../../core/generic components/mahattaty_button.dart';
+import '../../train_booking/domain/entities/ticket.dart';
+import '../../train_booking/presentation/components/cards/train_ticket_card.dart';
 
 class PaymentScreenBody extends StatelessWidget {
   final Ticket sampleTicket;

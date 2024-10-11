@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/generic components/mahattaty_scaffold.dart';
-import '../../domain/entities/ticket.dart';
+import '../../../core/generic components/mahattaty_scaffold.dart';
+import '../../train_booking/domain/entities/ticket.dart';
 
 
 class PaymentScreen extends StatelessWidget {
