@@ -6,8 +6,10 @@ import 'package:mahattaty/core/generic%20components/Dialogs/mahattaty_data_picke
 import 'package:mahattaty/core/generic%20components/mahattaty_search.dart';
 import 'package:mahattaty/core/utils/open_dialogs.dart';
 import 'package:mahattaty/features/train_booking/domain/entities/train.dart';
+import 'package:mahattaty/features/train_booking/presentation/screens/ticket_details_screen.dart';
 
 import '../../../../core/generic components/mahattaty_scaffold.dart';
+import '../../../../core/utils/open_screens.dart';
 import '../../domain/entities/ticket.dart';
 import '../components/cards/train_card.dart';
 import '../controllers/get_user_booked_trains_controller.dart';
@@ -126,7 +128,7 @@ class FilterWidget extends StatelessWidget {
     ];
 
     return SizedBox(
-      height: 70,
+      height: MediaQuery.of(context).size.height * 0.085,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: filters.length,
@@ -230,7 +232,7 @@ class MyTicketsTabsController extends StatelessWidget {
                 Tab(text: 'Done'),
               ],
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
             Expanded(
               child: TabBarView(
                 children: [
@@ -290,6 +292,16 @@ class MyTicketUpComingScreen extends StatelessWidget {
           arrivalStation: tickets.values.elementAt(index).trainArrivalStation,
           displayTrainTicketCard: true,
           ticket: tickets.keys.elementAt(index),
+          onTrainSelected: (ticket, train) {
+            OpenScreen.openScreenWithSmoothAnimation(
+              context,
+              TicketDetailScreen(
+                ticket: ticket!,
+                train: train!,
+              ),
+              false,
+            );
+          },
         );
       },
     );

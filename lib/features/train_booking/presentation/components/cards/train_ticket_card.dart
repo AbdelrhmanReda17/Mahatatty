@@ -14,21 +14,19 @@ class TrainTicketCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.only(left: 16, right: 16),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: const BorderRadius.only(
+          bottomLeft: Radius.circular(16),
+          bottomRight: Radius.circular(16),
+        ),
       ),
-      margin: const EdgeInsets.only(top: 0),
       child: Column(
         children: [
-          const CustomLine(
-            isDashed: true,
-            dashWidth: 3,
-            dashSpace: 3,
-            size: 1,
-          ),
+          const CustomLine(isDashed: true, size: 1, dashWidth: 3, dashSpace: 3),
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.only(top: 10, bottom: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

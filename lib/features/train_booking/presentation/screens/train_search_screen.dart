@@ -42,7 +42,7 @@ class TrainSearchScreen extends ConsumerWidget {
               train: train,
               departureStation: train.trainDepartureStation,
               arrivalStation: train.trainArrivalStation,
-              onTrainSelected: (_) {},
+              onTrainSelected: (_, __) {},
             );
           },
         );
@@ -97,6 +97,7 @@ class TrainSearchScreen extends ConsumerWidget {
         child: Column(
           children: [
             TrainCard(
+              onTrainSelected: (_, __) {},
               departureStation: trainState.fromStation,
               arrivalStation: trainState.toStation,
               ticketType: trainState.ticketType,
