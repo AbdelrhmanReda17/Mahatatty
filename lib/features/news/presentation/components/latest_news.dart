@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mahattaty/core/generic%20components/mahattaty_empty_data.dart';
+import 'package:mahattaty/core/generic%20components/mahattaty_error.dart';
 import 'package:mahattaty/core/utils/open_screens.dart';
 import 'package:mahattaty/features/news/presentation/components/cards/skeletons/news_card_skeleton.dart';
 import 'package:mahattaty/features/news/presentation/screens/news_screen.dart';
@@ -54,6 +56,9 @@ class LatestNews extends ConsumerWidget {
         Expanded(
           child: newsState.when(
             data: (news) {
+              if (news.isEmpty) {
+                return const MahattatyEmptyData(message: 'No News Available');
+              }
               return ListView.builder(
                 itemCount: news.length,
                 itemBuilder: (context, index) {
@@ -67,28 +72,8 @@ class LatestNews extends ConsumerWidget {
                 return const NewsCardSkeleton();
               },
             ),
-            error: (error, stackTrace) => Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Text(
-                    'Error While Fetching News, Please Try Again !!',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.error,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      ref.refresh(latestNewsController);
-                    },
-                    child: const Text('Retry'),
-                  ),
-                ],
-              ),
+            error: (error, stackTrace) => MahattatyError(
+              onRetry: () => ref.refresh(latestNewsController),
             ),
           ),
         ),

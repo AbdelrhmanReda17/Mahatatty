@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/generic components/mahattaty_empty_data.dart';
+import '../../../../core/generic components/mahattaty_error.dart';
 import '../../../../core/generic components/mahattaty_scaffold.dart';
 import '../../../../core/generic components/mahattaty_search.dart';
 import '../components/Cards/news_card.dart';
@@ -18,16 +20,7 @@ class NewsSearchScreen extends ConsumerWidget {
     var screenBody = newsData.when(
       data: (news) {
         if (news.isEmpty) {
-          return Center(
-            child: Text(
-              'No results found',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          );
+          return const MahattatyEmptyData(message: 'No News Available');
         }
         return ListView.builder(
           itemCount: news.length,
@@ -43,30 +36,13 @@ class NewsSearchScreen extends ConsumerWidget {
           return const NewsCardSkeleton();
         },
       ),
-      error: (error, stackTrace) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Text(
-              'Error While Fetching News, Please Try Again !!',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.error,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                ref.refresh(
-                    newsByQueryController(ref.watch(newsSearchProvider)));
-              },
-              child: const Text('Retry'),
-            ),
-          ],
-        );
-      },
+      error: (error, stackTrace) => MahattatyError(
+        onRetry: () => ref.refresh(
+          newsByQueryController(
+            ref.watch(newsSearchProvider),
+          ),
+        ),
+      ),
     );
     return MahattatyScaffold(
       appBarContent: Padding(

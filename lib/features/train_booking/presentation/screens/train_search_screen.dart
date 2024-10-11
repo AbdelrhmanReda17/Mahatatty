@@ -5,6 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mahattaty/core/generic%20components/Dialogs/mahattaty_train_filter_dialog.dart';
 import 'package:mahattaty/core/utils/open_dialogs.dart';
 
+import '../../../../core/generic components/mahattaty_empty_data.dart';
+import '../../../../core/generic components/mahattaty_error.dart';
+import '../../../../core/generic components/mahattaty_loading.dart';
 import '../../../../core/generic components/mahattaty_scaffold.dart';
 import '../../domain/entities/train_seat.dart';
 import '../components/cards/train_card.dart';
@@ -24,16 +27,7 @@ class TrainSearchScreen extends ConsumerWidget {
     var screenBody = trainsData.when(
       data: (trains) {
         if (trains.isEmpty) {
-          return Center(
-            child: Text(
-              'No results found',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.onSurface,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          );
+          return const MahattatyEmptyData(message: 'No Trains Available');
         }
         return ListView.builder(
           itemCount: trains.length,
@@ -44,38 +38,17 @@ class TrainSearchScreen extends ConsumerWidget {
               train: train,
               departureStation: train.trainDepartureStation,
               arrivalStation: train.trainArrivalStation,
-              onTrainSelected: (_) {},
+              onTrainSelected: (_, __) {},
             );
           },
         );
       },
-      loading: () => const Center(
-        child: CircularProgressIndicator(),
+      loading: () => const MahattatyLoading(),
+      error: (_, __) => MahattatyError(
+        onRetry: () => ref.refresh(
+          trainsBySearchController(ref.watch(trainSearchProvider)),
+        ),
       ),
-      error: (error, stackTrace) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Text(
-              'Error While Fetching Trains, Please Try Again !!',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.error,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                trainsData = ref.refresh(
-                    trainsBySearchController(ref.watch(trainSearchProvider)));
-              },
-              child: const Text('Retry'),
-            ),
-          ],
-        );
-      },
     );
     return MahattatyScaffold(
       appBarContent: Padding(
@@ -108,6 +81,7 @@ class TrainSearchScreen extends ConsumerWidget {
         child: Column(
           children: [
             TrainCard(
+              onTrainSelected: (_, __) {},
               departureStation: trainState.fromStation,
               arrivalStation: trainState.toStation,
               ticketType: trainState.ticketType,

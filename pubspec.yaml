@@ -44,7 +44,7 @@ dependencies:
   skeletonizer: ^1.4.2
   transparent_image: ^2.0.1
   syncfusion_flutter_datepicker: ^27.1.51
-
+  qr_flutter: ^4.1.0
 
 dev_dependencies:
   flutter_test:

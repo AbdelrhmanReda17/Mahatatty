@@ -10,6 +10,7 @@ class MahattatyDialog extends StatelessWidget {
   final String title;
   final String description;
   final List<Widget> content;
+  final bool showButton;
   final String buttonText;
   final VoidCallback onButtonPressed;
   final bool disabled;
@@ -20,6 +21,7 @@ class MahattatyDialog extends StatelessWidget {
     required this.title,
     required this.description,
     required this.content,
+    this.showButton = true,
     required this.buttonText,
     this.disabled = false,
     required this.onButtonPressed,
@@ -69,13 +71,14 @@ class MahattatyDialog extends StatelessWidget {
             ...content,
           ],
           const SizedBox(height: 20),
-          MahattatyButton(
-            text: buttonText,
-            style: MahattatyButtonStyle.primary,
-            disabled: disabled,
-            onPressed: onButtonPressed,
-            height: 60,
-          ),
+          if (showButton)
+            MahattatyButton(
+              text: buttonText,
+              style: MahattatyButtonStyle.primary,
+              disabled: disabled,
+              onPressed: onButtonPressed,
+              height: 60,
+            ),
         ],
       ),
     );
