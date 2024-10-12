@@ -68,6 +68,11 @@ class MyApp extends StatelessWidget {
             const AuthenticationScreen(key: Key('login_screen')),
         const AuthenticationScreen().registerRouteName: (context) =>
             const AuthenticationScreen(key: Key('register_screen')),
+
+        // '/settings': (context) => const SettingsScreen(),
+        // '/editProfile': (context) => const EditProfileScreen(),
+        // // '/changePassword': (context) => const ChangePasswordScreen(),
+        // '/legal-and-policies': (context) => const LegalAndPoliciesScreen()
       },
     );
   }

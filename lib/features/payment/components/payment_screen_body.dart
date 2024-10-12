@@ -40,21 +40,24 @@ class PaymentScreenBody extends StatelessWidget {
             departureStation: sampleTrain.trainDepartureStation,
             arrivalStation: sampleTrain.trainArrivalStation,
             displayTrainTicketCard: true,
-            onTrainSelected: (ticket, train) => showPaymentDialog(context),
+            // onTrainSelected: (ticket, train) => showPaymentDialog(context),
           ),
-         const SizedBox(height: 20),
-          PaymentDetails(ticket: sampleTicket, train: sampleTrain),
           const SizedBox(height: 20),
-          MahattatyButton(
-            style: MahattatyButtonStyle.primary,
-            text: "Pay now",
-            onPressed: () => showPaymentDialog(context),
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            textStyle: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          // PaymentDetails(ticket: sampleTicket, train: sampleTrain),
+          const SizedBox(height: 20),
+          // MahattatyButton(
+          //   style: MahattatyButtonStyle.primary,
+          //   text: "Pay now",
+          //   // onPressed: () => showPaymentDialog(context),
+          //   backgroundColor: Theme
+          //       .of(context)
+          //       .colorScheme
+          //       .primary,
+          //   textStyle: const TextStyle(
+          //     color: Colors.white,
+          //     fontWeight: FontWeight.bold,
+          //   ),
+          // ),
         ],
       ),
     );

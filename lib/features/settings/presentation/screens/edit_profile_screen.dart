@@ -2,23 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:io';
-import 'edit_profile_field.dart'; // Import the custom field widget
+import '../components/edit_profile_field.dart'; // Import the custom field widget
 
 class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({Key? key}) : super(key: key);
+  const EditProfileScreen({super.key});
 
   @override
-  _EditProfileScreenState createState() => _EditProfileScreenState();
+  EditProfileScreenState createState() => EditProfileScreenState();
 }
 
-class _EditProfileScreenState extends State<EditProfileScreen> {
+class EditProfileScreenState extends State<EditProfileScreen> {
   File? _imageFile;
   final ImagePicker _picker = ImagePicker();
 
-  TextEditingController _usernameController =
-  TextEditingController(text: 'Magdalena Succrose');
-  TextEditingController _emailController =
-  TextEditingController(text: 'magdalena83@mail.com');
+  final TextEditingController _usernameController =
+      TextEditingController(text: 'Magdalena Sucrose');
+  final TextEditingController _emailController =
+      TextEditingController(text: 'magdalena83@mail.com');
 
   // Function to pick an image from the gallery
   Future<void> _pickImage() async {
@@ -30,7 +30,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     }
   }
 
-  // Function to open Google accounts for linking
   Future<void> _linkGoogleAccount() async {
     const url = 'https://accounts.google.com/';
     if (await canLaunch(url)) {
@@ -71,9 +70,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 radius: 50,
                 backgroundImage: _imageFile != null
                     ? FileImage(_imageFile!)
-                    : AssetImage('assets/avatar.jpg') as ImageProvider,
+                    : const AssetImage('assets/avatar.jpg') as ImageProvider,
                 child: _imageFile == null
-                    ? const Icon(Icons.camera_alt, size: 50, color: Colors.white70)
+                    ? const Icon(Icons.camera_alt,
+                        size: 50, color: Colors.white70)
                     : null,
               ),
             ),
@@ -107,7 +107,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   // Save changes functionality
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal.shade700, // Darker teal color
+                  backgroundColor: Colors.teal.shade700,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),

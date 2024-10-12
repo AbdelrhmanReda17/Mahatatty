@@ -5,6 +5,7 @@ import 'package:mahattaty/authentication/presentation/controllers/auth_controlle
 import 'package:mahattaty/core/screens/explore_screen.dart';
 import 'package:mahattaty/core/screens/main_screen.dart';
 import 'package:mahattaty/features/news/presentation/screens/news_screen.dart';
+import 'package:mahattaty/features/settings/presentation/screens/settings_screen.dart';
 import 'package:mahattaty/features/train_booking/presentation/screens/user_tickets_screen.dart';
 
 class RootScreen extends StatefulWidget {
@@ -56,7 +57,7 @@ class RootScreenState extends State<RootScreen> {
     MainScreen(),
     ExploreScreen(),
     UserTicketsScreen(),
-    Placeholder(),
+    SettingsScreen(),
   ];
 
   @override

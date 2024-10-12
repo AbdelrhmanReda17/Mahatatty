@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:mahattaty/authentication/presentation/screens/authentication_screen.dart';
+import 'package:mahattaty/core/utils/open_screens.dart';
 
-import '../dialogs/logout_dialog.dart';
-import '../screens/edit_profile_screen/edit_profile_screen.dart';
-import '../screens/legal_and_policies_screen/legal_and_policies_screen.dart';
-import '../widgets/section_header.dart';
-import '../widgets/settings_tile.dart';
-
+import '../../../../core/generic components/mahattaty_alert.dart';
+import '../components/section_header.dart';
+import '../components/settings_tile.dart';
+import 'edit_profile_screen.dart';
+import 'legal_and_policies_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -15,20 +16,6 @@ class SettingsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () {
-              // Open more options menu
-            },
-          ),
-        ],
       ),
       body: ListView(
         children: [
@@ -37,44 +24,40 @@ class SettingsScreen extends StatelessWidget {
             icon: Icons.person_outline,
             title: 'Edit Profile',
             onTap: () {
-              Navigator.push(
+              OpenScreen.openScreenWithSmoothAnimation(
                 context,
-                MaterialPageRoute(builder: (_) => const EditProfileScreen()),
+                const EditProfileScreen(),
+                false,
               );
             },
           ),
           SettingsTile(
             icon: Icons.lock_outline,
             title: 'Change Password',
-            onTap: () {
-              // Navigate to Change Password screen
-            },
+            onTap: () {},
           ),
           SettingsTile(
             icon: Icons.language_outlined,
             title: 'Language',
             trailingText: 'English',
-            onTap: () {
-              // Navigate to Language selection
-            },
+            onTap: () {},
           ),
           const SectionHeader(title: 'Preferences'),
           SettingsTile(
             icon: Icons.policy_outlined,
             title: 'Legal and Policies',
             onTap: () {
-              Navigator.push(
+              OpenScreen.openScreenWithSmoothAnimation(
                 context,
-                MaterialPageRoute(builder: (_) => const LegalAndPoliciesScreen()),
+                const LegalAndPoliciesScreen(),
+                false,
               );
             },
           ),
           SettingsTile(
             icon: Icons.help_outline,
             title: 'Help & Support',
-            onTap: () {
-              // Navigate to Help & Support screen
-            },
+            onTap: () {},
           ),
           SettingsTile(
             icon: Icons.logout,
@@ -82,7 +65,21 @@ class SettingsScreen extends StatelessWidget {
             iconColor: Colors.red,
             textColor: Colors.red,
             onTap: () {
-              _showLogoutDialog(context);
+              mahattatyAlertDialog(
+                context,
+                message: 'Are you sure you want to logout?',
+                type: MahattatyAlertType.info,
+                showCancelButton: true,
+                onOk: () {
+                  OpenScreen.openScreenWithSmoothAnimation(
+                    context,
+                    const AuthenticationScreen(
+                      key: Key('login_screen'),
+                    ),
+                    true,
+                  );
+                },
+              );
             },
           ),
         ],
@@ -90,12 +87,3 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 }
-void _showLogoutDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return const LogoutDialog();
-    },
-  );
-}
-
