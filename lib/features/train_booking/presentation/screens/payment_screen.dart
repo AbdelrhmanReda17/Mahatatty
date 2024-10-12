@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 
 import '../../../../core/generic components/mahattaty_scaffold.dart';
 import '../../domain/entities/ticket.dart';
@@ -71,3 +71,4 @@ class CenterAppBarTitle extends StatelessWidget {
     );
   }
 }
+*/

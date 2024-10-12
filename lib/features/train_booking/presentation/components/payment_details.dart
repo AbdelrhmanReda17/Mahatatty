@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import '../../domain/entities/ticket.dart';
 import 'detail_row.dart';
 
@@ -63,4 +63,4 @@ class PaymentDetails extends StatelessWidget {
       ),
     );
   }
-}
+}*/
