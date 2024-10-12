@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mahattaty/Themes/light_theme.dart';
-import '../../../../core/generic components/mahattaty_button.dart';
+import '../../../core/generic components/mahattaty_button.dart';
 import 'mahattaty_circle_icon.dart';
 
 void showPaymentSuccessBottomSheet(BuildContext context) {

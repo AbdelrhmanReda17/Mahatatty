@@ -52,7 +52,7 @@ class DateListState extends ConsumerState<DateList> {
     List<Widget> dateWidgets = [];
     for (int i = 0; i < widget.daysInMonth; i++) {
       dateWidgets.add(DateCard(
-        isEnabled: isSameMonth ? i >= DateTime.now().day - 2 : true,
+        isEnabled: isSameMonth ? i >= DateTime.now().day - 1 : true,
         day: weekdays[i % 7],
         date: (i + 1).toString(),
         isSelected: selectedIndex == i,

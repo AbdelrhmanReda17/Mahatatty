@@ -1,4 +1,4 @@
-/*import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:mahattaty/features/train_booking/presentation/components/payment_details.dart';
 import 'package:mahattaty/features/train_booking/presentation/components/payment_method_dialog.dart';
 import 'package:mahattaty/features/train_booking/presentation/components/remaining_time_widget.dart';
@@ -42,4 +42,4 @@ class PaymentScreenBody extends StatelessWidget {
       ),
     );
   }
-}*/
+}

@@ -8,7 +8,7 @@ import '../../../../../core/utils/time_converter.dart';
 import '../../../domain/entities/ticket.dart';
 import '../../../domain/entities/train.dart';
 import '../../../domain/entities/train_seat.dart';
-import '../count_down_timer.dart';
+import '../../../../payment/components/count_down_timer.dart';
 import 'helpers/custom_line.dart';
 import 'helpers/semi_circle_clipper.dart';
 import 'helpers/train_price.dart';

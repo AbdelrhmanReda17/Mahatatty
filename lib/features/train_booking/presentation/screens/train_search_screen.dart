@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mahattaty/core/generic%20components/Dialogs/mahattaty_train_filter_dialog.dart';
+import 'package:mahattaty/core/utils/open_dialogs.dart';
 
 import '../../../../core/generic components/mahattaty_empty_data.dart';
 import '../../../../core/generic components/mahattaty_error.dart';
@@ -52,6 +54,7 @@ class TrainSearchScreen extends ConsumerWidget {
       appBarContent: Padding(
         padding: const EdgeInsets.only(left: 10),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               'Search Results',
@@ -61,6 +64,14 @@ class TrainSearchScreen extends ConsumerWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
+            IconButton(
+                onPressed: () async {
+                  OpenDialogs.openCustomDialog(
+                      context: context,
+                      dialog: const MahattatyTrainFilterDialog());
+                },
+                icon: const Icon(Icons.filter_list),
+            )
           ],
         ),
       ),
