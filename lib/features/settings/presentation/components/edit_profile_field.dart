@@ -4,17 +4,13 @@ class EditProfileField extends StatelessWidget {
   final IconData icon;
   final String label;
   final TextEditingController? controller;
-  final String? value;
-  final bool isLink;
 
   const EditProfileField({
-    Key? key,
+    super.key,
     required this.icon,
     required this.label,
     this.controller,
-    this.value,
-    this.isLink = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,12 +33,7 @@ class EditProfileField extends StatelessWidget {
               Icon(icon, color: Colors.black54),
               const SizedBox(width: 16),
               Expanded(
-                child: isLink
-                    ? Text(
-                  value ?? '',
-                  style: const TextStyle(fontSize: 16),
-                )
-                    : TextFormField(
+                child: TextFormField(
                   controller: controller,
                   style: const TextStyle(fontSize: 16),
                   decoration: const InputDecoration.collapsed(
@@ -50,12 +41,6 @@ class EditProfileField extends StatelessWidget {
                   ),
                 ),
               ),
-              if (isLink)
-                const Icon(
-                  Icons.arrow_forward_ios,
-                  size: 16,
-                  color: Colors.grey,
-                ),
             ],
           ),
         ),

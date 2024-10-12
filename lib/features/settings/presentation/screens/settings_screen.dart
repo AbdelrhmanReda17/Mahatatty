@@ -26,7 +26,7 @@ class SettingsScreen extends StatelessWidget {
             onTap: () {
               OpenScreen.openScreenWithSmoothAnimation(
                 context,
-                const EditProfileScreen(),
+                EditProfileScreen(),
                 false,
               );
             },
