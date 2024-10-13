@@ -10,6 +10,7 @@ class MahattatyTextFormField extends StatefulWidget {
     this.validator,
     this.textStyle,
     this.errorText,
+    this.disabled = false,
     this.iconData,
     this.keyboardType = TextInputType.text,
     this.verticalPadding = 15.0,
@@ -30,6 +31,7 @@ class MahattatyTextFormField extends StatefulWidget {
   final TextStyle? textStyle;
   final String? errorText;
   final TextInputType? keyboardType;
+  final bool disabled;
   final IconData? iconData;
   final double verticalPadding;
   final double horizontalPadding;
@@ -102,7 +104,7 @@ class _MahattatyTextFormFieldState extends State<MahattatyTextFormField> {
           focusNode: _focusNode,
           autocorrect: true,
           controller: widget.controller,
-
+          enabled: !widget.disabled,
           validator: widget.validator,
           // Use validator for error handling
           textAlign: widget.textAlign,
@@ -118,6 +120,12 @@ class _MahattatyTextFormFieldState extends State<MahattatyTextFormField> {
           obscureText: isPasswordVisible,
           maxLength: widget.maxLength,
           decoration: InputDecoration(
+            disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15.0),
+              borderSide: BorderSide(
+                color: colorScheme.onPrimaryContainer,
+              ),
+            ),
             errorText: widget.errorText,
             counterText: widget.counterText,
             contentPadding: const EdgeInsets.symmetric(

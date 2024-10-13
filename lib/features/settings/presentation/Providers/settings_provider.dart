@@ -9,17 +9,6 @@ import '../controllers/settings_controller.dart';
 final settingsRepositoryProvider = Provider<BaseSettingsRepository>((ref) {
   final firebaseAuth = FirebaseAuth.instance;
   BaseSettingsRemoteDataResource settingsRemoteDataResource =
-  SettingsRemoteDataResource(firebaseAuth: firebaseAuth);
+      SettingsRemoteDataResource(firebaseAuth: firebaseAuth);
   return SettingsRepository(remoteDataSource: settingsRemoteDataResource);
-});
-
-final editProfileUseCaseProvider = Provider<EditProfileUseCase>((ref) {
-  final settingsRepository = ref.read(settingsRepositoryProvider);
-  return EditProfileUseCase(settingsRepository);
-});
-
-final settingsControllerProvider =
-StateNotifierProvider<SettingsController, SettingsState>((ref) {
-  final editProfileUseCase = ref.read(editProfileUseCaseProvider);
-  return SettingsController(editProfileUseCase);
 });

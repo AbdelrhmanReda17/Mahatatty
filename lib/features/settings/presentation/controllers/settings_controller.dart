@@ -1,12 +1,15 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../../../../authentication/data/models/user_model.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mahattaty/authentication/presentation/controllers/auth_controller.dart';
+import 'package:mahattaty/features/settings/Exceptions/settings_exception.dart';
+import 'package:mahattaty/features/settings/domain/usecases/change_password_usecase.dart';
 import '../../domain/usecases/edit_profile_usecase.dart';
-import '../Providers/change_language_usecase_provider.dart';
+import '../Providers/change_password_usecase_provider.dart';
+import '../Providers/edit_profile_usecase_provider.dart';
 
 class SettingsState {
   final bool isLoading;
-  final Exception? exception;
+  final SettingsException? exception;
   final bool isSuccessful;
 
   SettingsState({
@@ -17,7 +20,7 @@ class SettingsState {
 
   SettingsState copyWith({
     bool? isLoading,
-    Exception? exception,
+    SettingsException? exception,
     bool? isSuccessful,
   }) {
     return SettingsState(
@@ -26,30 +29,59 @@ class SettingsState {
       isSuccessful: isSuccessful ?? this.isSuccessful,
     );
   }
+
+  String? getError(SettingsErrorAction action, SettingsError errorType) {
+    return exception?.action == action && exception?.error == errorType
+        ? exception?.message
+        : null;
+  }
 }
 
 class SettingsController extends StateNotifier<SettingsState> {
   final EditProfileUseCase editProfileUseCase;
+  final ChangePasswordUseCase changePasswordUseCase;
 
-  SettingsController(this.editProfileUseCase) : super(SettingsState());
+  SettingsController(this.editProfileUseCase, this.changePasswordUseCase)
+      : super(SettingsState());
 
-  Future<void> editProfile(UserModel updatedProfile) async {
+  Future<void> editProfile(
+      {required String name, required String email}) async {
     state = state.copyWith(isLoading: true);
     try {
-      await editProfileUseCase.execute(updatedProfile);
-      final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        await user.updateDisplayName(updatedProfile.name);
-        await user.updateEmail(updatedProfile.email);
-      }
+      await editProfileUseCase.call(name, email);
       state = state.copyWith(isSuccessful: true, isLoading: false);
-    } catch (e) {
-      state = state.copyWith(exception: e as Exception, isLoading: false);
+    } on FirebaseAuthException catch (e) {
+      state = state.copyWith(
+        exception: SettingsException.fromFirebaseException(
+          e,
+          SettingsErrorAction.editProfile,
+        ),
+        isLoading: false,
+      );
+    }
+  }
+
+  Future<void> changePassword(String password) async {
+    state = state.copyWith(isLoading: true);
+    try {
+      await changePasswordUseCase.call(password);
+      state = state.copyWith(isSuccessful: true, isLoading: false);
+    } on FirebaseAuthException catch (e) {
+      state = state.copyWith(
+        exception: SettingsException.fromFirebaseException(
+          e,
+          SettingsErrorAction.changePassword,
+        ),
+        isLoading: false,
+      );
     }
   }
 }
 
 final settingsControllerProvider =
-StateNotifierProvider<SettingsController, SettingsState>(
-      (ref) => SettingsController(ref.read(editProfileUseCaseProvider)),
+    StateNotifierProvider<SettingsController, SettingsState>(
+  (ref) => SettingsController(
+    ref.read(editProfileUseCaseProvider),
+    ref.read(changePasswordUseCaseProvider),
+  ),
 );

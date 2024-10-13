@@ -1,12 +1,7 @@
-import 'dart:developer';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mahattaty/core/utils/app_constance.dart';
-import 'package:mahattaty/core/utils/open_screens.dart';
 import '../../../core/generic components/mahattaty_button.dart';
-import '../../../core/screens/root_screen.dart';
 import '../controllers/auth_controller.dart';
 
 class SocialAccountsLogin extends ConsumerWidget {

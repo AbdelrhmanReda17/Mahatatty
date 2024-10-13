@@ -17,7 +17,7 @@ class SettingsRepository implements BaseSettingsRepository {
   }
 
   @override
-  Future<void> editProfile(String uuid, String name, String email) {
-    return remoteDataSource.editProfile(uuid, name, email);
+  Future<void> editProfile(String name, String email) {
+    return remoteDataSource.editProfile(name, email);
   }
 }

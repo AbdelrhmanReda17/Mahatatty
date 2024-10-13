@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mahattaty/authentication/presentation/controllers/auth_controller.dart';
 import 'package:mahattaty/core/utils/app_constance.dart';
 import '../controllers/splash_controller.dart';
 
@@ -27,6 +28,7 @@ class SplashScreenState extends ConsumerState<SplashScreen>
 
     _controller.forward().whenComplete(
       () {
+        ref.read(authControllerProvider.notifier).getCurrentUser();
         ref.read(splashControllerProvider.notifier).checkUserStatus(context);
       },
     );

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,6 +26,9 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
     await prefs.setString('user_uuid', user.uuid);
     await prefs.setString('user_email', user.email);
     await prefs.setString('user_name', user.name);
+    await prefs.setBool('user_is_google', user.isGoogle);
+    await prefs.setBool('user_is_email_verified', user.isEmailVerified);
+    await prefs.setString('user_photo_url', user.photoUrl ?? '');
   }
 
   Future<UserModel?> _getUserFromPreferences() async {
@@ -35,12 +36,18 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
     final uuid = prefs.getString('user_uuid');
     final email = prefs.getString('user_email');
     final name = prefs.getString('user_name');
+    final isGoogle = prefs.getBool('user_is_google');
+    final isEmailVerified = prefs.getBool('user_is_email_verified');
+    final photoUrl = prefs.getString('user_photo_url');
 
     if (uuid != null && email != null && name != null) {
       return UserModel(
         uuid: uuid,
         email: email,
         name: name,
+        isGoogle: isGoogle ?? false,
+        isEmailVerified: isEmailVerified ?? false,
+        photoUrl: photoUrl == '' ? null : photoUrl,
       );
     }
     return null;
@@ -81,7 +88,6 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
     } on FirebaseAuthException catch (e) {
       throw AuthException(e, AuthErrorAction.signIn);
     } catch (e) {
-      log(e.toString());
       throw AuthException(
           FirebaseAuthException(
               message: "An Error occurred while login in with google",
@@ -99,17 +105,14 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
       if (isGoogle) {
         final result = await _signInWithGoogle();
         if (result != null) {
-          userModel = UserModel(
-            uuid: result.uid,
-            email: result.email!,
-            name: result.displayName ?? "",
-          );
+          userModel = UserModel.fromFirebaseUser(result);
         }
       } else {
         final result = await firebaseAuth.signInWithEmailAndPassword(
           email: email,
           password: password,
         );
+
         if (result.user != null) {
           userModel = UserModel.fromFirebaseUser(result.user!);
         }
@@ -154,11 +157,7 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
   Future<UserModel?> getCurrentUser() async {
     final user = firebaseAuth.currentUser;
     if (user != null) {
-      UserModel userModel = UserModel(
-        uuid: user.uid,
-        email: user.email!,
-        name: user.displayName ?? "",
-      );
+      UserModel userModel = UserModel.fromFirebaseUser(user);
       await _saveUserToPreferences(userModel);
       return userModel;
     }

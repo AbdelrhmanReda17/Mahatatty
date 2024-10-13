@@ -53,10 +53,8 @@ class _MahattatyDataPickerState extends State<MahattatyDataPicker> {
               final int selectedMonth = selectedDate.month;
               final int selectedYear = selectedDate.year;
               final int selectedDay = selectedDate.month == DateTime.now().month
-                  ? DateTime.now().day - 1
+                  ? DateTime.now().day
                   : 1;
-
-              log('selectedDate: $selectedDay - $selectedMonth - $selectedYear');
               widget.onDateSelected(
                   DateTime(selectedYear, selectedMonth, selectedDay));
               Navigator.of(context).pop();

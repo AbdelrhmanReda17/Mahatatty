@@ -6,7 +6,7 @@ abstract class BaseSettingsRemoteDataResource {
 
   Future<void> changePassword(String password);
 
-  Future<void> editProfile(String uuid, String name, String email);
+  Future<void> editProfile(String name, String email);
 }
 
 class SettingsRemoteDataResource implements BaseSettingsRemoteDataResource {
@@ -21,11 +21,21 @@ class SettingsRemoteDataResource implements BaseSettingsRemoteDataResource {
 
   @override
   Future<void> changePassword(String password) {
-    throw UnimplementedError();
+    try {
+      return firebaseAuth.currentUser!.updatePassword(password);
+    } on FirebaseAuthException catch (e) {
+      rethrow;
+    }
   }
 
   @override
-  Future<void> editProfile(String uuid, String name, String email) {
-    throw UnimplementedError();
+  Future<void> editProfile(String name, String email) async {
+    try {
+      await firebaseAuth.currentUser!.updateEmail(email);
+      await firebaseAuth.currentUser!.updateDisplayName(name);
+      await firebaseAuth.currentUser!.reload();
+    } on FirebaseAuthException catch (e) {
+      rethrow;
+    }
   }
 }

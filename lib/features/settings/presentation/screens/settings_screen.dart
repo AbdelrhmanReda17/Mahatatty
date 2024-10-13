@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mahattaty/authentication/presentation/screens/authentication_screen.dart';
 import 'package:mahattaty/core/utils/open_screens.dart';
 
+import '../../../../authentication/presentation/controllers/auth_controller.dart';
 import '../../../../core/generic components/mahattaty_alert.dart';
 import '../components/section_header.dart';
 import '../components/settings_tile.dart';
 import 'edit_profile_screen.dart';
 import 'legal_and_policies_screen.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
@@ -26,7 +28,7 @@ class SettingsScreen extends StatelessWidget {
             onTap: () {
               OpenScreen.openScreenWithSmoothAnimation(
                 context,
-                EditProfileScreen(),
+                const EditProfileScreen(),
                 false,
               );
             },
@@ -71,6 +73,7 @@ class SettingsScreen extends StatelessWidget {
                 type: MahattatyAlertType.info,
                 showCancelButton: true,
                 onOk: () {
+                  ref.read(authControllerProvider.notifier).signOut();
                   OpenScreen.openScreenWithSmoothAnimation(
                     context,
                     const AuthenticationScreen(

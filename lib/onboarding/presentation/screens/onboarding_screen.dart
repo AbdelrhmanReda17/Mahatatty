@@ -15,6 +15,7 @@ class OnboardingScreen extends ConsumerWidget {
     final PageController controller = PageController();
     final List<OnboardingStepData> onboardingSteps =
         ref.watch(getOnboardingStepsProvider).execute();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,

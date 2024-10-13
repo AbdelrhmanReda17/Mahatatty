@@ -141,15 +141,6 @@ class AuthenticationScreenState extends ConsumerState<AuthenticationScreen>
                 ),
               ],
             ),
-            MahattatyButton(
-              text: 'logout fast',
-              onPressed: () async {
-                await ref
-                    .read(authControllerProvider.notifier)
-                    .signOutUseCase();
-              },
-              style: MahattatyButtonStyle.secondary,
-            ),
             const SocialAccountsLogin(),
             const SizedBox(height: 8),
             isLogin

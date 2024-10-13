@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mahattaty/authentication/domain/entities/User.dart';
 import 'package:mahattaty/authentication/domain/usecases/get_current_user_usecase.dart';
 import 'package:mahattaty/core/screens/root_screen.dart';
+import '../../../authentication/presentation/controllers/auth_controller.dart';
 import '../../../authentication/presentation/providers/get_current_user_provider.dart';
 import '../../../authentication/presentation/screens/authentication_screen.dart';
 import '../../../core/utils/open_screens.dart';
@@ -17,7 +18,7 @@ final splashControllerProvider =
     StateNotifierProvider<SplashController, AsyncValue<User?>>(
   (ref) {
     return SplashController(
-      ref.watch(getCurrentUserUseCaseProvider),
+      ref.watch(authControllerProvider).user,
       ref.watch(checkOnboardingStatusProvider),
       ref.watch(setOnboardingSeenProvider),
     );
@@ -25,39 +26,34 @@ final splashControllerProvider =
 );
 
 class SplashController extends StateNotifier<AsyncValue<User?>> {
-  final GetCurrentUserUseCase getCurrentUserUseCase;
   final CheckOnboardingStatusUseCase checkOnboardingStatusUseCase;
   final SetOnboardingSeenUseCase setOnboardingSeenUseCase;
+  final User? user;
 
-  SplashController(this.getCurrentUserUseCase,
-      this.checkOnboardingStatusUseCase, this.setOnboardingSeenUseCase)
+  SplashController(this.user, this.checkOnboardingStatusUseCase,
+      this.setOnboardingSeenUseCase)
       : super(const AsyncValue.loading());
 
   Future<void> checkUserStatus(BuildContext context) async {
     try {
-      final User? user = await getCurrentUserUseCase.call();
       if (user != null) {
-        log('User is logged in: ${user.toString()}');
         OpenScreen.open(
           context: context,
           screen: const RootScreen(
             key: Key('home_screen'),
-          ), // HOME SCREEN !
+          ),
           isReplace: true,
         );
       } else {
-        // Check onboarding status
         final hasSeenOnboarding = await checkOnboardingStatusUseCase.execute();
         if (!hasSeenOnboarding) {
           await setOnboardingSeenUseCase.execute();
-          // If onboarding is seen for the first time, navigate to onboarding
           OpenScreen.open(
             context: context,
             screen: const OnboardingScreen(),
             isReplace: true,
           );
         } else {
-          // If not the first time, navigate to login
           OpenScreen.open(
             context: context,
             screen: const AuthenticationScreen(),
@@ -66,7 +62,6 @@ class SplashController extends StateNotifier<AsyncValue<User?>> {
         }
       }
     } catch (e) {
-      log('Error checking user: $e');
       OpenScreen.open(
         context: context,
         screen: const AuthenticationScreen(),

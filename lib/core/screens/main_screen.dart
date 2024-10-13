@@ -1,13 +1,20 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mahattaty/core/generic%20components/mahattaty_scaffold.dart';
 import 'package:mahattaty/features/news/presentation/components/latest_news.dart';
 import 'package:mahattaty/features/train_booking/presentation/components/search_card.dart';
 
-class MainScreen extends StatelessWidget {
+import '../../authentication/presentation/controllers/auth_controller.dart';
+
+class MainScreen extends ConsumerWidget {
   const MainScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.watch(authControllerProvider).user;
+    log(user.toString());
     return MahattatyScaffold(
       bgHeight: backgroundHeight.medium,
       appBarContent: Padding(
