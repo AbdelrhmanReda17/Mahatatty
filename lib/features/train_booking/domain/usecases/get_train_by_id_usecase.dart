@@ -1,24 +1,13 @@
 import 'package:mahattaty/features/train_booking/domain/repository/train_repository.dart';
 
-import '../entities/ticket.dart';
 import '../entities/train.dart';
 
-class GetTrainsBySearch {
+class GetTrainById{
   final BaseTrainRepository repository;
 
-  GetTrainsBySearch(this.repository);
+  GetTrainById(this.repository);
 
-  Future<List<Train>> call({
-    required TicketType ticket,
-    required TrainStations from,
-    required TrainStations to,
-    DateTime? fromDateTime,
-  }) async {
-    return await repository.getTrainsBySearch(
-      ticket: ticket,
-      from: from,
-      to: to,
-      fromDateTime: fromDateTime,
-    );
+  Future<Train> call({required String trainId}) async{
+    return await repository.getTrainById(trainId);
   }
 }

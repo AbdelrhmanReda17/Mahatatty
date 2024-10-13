@@ -4,11 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mahattaty/core/generic%20components/Dialogs/mahattaty_train_filter_dialog.dart';
 import 'package:mahattaty/core/utils/open_dialogs.dart';
+import 'package:mahattaty/features/train_booking/domain/entities/ticket.dart';
+import 'package:mahattaty/features/train_booking/presentation/providers/get_ticket_by_train_id_provider.dart';
+import 'package:mahattaty/features/train_booking/presentation/providers/get_train_by_id_provider.dart';
+import 'package:mahattaty/features/train_booking/presentation/screens/seat_selection_screen.dart';
 
 import '../../../../core/generic components/mahattaty_empty_data.dart';
 import '../../../../core/generic components/mahattaty_error.dart';
 import '../../../../core/generic components/mahattaty_loading.dart';
 import '../../../../core/generic components/mahattaty_scaffold.dart';
+import '../../../../core/utils/open_screens.dart';
 import '../../domain/entities/train_seat.dart';
 import '../components/cards/train_card.dart';
 import '../components/date_list.dart';
@@ -34,11 +39,31 @@ class TrainSearchScreen extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           itemBuilder: (context, index) {
             final train = trains[index];
-            return TrainCard(
-              train: train,
-              departureStation: train.trainDepartureStation,
-              arrivalStation: train.trainArrivalStation,
-              onTrainSelected: (_, __) {},
+            return Column(
+              children: [
+                TrainCard(
+                  train: train,
+                  departureStation: train.trainDepartureStation,
+                  arrivalStation: train.trainArrivalStation,
+                  onTrainSelected: (ticket, selectedTrain) {
+                    if (selectedTrain != null) {
+                      OpenScreen.openScreenWithSmoothAnimation(
+                        context,
+                        SeatSelectionScreen(trainId: selectedTrain.id),
+                        false,
+                      );
+                    }
+                  },
+                ),
+                IconButton(
+                  onPressed: (){
+                    OpenScreen.openScreenWithSmoothAnimation(
+                      context,
+                      SeatSelectionScreen(trainId: train.id),
+                      false,
+                    );
+                  }, icon: const Icon(Icons.ac_unit))
+              ],
             );
           },
         );

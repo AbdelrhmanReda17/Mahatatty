@@ -18,4 +18,6 @@ abstract class BaseTrainRepository {
   Future<void> bookTrainTicket(Ticket ticket);
 
   Future<void> cancelTrainTicket(String ticketId);
+
+  Future<Train> getTrainById(String trainId);
 }

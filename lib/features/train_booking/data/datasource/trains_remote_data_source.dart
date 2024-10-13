@@ -70,6 +70,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../domain/entities/ticket.dart';
 import '../../domain/entities/train.dart';
@@ -93,6 +94,14 @@ abstract class BaseTrainsRemoteDataSource {
   Future<List<TrainModel>> getBestOffersTrains();
 
   Future<Map<TicketModel, TrainModel>> getUserBookedTrains(String userId);
+
+  Future<Train> getTrainById(String trainId);
+
+  // Future<List<Train>> getFilteredTickets({
+  //   required List<String> trainTypes,
+  //   required double minPrice,
+  //   required double maxPrice,
+  // });
 }
 
 class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
@@ -141,6 +150,10 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
             'trainBookedSeats': bookedSeats,
             'TrainSeatsStatus': 'available',
           });
+        });
+        // Update ticket status after cancellation
+        fireStore.collection('tickets').doc(ticketId).update({
+          'status' : 'canceled'
         });
       });
     } catch (e) {
@@ -238,4 +251,52 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
       throw Exception(e);
     }
   }
+
+  @override
+  Future<TrainModel> getTrainById(String trainId) async{
+    try{
+      final train = await fireStore.collection('trains').doc(trainId).get();
+      if (train.exists){
+        return TrainModel.fromFireStore(train.data()!, trainId);
+      }
+      throw Exception('Train was Not Found');
+    }
+    catch(e){
+      throw Exception('Error Fetching Train Data: $e');
+    }
+
+  }
+
+  // @override
+  // Future<List<Ticket>> getFilteredTickets({
+  //   required List<String> trainTypes,
+  //   required double minPrice,
+  //   required double maxPrice
+  // }) async {
+  //   try {
+  //
+  //     final tickets = await fireStore
+  //         .collection('tickets')
+  //         .where('price', isGreaterThanOrEqualTo: minPrice)
+  //         .where('price', isLessThanOrEqualTo: maxPrice)
+  //         .get()
+  //         .then((snapshot) {
+  //           return snapshot.docs.map((doc) {
+  //             return TicketModel.fromFireStore(doc.data(), doc.id);
+  //           }).toList();
+  //         });
+  //
+  //     final trains = <TrainModel>[];
+  //     for (var ticket in tickets){
+  //       final train = await fireStore
+  //           .collection('tickets').doc(ticket.trainId)
+  //           .where('price', isGreaterThanOrEqualTo: minPrice)
+  //           .where('price', isLessThanOrEqualTo: maxPrice)
+  //           .get();
+  //       tickets.add(
+  //         TicketModel.fromFireStore(
+  //             ticket.data() as Map<String, dynamic>, ticket.id),
+  //       );
+  //     }
+  // }
 }

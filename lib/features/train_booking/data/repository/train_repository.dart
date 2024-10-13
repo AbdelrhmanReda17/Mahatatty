@@ -4,7 +4,6 @@ import '../../domain/entities/ticket.dart';
 import '../../domain/entities/train.dart';
 import '../../domain/repository/train_repository.dart';
 import '../datasource/trains_remote_data_source.dart';
-import '../models/train_model.dart';
 
 class TrainRepository implements BaseTrainRepository {
   final BaseTrainsRemoteDataSource remoteDataSource;
@@ -49,4 +48,10 @@ class TrainRepository implements BaseTrainRepository {
   Future<Map<Ticket, Train>> getUserBookedTrains(String userId) {
     return remoteDataSource.getUserBookedTrains(userId);
   }
+
+  @override
+  Future<Train> getTrainById(String trainId) {
+    return remoteDataSource.getTrainById(trainId);
+  }
+
 }
