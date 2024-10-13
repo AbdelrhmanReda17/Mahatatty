@@ -45,11 +45,18 @@ dependencies:
   transparent_image: ^2.0.1
   syncfusion_flutter_datepicker: ^27.1.51
   qr_flutter: ^4.1.0
+  # To pick images from the gallery or camera
+  image_picker: ^0.8.5+3
 
+  # To open URLs (like Google accounts)
+  url_launcher: ^6.1.7
+
+  # Optional: If needed for better file handling
+  file_picker: ^4.6.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  
+
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your

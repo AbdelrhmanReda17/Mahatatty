@@ -7,6 +7,8 @@ void mahattatyAlertDialog(
   required String message,
   required MahattatyAlertType type,
   Function? onOk,
+  Function? onCancel,
+  bool showCancelButton = false,
   Function? onPop,
 }) {
   Color? color;
@@ -38,6 +40,15 @@ void mahattatyAlertDialog(
       }
     },
   );
+  Widget cancelButton = TextButton(
+    child: const Text("Cancel"),
+    onPressed: () {
+      Navigator.of(context).pop();
+      if (onCancel != null) {
+        onCancel();
+      }
+    },
+  );
 
   showDialog(
     context: context,
@@ -60,9 +71,7 @@ void mahattatyAlertDialog(
           ],
         ),
         content: Text(message),
-        actions: [
-          okButton,
-        ],
+        actions: [okButton, cancelButton],
       );
     },
   ).then((value) {
