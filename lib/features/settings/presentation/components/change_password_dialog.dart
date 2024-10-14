@@ -7,7 +7,15 @@ import '../../../../core/generic components/mahattaty_dialog.dart';
 class ChangePasswordDialog extends StatelessWidget {
   final _passwordFormKey = GlobalKey<FormState>();
 
-  ChangePasswordDialog({super.key});
+  ChangePasswordDialog({
+    super.key,
+    required this.onButtonPressed,
+  });
+
+  final List<TextEditingController> passwordTextControllers =
+      List.generate(2, (_) => TextEditingController());
+
+  final Function onButtonPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +32,7 @@ class ChangePasswordDialog extends StatelessWidget {
                 isPassword: true,
                 iconData: FontAwesomeIcons.lock,
                 hintText: 'Create your password',
-                controller: TextEditingController(),
+                controller: passwordTextControllers[0],
                 validator: (value) => value!.isValidPassword
                     ? null
                     : 'Password must be at least 8 characters, include an uppercase letter, a lowercase letter, and a number',
@@ -34,9 +42,10 @@ class ChangePasswordDialog extends StatelessWidget {
                 labelText: 'Confirm Password',
                 isPassword: true,
                 iconData: FontAwesomeIcons.lock,
-                controller: TextEditingController(),
+                controller: passwordTextControllers[1],
                 hintText: 'Enter your password again',
-                validator: (value) => value!.isValidConfirmPassword('')
+                validator: (value) => value!
+                        .isValidConfirmPassword(passwordTextControllers[0].text)
                     ? null
                     : 'Passwords do not match',
               ),
@@ -47,9 +56,7 @@ class ChangePasswordDialog extends StatelessWidget {
       buttonText: 'Change Password',
       onButtonPressed: () {
         if (_passwordFormKey.currentState!.validate()) {
-          ref.read(settingsControllerProvider.notifier).changePassword(
-                _passwordFormKey.currentState!.fields[0].value,
-              );
+          onButtonPressed(passwordTextControllers[0].text);
         }
       },
     );

@@ -8,6 +8,8 @@ import 'package:mahattaty/features/news/presentation/screens/news_screen.dart';
 import 'package:mahattaty/onboarding/presentation/screens/splash_screen.dart';
 import 'package:mahattaty/themes/dark_theme.dart';
 import 'package:mahattaty/themes/light_theme.dart';
+import 'features/train_booking/domain/entities/ticket.dart';
+import 'features/train_booking/presentation/screens/train_search_screen.dart';
 import 'firebase_options.dart';
 import 'dart:developer';
 
@@ -46,7 +48,6 @@ class MyApp extends StatelessWidget {
       darkTheme: darkTheme,
       themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
-      // home: const NewsScreen(),
       initialRoute: const SplashScreen().routeName,
       routes: {
         const RootScreen().homeRouteName: (context) => const RootScreen(

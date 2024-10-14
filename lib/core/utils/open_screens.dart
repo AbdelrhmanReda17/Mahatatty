@@ -6,14 +6,32 @@ import '../../onboarding/presentation/screens/onboarding_screen.dart';
 class OpenScreen {
   static void open({
     required BuildContext context,
-    required Widget screen,
+    Widget? screen,
+    String? routeName,
+    bool isNamed = false,
     bool isReplace = false,
   }) {
     if (isReplace) {
-      _replaceScreen(context, screen);
+      if (isNamed) {
+        _replaceNamedScreen(context, routeName!);
+      } else {
+        _replaceScreen(context, screen!);
+      }
     } else {
-      _pushScreen(context, screen);
+      if (isNamed) {
+        _pushNamedScreen(context, routeName!);
+      } else {
+        _pushScreen(context, screen!);
+      }
     }
+  }
+
+  static void _pushNamedScreen(BuildContext context, String routeName) {
+    Navigator.of(context).pushNamed(routeName);
+  }
+
+  static void _replaceNamedScreen(BuildContext context, String routeName) {
+    Navigator.of(context).pushReplacementNamed(routeName);
   }
 
   static void _pushScreen(BuildContext context, Widget screen) {

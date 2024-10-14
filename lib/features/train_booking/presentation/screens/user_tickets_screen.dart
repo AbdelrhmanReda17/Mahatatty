@@ -7,6 +7,7 @@ import 'package:mahattaty/core/utils/open_dialogs.dart';
 import 'package:mahattaty/features/train_booking/domain/entities/train.dart';
 import '../../../../core/generic components/mahattaty_scaffold.dart';
 import '../components/user_tickets_tabs_controller.dart';
+import '../controllers/book_ticket_controller.dart';
 import '../controllers/get_user_booked_trains_controller.dart';
 
 class UserTicketsScreen extends ConsumerStatefulWidget {

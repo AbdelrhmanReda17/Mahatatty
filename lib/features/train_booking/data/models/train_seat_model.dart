@@ -6,32 +6,28 @@ class TrainSeatModel extends TrainSeats {
   TrainSeatModel({
     required super.seatType,
     required super.numberOfSeats,
+    required super.bookedSeats,
     required super.seatPrice,
   });
 
   factory TrainSeatModel.fromFireStore(Map<String, dynamic> data) {
-    log(SeatType.values
-        .firstWhere(
-          (element) => element.toString() == 'SeatType.${data["seatType"]}',
-        )
-        .toString());
-    log(data["numberOfSeats"].toString());
-    log(data["seatPrice"].toString());
-
+    log('TrainSeatModel.fromFireStore: $data');
     return TrainSeatModel(
       seatType: SeatType.values.firstWhere(
         (element) => element.toString() == 'SeatType.${data["seatType"]}',
       ),
-      numberOfSeats: data['numberOfSeats'],
-      seatPrice: data['seatPrice'],
+      numberOfSeats: double.parse(data['numberOfSeats'].toString()),
+      bookedSeats: double.parse(data['bookedSeats'].toString()),
+      seatPrice: double.parse(data['seatPrice'].toString()),
     );
   }
-//
-// Map<String, dynamic> toMap() {
-//   return {
-//     'seatType': seatType.toString().split('.').last,
-//     'numberOfSeats': numberOfSeats,
-//     'seatPrice': seatPrice,
-//   };
-// }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'seatType': seatType.toString().split('.').last,
+      'numberOfSeats': numberOfSeats,
+      'bookedSeats': bookedSeats,
+      'seatPrice': seatPrice,
+    };
+  }
 }

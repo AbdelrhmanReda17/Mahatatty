@@ -3,7 +3,7 @@ import 'package:mahattaty/Themes/light_theme.dart';
 import '../../../core/generic components/mahattaty_button.dart';
 import 'mahattaty_circle_icon.dart';
 
-void showPaymentSuccessBottomSheet(BuildContext context) {
+void showPaymentSuccessBottomSheet(BuildContext context, Function onClose) {
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -34,16 +34,16 @@ void showPaymentSuccessBottomSheet(BuildContext context) {
             Text(
               'Payment Successful',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
             ),
             const SizedBox(height: 15),
             Text(
               'Your ticket for the journey has been successful. Thank you!',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: customGrey,
-              ),
+                    color: customGrey,
+                  ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 60),
@@ -52,6 +52,7 @@ void showPaymentSuccessBottomSheet(BuildContext context) {
               style: MahattatyButtonStyle.primary,
               onPressed: () {
                 Navigator.of(context).pop();
+                onClose();
               },
               height: 60,
               width: double.infinity,

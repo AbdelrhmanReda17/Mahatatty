@@ -3,10 +3,10 @@ import 'package:mahattaty/features/train_booking/domain/repository/train_reposit
 import '../../data/repository/train_repository.dart';
 import '../entities/train.dart';
 
-class GetBestOffersTrains {
+class GetBestOffersTrainsUseCase {
   final BaseTrainRepository repository;
 
-  GetBestOffersTrains(this.repository);
+  GetBestOffersTrainsUseCase(this.repository);
 
   Future<List<Train>> call() async {
     return await repository.getBestOffersTrains();

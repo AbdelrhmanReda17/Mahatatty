@@ -4,7 +4,7 @@ import '../../domain/entities/ticket.dart';
 import '../../domain/entities/train.dart';
 
 class TrainSearchState {
-  TicketType ticketType = TicketType.oneWay;
+  TicketType ticketType;
   TrainStations fromStation;
   TrainStations toStation;
   Timestamp departureDate;
@@ -36,6 +36,6 @@ class TrainSearchState {
   }
 }
 
-final trainSearchProvider = StateProvider<TrainSearchState>((ref) {
+final trainSearchProvider = StateProvider.autoDispose<TrainSearchState>((ref) {
   return TrainSearchState();
 });

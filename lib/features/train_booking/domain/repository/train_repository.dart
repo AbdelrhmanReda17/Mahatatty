@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../entities/ticket.dart';
 import '../entities/train.dart';
+import '../entities/train_seat.dart';
 
 abstract class BaseTrainRepository {
   Future<List<Train>> getAllTrains();
@@ -15,7 +18,15 @@ abstract class BaseTrainRepository {
 
   Future<Map<Ticket, Train>> getUserBookedTrains(String userId);
 
-  Future<void> bookTrainTicket(Ticket ticket);
+  Future<String> bookTrainTicket({
+    required TicketType ticketType,
+    required String trainId,
+    required Timestamp bookingDate,
+    required SeatType seat,
+    required String userId,
+  });
+
+  Future<void> changeTrainTicketStatus(String ticketId, TicketStatus status);
 
   Future<void> cancelTrainTicket(String ticketId);
 

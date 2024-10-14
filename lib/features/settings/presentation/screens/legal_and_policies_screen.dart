@@ -26,11 +26,17 @@ class LegalAndPoliciesScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Terms",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+            const ListTile(
+              contentPadding: EdgeInsets.all(0),
+              title: Text(
+                "Terms and Conditions",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              trailing: Text(
+                "1st January 2022",
               ),
             ),
             SizedBox(height: 8),
@@ -44,11 +50,17 @@ class LegalAndPoliciesScreen extends StatelessWidget {
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 24),
-            Text(
-              "Changes to the Service and/or Terms",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+            ListTile(
+              contentPadding: EdgeInsets.all(0),
+              title: Text(
+                "Changes to the Service and/or Terms",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              trailing: Text(
+                "1st January 2022",
               ),
             ),
             SizedBox(height: 8),
@@ -60,11 +72,17 @@ class LegalAndPoliciesScreen extends StatelessWidget {
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 24),
-            Text(
-              "Privacy Policy",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
+            ListTile(
+              contentPadding: EdgeInsets.all(0),
+              title: Text(
+                "Privacy Policy",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              trailing: Text(
+                "1st January 2022",
               ),
             ),
             SizedBox(height: 8),

@@ -34,32 +34,23 @@ class SearchCardForm extends ConsumerWidget {
           children: [
             Row(
               children: [
-                Consumer(
-                  builder: (context, ref, child) {
-                    return ChoiceChip.elevated(
-                      label: const Text('One Way'),
-                      selected: searchState.ticketType == TicketType.oneWay,
-                      selectedColor: Theme.of(context).colorScheme.primary,
-                      onSelected: (_) => ref
-                              .read(trainSearchProvider.notifier)
-                              .state =
+                ChoiceChip.elevated(
+                  label: const Text('One Way'),
+                  selected: searchState.ticketType == TicketType.oneWay,
+                  selectedColor: Theme.of(context).colorScheme.primary,
+                  onSelected: (_) =>
+                      ref.read(trainSearchProvider.notifier).state =
                           searchState.copyWith(ticketType: TicketType.oneWay),
-                    );
-                  },
                 ),
                 const SizedBox(width: 10),
-                Consumer(
-                  builder: (context, ref, child) {
-                    return ChoiceChip.elevated(
-                      label: const Text('Round-trip'),
-                      selected: searchState.ticketType == TicketType.roundTrip,
-                      selectedColor: Theme.of(context).colorScheme.primary,
-                      onSelected: (_) =>
-                          ref.read(trainSearchProvider.notifier).state =
-                              searchState.copyWith(
-                                  ticketType: TicketType.roundTrip),
-                    );
-                  },
+                ChoiceChip.elevated(
+                  label: const Text('Round-trip'),
+                  selected: searchState.ticketType == TicketType.roundTrip,
+                  selectedColor: Theme.of(context).colorScheme.primary,
+                  onSelected: (_) => ref
+                          .read(trainSearchProvider.notifier)
+                          .state =
+                      searchState.copyWith(ticketType: TicketType.roundTrip),
                 ),
               ],
             ),
@@ -207,7 +198,10 @@ class SearchCardForm extends ConsumerWidget {
                 }
                 OpenScreen.openScreenWithSmoothAnimation(
                   context,
-                  const TrainSearchScreen(key: Key('train_search')),
+                  TrainSearchScreen(
+                    key: const Key('train_search'),
+                    type: searchState.ticketType,
+                  ),
                   false,
                 );
               },

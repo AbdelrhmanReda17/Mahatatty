@@ -72,7 +72,7 @@ class TrainCard extends StatelessWidget {
   }
 
   void _handleTrainSelection() {
-    if (onTrainSelected != null && ticket != null && train != null) {
+    if (onTrainSelected != null && (ticket != null || train != null)) {
       onTrainSelected!(ticket, train);
     }
   }

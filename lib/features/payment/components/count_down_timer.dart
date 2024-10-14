@@ -6,8 +6,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CountdownTimer extends ConsumerStatefulWidget {
   final DateTime targetDateTime;
+  final Function? onTimerEnd;
 
-  const CountdownTimer({super.key, required this.targetDateTime});
+  const CountdownTimer(
+      {super.key, required this.targetDateTime, this.onTimerEnd});
 
   @override
   CountdownTimerState createState() => CountdownTimerState();
@@ -30,7 +32,10 @@ class CountdownTimerState extends ConsumerState<CountdownTimer> {
         if (remainingDuration.isNegative) {
           // Stop the timer if time is up
           _timer.cancel();
-          remainingDuration = Duration.zero; // Set to zero
+          remainingDuration = Duration.zero;
+          if (widget.onTimerEnd != null) {
+            widget.onTimerEnd!();
+          }
         }
       });
     });
@@ -38,7 +43,7 @@ class CountdownTimerState extends ConsumerState<CountdownTimer> {
 
   @override
   void dispose() {
-    _timer.cancel(); // Cancel the timer on dispose
+    _timer.cancel();
     super.dispose();
   }
 
@@ -52,7 +57,6 @@ class CountdownTimerState extends ConsumerState<CountdownTimer> {
       return "$twoDigitHours:$twoDigitMinutes:$twoDigitSeconds";
     }
 
-    log('Remaining duration: ${remainingDuration.inSeconds} a');
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(7),

@@ -1,22 +1,59 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mahattaty/authentication/presentation/controllers/auth_controller.dart';
+import 'package:mahattaty/core/generic%20components/mahattaty_button.dart';
 import 'package:mahattaty/core/generic%20components/mahattaty_scaffold.dart';
-import 'package:mahattaty/features/train_booking/presentation/providers/get_selected_seats_provider.dart';
+import 'package:mahattaty/core/utils/open_screens.dart';
+import 'package:mahattaty/features/payment/presentation/payment_screen.dart';
+import '../../../../core/generic components/mahattaty_alert.dart';
+import '../../domain/entities/ticket.dart';
+import '../../domain/entities/train.dart';
+import '../components/cards/train_card.dart';
+import '../controllers/book_ticket_controller.dart';
 
-import '../../domain/entities/train_seat.dart';
-import '../providers/get_train_by_id_provider.dart';
+class SeatSelectionScreen extends ConsumerStatefulWidget {
+  final Train train;
+  final TicketType ticketType;
 
-class SeatSelectionScreen extends ConsumerWidget{
-  final String trainId;
-
-  const SeatSelectionScreen({super.key, required this.trainId});
+  const SeatSelectionScreen(
+      {super.key, required this.train, required this.ticketType});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final selectedTrain = ref.watch(getTrainByIdProvider(trainId));
-    final seats = ref.watch(selectedSeatsProvider);
+  SeatSelectionScreenState createState() => SeatSelectionScreenState();
+}
+
+class SeatSelectionScreenState extends ConsumerState<SeatSelectionScreen> {
+  late int _isSeatSelected;
+
+  @override
+  void initState() {
+    super.initState();
+    _isSeatSelected = widget.train.trainSeats.indexWhere(
+      (element) => element.numberOfSeats != element.bookedSeats,
+    );
+  }
+
+  void _onSelected(int selected) {
+    setState(() {
+      _isSeatSelected = selected;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ref.listen(
+      bookTicketControllerProvider,
+      (old, next) {
+        if (next.error != null) {
+          mahattatyAlertDialog(
+            context,
+            message: next.error!,
+            type: MahattatyAlertType.error,
+          );
+        }
+      },
+    );
 
     return MahattatyScaffold(
       appBarContent: Padding(
@@ -26,85 +63,168 @@ class SeatSelectionScreen extends ConsumerWidget{
             Text(
               'Select Your Seat',
               style: TextStyle(
-                color: Theme.of(context).colorScheme.surface,
-                fontSize: 20,
-                fontWeight: FontWeight.bold
-              ),
+                  color: Theme.of(context).colorScheme.surface,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
             )
           ],
-        )
+        ),
       ),
       bgHeight: backgroundHeight.small,
       body: Padding(
         padding: const EdgeInsets.only(left: 2, right: 2, top: 10),
         child: Column(
           children: [
-            selectedTrain.when(
-              data: (train) {
-                return Column(
-                  children: [
-                    ...train.trainSeats.map((seat) {
-                      final isSelected = seats.contains(seat);
-                      return ListTile(
-                        title: Text('${seat.seatType.name} - \$${seat.seatPrice}'),
-                        subtitle: Text('Available seats: ${seat.numberOfSeats}'),
-                        trailing: Icon(
-                          isSelected ? Icons.check_box : Icons.check_box_outline_blank,
-                          color: isSelected ? Colors.green : null,
+            TrainCard(
+              train: widget.train,
+              departureStation: widget.train.trainDepartureStation,
+              arrivalStation: widget.train.trainArrivalStation,
+            ),
+            RichText(
+              text: TextSpan(
+                text: 'Train Seats',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
+              ),
+            ),
+            ...widget.train.trainSeats.map(
+              (seat) {
+                return ListTile(
+                  onTap: null,
+                  title: Text(
+                    seat.seatType.name,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  trailing: Text(
+                    '\$${seat.seatPrice}',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  subtitle: Text(
+                      'Remaining Seats: ${seat.numberOfSeats - seat.bookedSeats}'),
+                );
+              },
+            ),
+            const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Text(
+                'Select your Seat :',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ...widget.train.trainSeats.map(
+                  (seat) {
+                    return ChoiceChip.elevated(
+                      padding: const EdgeInsets.all(8.0),
+                      label: Text(
+                        seat.seatType.name,
+                        style: const TextStyle(
+                          fontSize: 16,
                         ),
-                        onTap: () {
-                          selectSeat(ref, seat);
-                        },
-                      );
-                    }),
-
-                    const Spacer(),
-
-                    Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Total Price:',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            '\$${_calculateTotalPrice(seats)}',
-                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                        ],
                       ),
-                    ),
-
-                    // Confirm selection button
-                    ElevatedButton(
-                      onPressed: seats.isNotEmpty
-                          ? () {
-                        // Handle seat confirmation
-                        _confirmSeats(ref, seats);
-                      }
+                      disabledColor:
+                          Theme.of(context).colorScheme.onPrimaryContainer,
+                      selectedColor: Theme.of(context).colorScheme.primary,
+                      selected: _isSeatSelected ==
+                          widget.train.trainSeats.indexOf(seat),
+                      onSelected: (seat.numberOfSeats != seat.bookedSeats)
+                          ? (selected) {
+                              _onSelected(
+                                  widget.train.trainSeats.indexOf(seat));
+                            }
                           : null,
-                      child: const Text('Confirm Seats'),
-                    ),
-                  ],
-                  );
-                },
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (error, stack) => Center(child: Text('Error: $error')),
-            )
+                    );
+                  },
+                ),
+              ],
+            ),
+            const Spacer(),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Total Price:',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    '\$${widget.train.trainSeats[_isSeatSelected].seatPrice}',
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  child: MahattatyButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: MahattatyButtonStyle.secondary,
+                    text: 'Cancel',
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  child: MahattatyButton(
+                    disabled: ref.watch(bookTicketControllerProvider).isLoading,
+                    onPressed: () async {
+                      await ref
+                          .watch(bookTicketControllerProvider.notifier)
+                          .bookTicket(
+                            ticketType: widget.ticketType,
+                            trainId: widget.train.id,
+                            bookingDate: Timestamp.now(),
+                            seat: widget
+                                .train.trainSeats[_isSeatSelected].seatType,
+                            userId:
+                                ref.watch(authControllerProvider).user!.uuid,
+                          );
+
+                      if (ref.watch(bookTicketControllerProvider).error ==
+                          null) {
+                        OpenScreen.openScreenWithSmoothAnimation(
+                          context,
+                          PaymentScreen(
+                            train: widget.train,
+                            ticketType: widget.ticketType,
+                            seatType: widget
+                                .train.trainSeats[_isSeatSelected].seatType,
+                            ticketId: ref
+                                .watch(bookTicketControllerProvider)
+                                .ticketId!,
+                          ),
+                          true,
+                        );
+                      }
+                    },
+                    style: MahattatyButtonStyle.primary,
+                    text: 'Confirm Seats',
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
-      )
+      ),
     );
   }
-
-  double _calculateTotalPrice(List<TrainSeats> selectedSeats) {
-    return selectedSeats.fold(0, (sum, seat) => sum + seat.seatPrice);
-  }
-
-  void _confirmSeats(WidgetRef ref, List<TrainSeats> selectedSeats) {
-    clearSelectedSeats(ref); // Clear selected seats after confirmation
-  }
-
 }

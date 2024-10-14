@@ -71,7 +71,7 @@ void mahattatyAlertDialog(
           ],
         ),
         content: Text(message),
-        actions: [okButton, cancelButton],
+        actions: [okButton, if (showCancelButton) cancelButton],
       );
     },
   ).then((value) {

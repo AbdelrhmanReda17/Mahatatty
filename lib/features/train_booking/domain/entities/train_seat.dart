@@ -9,12 +9,14 @@ enum SeatType {
 }
 
 class TrainSeats {
-  final double numberOfSeats;
-  final SeatType seatType;
-  final double seatPrice;
+  double numberOfSeats;
+  double bookedSeats;
+  SeatType seatType;
+  double seatPrice;
 
   TrainSeats({
     required this.numberOfSeats,
+    required this.bookedSeats,
     required this.seatType,
     required this.seatPrice,
   });

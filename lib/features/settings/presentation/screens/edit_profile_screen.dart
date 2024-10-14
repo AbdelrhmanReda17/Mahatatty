@@ -42,7 +42,22 @@ class EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           mahattatyAlertDialog(
             context,
             message: state.exception!.message,
+            showCancelButton: false,
             type: MahattatyAlertType.error,
+            onOk: () {
+              Navigator.of(context).pop();
+            },
+          );
+        }
+        if (state.isSuccessful) {
+          mahattatyAlertDialog(
+            context,
+            message: 'Profile updated successfully',
+            showCancelButton: false,
+            type: MahattatyAlertType.success,
+            onOk: () {
+              Navigator.of(context).pop();
+            },
           );
         }
       },
@@ -88,13 +103,19 @@ class EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 onPressed: () {
                   OpenDialogs.openCustomDialog(
                     context: context,
-                    dialog: ChangePasswordDialog(),
+                    dialog: ChangePasswordDialog(
+                      onButtonPressed: (password) async {
+                        await ref
+                            .read(settingsControllerProvider.notifier)
+                            .changePassword(password);
+                        Navigator.of(context).pop();
+                      },
+                    ),
                   );
                 },
                 style: MahattatyButtonStyle.secondary,
               ),
               const Spacer(),
-              // Buttons Section
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -117,7 +138,9 @@ class EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       onPressed: state.isLoading
                           ? null
                           : () async {
-                              if (_formKey.currentState!.validate()) {
+                              if (_formKey.currentState!.validate() &&
+                                  (_usernameController.text != user?.name ||
+                                      _emailController.text != user?.email)) {
                                 await ref
                                     .read(settingsControllerProvider.notifier)
                                     .editProfile(

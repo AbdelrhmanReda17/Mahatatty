@@ -63,9 +63,8 @@ class AuthenticationScreenState extends ConsumerState<AuthenticationScreen>
         if (next.user != null) {
           OpenScreen.open(
             context: context,
-            screen: const RootScreen(
-              key: Key('home_screen'),
-            ),
+            routeName: const RootScreen().homeRouteName,
+            isNamed: true,
             isReplace: true,
           );
         }

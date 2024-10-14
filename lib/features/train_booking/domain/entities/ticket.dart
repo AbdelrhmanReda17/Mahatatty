@@ -12,6 +12,7 @@ enum TicketType {
 
 enum TicketStatus {
   booked,
+  onHold,
   canceled,
 }
 

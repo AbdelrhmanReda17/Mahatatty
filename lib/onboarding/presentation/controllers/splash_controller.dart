@@ -39,9 +39,8 @@ class SplashController extends StateNotifier<AsyncValue<User?>> {
       if (user != null) {
         OpenScreen.open(
           context: context,
-          screen: const RootScreen(
-            key: Key('home_screen'),
-          ),
+          routeName: const RootScreen().homeRouteName,
+          isNamed: true,
           isReplace: true,
         );
       } else {

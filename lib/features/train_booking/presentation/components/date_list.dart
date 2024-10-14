@@ -37,11 +37,20 @@ class DateListState extends ConsumerState<DateList> {
   }
 
   void selectDate(int index) {
-    ref.read(trainSearchProvider.notifier).state = ref
-        .read(trainSearchProvider)
-        .copyWith(
-            departureDate: Timestamp.fromDate(DateTime(
-                widget.startDate.year, widget.startDate.month, index + 1)));
+    log('Selected Date: ${index + 1}');
+    DateTime x = DateTime.now();
+    ref.read(trainSearchProvider.notifier).state =
+        ref.read(trainSearchProvider).copyWith(
+              departureDate: Timestamp.fromDate(
+                DateTime(
+                  x.year,
+                  x.month,
+                  index + 1,
+                  x.day == index + 1 ? x.hour : 0,
+                  x.day == index + 1 ? x.minute : 0,
+                ),
+              ),
+            );
     setState(() {
       selectedIndex = index;
     });

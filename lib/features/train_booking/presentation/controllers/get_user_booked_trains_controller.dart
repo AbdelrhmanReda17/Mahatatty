@@ -7,7 +7,8 @@ import 'package:mahattaty/features/train_booking/domain/entities/ticket.dart';
 import '../../domain/entities/train.dart';
 import '../providers/get_user_booked_trains_provider.dart';
 
-final getUserBookedTrainsController = FutureProvider<Map<Ticket, Train>>((ref) {
+final getUserBookedTrainsController =
+    FutureProvider.autoDispose<Map<Ticket, Train>>((ref) {
   ref.state = const AsyncValue.loading();
   try {
     final user = ref.read(getCurrentUserUseCaseProvider).call();

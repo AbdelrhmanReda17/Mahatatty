@@ -61,6 +61,10 @@ class SettingsController extends StateNotifier<SettingsState> {
     }
   }
 
+  void clearState() {
+    state = SettingsState();
+  }
+
   Future<void> changePassword(String password) async {
     state = state.copyWith(isLoading: true);
     try {

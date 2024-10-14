@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 // ignore: camel_case_types
@@ -8,6 +10,7 @@ class MahattatyScaffold extends StatelessWidget {
   final Widget? appBarContent;
   final Widget? floatingActionButton;
   final Widget? bottomNavigationBar;
+  final Function? onWillPop;
   final backgroundHeight bgHeight;
 
   const MahattatyScaffold({
@@ -16,38 +19,49 @@ class MahattatyScaffold extends StatelessWidget {
     this.appBarContent,
     this.floatingActionButton,
     this.bottomNavigationBar,
+    this.onWillPop,
     this.bgHeight = backgroundHeight.small,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFf5f5f5),
-      appBar: AppBar(
-        shadowColor: Colors.transparent,
-        surfaceTintColor: Colors.transparent,
-        foregroundColor: Colors.transparent,
-        titleSpacing: 0,
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        iconTheme: const IconThemeData(color: Colors.white),
-        elevation: 0.0,
-        title: appBarContent,
+    return WillPopScope(
+      onWillPop: () {
+        log('onWillPop');
+        if (onWillPop != null) {
+          onWillPop!();
+        }
+        Navigator.of(context).pop();
+        return Future.value(false);
+      },
+      child: Scaffold(
+        backgroundColor: const Color(0xFFf5f5f5),
+        appBar: AppBar(
+          shadowColor: Colors.transparent,
+          surfaceTintColor: Colors.transparent,
+          foregroundColor: Colors.transparent,
+          titleSpacing: 0,
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          iconTheme: const IconThemeData(color: Colors.white),
+          elevation: 0.0,
+          title: appBarContent,
+        ),
+        body: Stack(
+          children: [
+            Container(
+              color: Theme.of(context).colorScheme.primary,
+              height: bgHeight == backgroundHeight.small
+                  ? MediaQuery.of(context).size.height * 0.1
+                  : bgHeight == backgroundHeight.medium
+                      ? MediaQuery.of(context).size.height * 0.2
+                      : MediaQuery.of(context).size.height * 0.3,
+            ),
+            body,
+          ],
+        ),
+        floatingActionButton: floatingActionButton,
+        bottomNavigationBar: bottomNavigationBar,
       ),
-      body: Stack(
-        children: [
-          Container(
-            color: Theme.of(context).colorScheme.primary,
-            height: bgHeight == backgroundHeight.small
-                ? MediaQuery.of(context).size.height * 0.1
-                : bgHeight == backgroundHeight.medium
-                    ? MediaQuery.of(context).size.height * 0.2
-                    : MediaQuery.of(context).size.height * 0.3,
-          ),
-          body,
-        ],
-      ),
-      floatingActionButton: floatingActionButton,
-      bottomNavigationBar: bottomNavigationBar,
     );
   }
 }

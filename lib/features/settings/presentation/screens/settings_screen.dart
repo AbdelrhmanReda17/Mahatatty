@@ -34,11 +34,6 @@ class SettingsScreen extends ConsumerWidget {
             },
           ),
           SettingsTile(
-            icon: Icons.lock_outline,
-            title: 'Change Password',
-            onTap: () {},
-          ),
-          SettingsTile(
             icon: Icons.language_outlined,
             title: 'Language',
             trailingText: 'English',
@@ -55,11 +50,6 @@ class SettingsScreen extends ConsumerWidget {
                 false,
               );
             },
-          ),
-          SettingsTile(
-            icon: Icons.help_outline,
-            title: 'Help & Support',
-            onTap: () {},
           ),
           SettingsTile(
             icon: Icons.logout,

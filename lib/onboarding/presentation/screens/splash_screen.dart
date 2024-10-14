@@ -27,12 +27,11 @@ class SplashScreenState extends ConsumerState<SplashScreen>
     );
 
     _controller.forward().whenComplete(
-      () {
-        ref.read(authControllerProvider.notifier).getCurrentUser();
+      () async {
+        await ref.read(authControllerProvider.notifier).getCurrentUser();
         ref.read(splashControllerProvider.notifier).checkUserStatus(context);
       },
     );
-
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
   }
 

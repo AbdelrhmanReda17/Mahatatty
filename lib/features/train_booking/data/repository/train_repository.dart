@@ -1,7 +1,10 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../../domain/entities/ticket.dart';
 import '../../domain/entities/train.dart';
+import '../../domain/entities/train_seat.dart';
 import '../../domain/repository/train_repository.dart';
 import '../datasource/trains_remote_data_source.dart';
 
@@ -11,8 +14,25 @@ class TrainRepository implements BaseTrainRepository {
   TrainRepository(this.remoteDataSource);
 
   @override
-  Future<void> bookTrainTicket(Ticket ticket) {
-    return remoteDataSource.bookTrainTicket(ticket);
+  Future<String> bookTrainTicket({
+    required TicketType ticketType,
+    required String trainId,
+    required Timestamp bookingDate,
+    required SeatType seat,
+    required String userId,
+  }) {
+    return remoteDataSource.bookTrainTicket(
+      ticketType: ticketType,
+      trainId: trainId,
+      bookingDate: bookingDate,
+      seat: seat,
+      userId: userId,
+    );
+  }
+
+  @override
+  Future<void> changeTrainTicketStatus(String ticketId, TicketStatus status) {
+    return remoteDataSource.changeTrainTicketStatus(ticketId, status);
   }
 
   @override
@@ -53,5 +73,4 @@ class TrainRepository implements BaseTrainRepository {
   Future<Train> getTrainById(String trainId) {
     return remoteDataSource.getTrainById(trainId);
   }
-
 }
