@@ -1,12 +1,13 @@
+import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mahattaty/authentication/presentation/controllers/auth_controller.dart';
 import 'package:mahattaty/core/screens/explore_screen.dart';
 import 'package:mahattaty/core/screens/main_screen.dart';
-import 'package:mahattaty/features/news/presentation/screens/news_screen.dart';
 import 'package:mahattaty/features/settings/presentation/screens/settings_screen.dart';
 import 'package:mahattaty/features/train_booking/presentation/screens/user_tickets_screen.dart';
+import 'no_network_screen.dart';
 
 class RootScreen extends StatefulWidget {
   const RootScreen({super.key});
@@ -26,15 +27,19 @@ class RootScreen extends StatefulWidget {
 class RootScreenState extends State<RootScreen> {
   int _selectedPageIndex = 0;
 
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedPageIndex = index;
     });
+
   }
+
 
   @override
   void initState() {
     super.initState();
+
     switch (widget.key) {
       case const Key('home_screen'):
         _selectedPageIndex = 0;

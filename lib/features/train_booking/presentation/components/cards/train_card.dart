@@ -2,17 +2,17 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mahattaty/core/utils/app_localizations_extension.dart';
 import 'package:mahattaty/features/train_booking/presentation/components/cards/train_ticket_card.dart';
-
 import '../../../../../core/utils/time_converter.dart';
 import '../../../domain/entities/ticket.dart';
 import '../../../domain/entities/train.dart';
 import '../../../domain/entities/train_seat.dart';
-import '../../../../payment/components/count_down_timer.dart';
+import '../../../../../core/generic components/count_down_timer.dart';
 import 'helpers/custom_line.dart';
-import 'helpers/semi_circle_clipper.dart';
 import 'helpers/train_price.dart';
 import 'helpers/train_time_information.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TrainCard extends StatelessWidget {
   final Train? train;
@@ -21,6 +21,7 @@ class TrainCard extends StatelessWidget {
   final SeatType? seatType;
   final TrainStations departureStation;
   final TrainStations arrivalStation;
+  final isShowPrice;
 
   final Function(Ticket?, Train?)? onTrainSelected;
   final bool displayTrainTicketCard;
@@ -34,6 +35,7 @@ class TrainCard extends StatelessWidget {
     this.seatType,
     this.onTrainSelected,
     required this.departureStation,
+    this.isShowPrice = true,
     required this.arrivalStation,
     this.displayTrainTicketCard = false,
     this.isLoading = true,
@@ -41,9 +43,11 @@ class TrainCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final trainPriceData = _calculatePrice(train, ticket);
+    final trainPriceData = _calculatePrice(train, ticket , seatType);
     final bool isShowTicketChard =
         ticketType != null && seatType != null && displayTrainTicketCard;
+
+
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.9,
       child: Container(
@@ -77,17 +81,19 @@ class TrainCard extends StatelessWidget {
     }
   }
 
-  Map<String, dynamic> _calculatePrice(Train? train, Ticket? ticket) {
+  Map<String, dynamic> _calculatePrice(Train? train, Ticket? ticket , SeatType? seatType) {
     double trainPrice = 0.0;
     double discountTrainPrice = 0.0;
     bool isShowDiscount = false;
 
     if (train != null) {
+      seatType ??= SeatType.economic;
       trainPrice = train.trainSeats
-          .firstWhere((element) => element.seatType == SeatType.economic)
+          .firstWhere((element) => element.seatType == seatType)
           .seatPrice;
       discountTrainPrice =
           trainPrice - (trainPrice * (train.seatDiscount / 100));
+      log('discountTrainPrice: $discountTrainPrice');
       isShowDiscount = train.seatDiscount != 0 &&
           train.seatDiscountDate.toDate().isAfter(DateTime.now());
     }
@@ -127,11 +133,11 @@ class TrainCard extends StatelessWidget {
             TimeInformation(
               departureTime: train!.trainDepartureTime,
               departureDate:
-                  TimeConverter.convertTimeToDate(train!.trainArrivalDate),
+                  TimeConverter.convertTimeToDate(train!.trainArrivalDate , isNumber: true),
               duration: train!.trainDuration,
               arrivalTime: train!.trainArrivalTime,
               arrivalDate:
-                  TimeConverter.convertTimeToDate(train!.trainArrivalDate),
+                  TimeConverter.convertTimeToDate(train!.trainArrivalDate , isNumber: true),
             ),
           ],
         ],
@@ -145,21 +151,30 @@ class TrainCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Row(
-          children: [
-            const Icon(FontAwesomeIcons.trainSubway),
-            const SizedBox(width: 8),
-            Text(
-              train!.trainName,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-            ),
-          ],
+        Expanded(
+          child: Row(
+            children: [
+              const Icon(FontAwesomeIcons.trainSubway),
+              const SizedBox(width: 8),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.35,
+                child: Text(
+                  overflow: TextOverflow.ellipsis,
+                  train!.trainName,
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+              ),
+            ],
+          ),
         ),
-        TrainPrice(
-          trainPrice: trainPriceData['trainPrice'],
-          discountTrainPrice: trainPriceData['discountTrainPrice'],
-          seatDiscount: train!.seatDiscount,
-          isShowDiscount: trainPriceData['isShowDiscount'],
+        if(isShowPrice)
+        SizedBox(
+          width: MediaQuery.of(context).size.width * 0.36,
+          child: TrainPrice(
+            trainPrice: trainPriceData['trainPrice'],
+            discountTrainPrice: trainPriceData['discountTrainPrice'],
+            isShowDiscount: trainPriceData['isShowDiscount'],
+          ),
         ),
       ],
     );
@@ -175,16 +190,13 @@ class TrainCard extends StatelessWidget {
     );
   }
 
-  Widget _buildStationColumn(BuildContext context, TrainStations station,
-      {bool isRightAlign = false}) {
+  Widget _buildStationColumn(BuildContext context, TrainStations station, {bool isRightAlign = false}) {
     return Column(
-      crossAxisAlignment:
-          isRightAlign ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      crossAxisAlignment: isRightAlign ? CrossAxisAlignment.end : CrossAxisAlignment.start,
       children: [
         Text(
-          station.name,
-          style: TextStyle(
-              color: Theme.of(context).colorScheme.onPrimaryContainer),
+          AppLocalizations.of(context)!.station(station.code),
+          style: TextStyle(color: Theme.of(context).colorScheme.onPrimaryContainer),
         ),
         Text(
           station.code,

@@ -1,7 +1,6 @@
-import 'package:mahattaty/core/utils/app_constance.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:mahattaty/onboarding/domain/repository/onboarding_repository.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:flutter/material.dart';
 import '../../domain/entities/onboarding_step.dart';
 import '../datasource/onboarding_local_data_source.dart';
 
@@ -11,8 +10,8 @@ class OnboardingRepository implements BaseOnboardingRepository {
   OnboardingRepository(this.localDataSource);
 
   @override
-  List<OnboardingStepData> getOnboardingSteps() {
-    return localDataSource.getOnboardingSteps();
+  List<OnboardingStepData> getOnboardingSteps(BuildContext context) {
+    return localDataSource.getOnboardingSteps(context);
   }
 
   @override

@@ -1,10 +1,7 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mahattaty/features/train_booking/data/models/train_seat_model.dart';
-
 import '../../domain/entities/ticket.dart';
 import '../../domain/entities/train.dart';
 import '../../domain/entities/train_seat.dart';
@@ -44,6 +41,7 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
 
   TrainsRemoteDataSource(this.fireStore);
 
+
   @override
   Future<String> bookTrainTicket({
     required TicketType ticketType,
@@ -53,43 +51,54 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
     required String userId,
   }) async {
     try {
-      final oldTicket = await fireStore
+      var oldTicket = await fireStore
           .collection('tickets')
           .where('userId', isEqualTo: userId)
-          .get();
+          .get().timeout(const Duration(seconds: 5));
       if (oldTicket.docs.isNotEmpty) {
-        throw ('You have already booked a ticket');
+        final TicketModel ticketModel = TicketModel.fromFireStore(
+            oldTicket.docs.first.data(),
+            oldTicket.docs.first.id
+        );
+        if (ticketModel.status == TicketStatus.booked) {
+          throw ('You have already booked a ticket for this train');
+        } else {
+          await fireStore.collection('tickets')
+              .doc(ticketModel.id)
+              .delete();
+        }
       }
       final train =
-          await fireStore.collection('trains').doc(trainId).get().then((doc) {
+      await fireStore.collection('trains').doc(trainId).get().then((doc) {
         return TrainModel.fromFireStore(
             doc.data() as Map<String, dynamic>, doc.id);
       });
       train.trainSeats
           .firstWhere((element) => element.seatType == seat)
           .bookedSeats++;
-
       await fireStore.collection('trains').doc(trainId).update(
         {
           'trainBookedSeats': train.trainBookedSeats + 1,
           'TrainSeatsStatus':
-              train.trainBookedSeats + 1 == train.trainTotalSeats
-                  ? 'booked'
-                  : 'available',
+          train.trainBookedSeats + 1 == train.trainTotalSeats
+              ? 'booked'
+              : 'available',
           'trainSeats': train.trainSeats
               .map((e) => TrainSeatModel(
-                    seatType: e.seatType,
-                    numberOfSeats: e.numberOfSeats,
-                    bookedSeats: e.bookedSeats,
-                    seatPrice: e.seatPrice,
-                  ))
+            seatType: e.seatType,
+            numberOfSeats: e.numberOfSeats,
+            bookedSeats: e.bookedSeats,
+            seatPrice: e.seatPrice,
+          ))
               .map((e) => e.toMap())
               .toList(),
         },
       );
+
       var ticketPrice = train.trainSeats
           .firstWhere((element) => element.seatType == seat)
           .seatPrice;
+
       final ticket = await fireStore.collection('tickets').add({
         'trainId': trainId,
         'userId': userId,
@@ -99,11 +108,21 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
         'price': ticketPrice,
         'bookingDate': bookingDate,
       });
+
       return ticket.id;
-    } catch (e) {
+    } on FirebaseException catch (e) {
+      log('Firebase Error: ${e.message}');
+      if (e.code == 'unavailable') {
+        throw Exception('No network connection. Please check your internet.');
+      } else {
+        throw Exception('Firebase error: ${e.message}');
+      }
+    }  catch (e) {
+      log('Error: $e');
       rethrow;
     }
   }
+
 
   @override
   Future<void> changeTrainTicketStatus(
@@ -111,7 +130,7 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
     try {
       await fireStore.collection('tickets').doc(ticketId).update({
         'status': status.toString().split('.').last,
-      });
+      }).timeout(const Duration(seconds: 5));
     } catch (e) {
       throw Exception(e);
     }
@@ -120,10 +139,10 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
   @override
   Future<void> cancelTrainTicket(String ticketId) async {
     try {
-      final ticket = await fireStore.collection('tickets').doc(ticketId).get();
+      final ticket = await fireStore.collection('tickets').doc(ticketId).get().timeout(const Duration(seconds: 5));
       final ticketData = ticket.data() as Map<String, dynamic>;
       final train =
-          await fireStore.collection('trains').doc(ticketData['trainId']).get();
+          await fireStore.collection('trains').doc(ticketData['trainId']).get().timeout(const Duration(seconds: 5));
       final trainData = train.data() as Map<String, dynamic>;
       await fireStore.collection('tickets').doc(ticketId).delete();
       await fireStore.collection('trains').doc(ticketData['trainId']).update({
@@ -160,7 +179,7 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
         return snapshot.docs.map((doc) {
           return TrainModel.fromFireStore(doc.data(), doc.id);
         }).toList();
-      });
+      }).timeout(const Duration(seconds: 5));
     } catch (e) {
       rethrow;
     }
@@ -174,7 +193,7 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
           .where('trainSeatsStatus', isEqualTo: 'available')
           .where('seatDiscount', isGreaterThan: 0)
           .where('seatDiscountEndDate', isGreaterThan: Timestamp.now())
-          .get();
+          .get().timeout(const Duration(seconds: 5));
       final trains = result.docs
           .map((doc) => TrainModel.fromFireStore(doc.data(), doc.id))
           .toList();
@@ -195,7 +214,7 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
           .collection('trains')
           .where('trainDepartureStation', isEqualTo: from.name.toLowerCase())
           .where('trainArrivalStation', isEqualTo: to.name.toLowerCase())
-          .get()
+          .get().timeout(const Duration(seconds: 5))
           .then((snapshot) {
         return snapshot.docs.map((doc) {
           return TrainModel.fromFireStore(doc.data(), doc.id);
@@ -223,7 +242,7 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
       final result = await fireStore
           .collection('tickets')
           .where('userId', isEqualTo: userId)
-          .get();
+          .get().timeout(const Duration(seconds: 5));
       final tickets = result.docs
           .map((doc) => TicketModel.fromFireStore(doc.data(), doc.id))
           .toList();

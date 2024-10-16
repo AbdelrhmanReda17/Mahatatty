@@ -8,6 +8,7 @@ import '../../domain/repository/news_repository.dart';
 final newsRepositoryProvider = Provider<BaseNewsRepository>(
   (ref) {
     final FirebaseFirestore firebaseFireStore = FirebaseFirestore.instance;
+    firebaseFireStore.settings = const Settings(persistenceEnabled: false);
     final BaseNewsRemoteDataSource newsRemoteDataSource =
         NewsRemoteDataSource(firebaseFireStore);
     return NewsRepository(newsRemoteDataSource);

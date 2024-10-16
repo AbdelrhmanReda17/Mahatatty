@@ -43,7 +43,7 @@ class SplashController extends StateNotifier<AsyncValue<User?>> {
           isNamed: true,
           isReplace: true,
         );
-      } else {
+        } else {
         final hasSeenOnboarding = await checkOnboardingStatusUseCase.execute();
         if (!hasSeenOnboarding) {
           await setOnboardingSeenUseCase.execute();

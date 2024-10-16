@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mahattaty/Themes/light_theme.dart';
 import '../../../core/generic components/mahattaty_button.dart';
 import 'mahattaty_circle_icon.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void showPaymentSuccessBottomSheet(BuildContext context, Function onClose) {
   showModalBottomSheet(
@@ -32,15 +33,15 @@ void showPaymentSuccessBottomSheet(BuildContext context, Function onClose) {
             ),
             const SizedBox(height: 15),
             Text(
-              'Payment Successful',
+              AppLocalizations.of(context)!.paySuccess,
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).colorScheme.onSurface,
                   ),
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 16),
             Text(
-              'Your ticket for the journey has been successful. Thank you!',
+              AppLocalizations.of(context)!.paySuccessInfo,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     color: customGrey,
                   ),
@@ -48,7 +49,7 @@ void showPaymentSuccessBottomSheet(BuildContext context, Function onClose) {
             ),
             const SizedBox(height: 60),
             MahattatyButton(
-              text: 'Close',
+              text: AppLocalizations.of(context)!.closeButton,
               style: MahattatyButtonStyle.primary,
               onPressed: () {
                 Navigator.of(context).pop();

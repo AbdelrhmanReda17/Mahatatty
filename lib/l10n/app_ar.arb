@@ -1,0 +1,330 @@
+{
+  "language": "العربية",
+  "@language": {
+    "description": "اللغة الحالية"
+  },
+  "languageCode": "ar",
+  "otherLanguage": "English",
+  "appName": "محطتي",
+  "@appName": {
+    "description": "اسم التطبيق"
+  },
+  "otherLanguageCode": "en",
+  "onboardingTitle1": "سهولة الحصول على تذاكر القطار من أي مكان",
+  "@onboardingTitle1": {
+    "description": "عنوان الخطوة الثانية من شاشة الترحيب"
+  },
+  "onboardingSubtitle1": "احجز التذاكر أثناء التنقل بسهولة، سواء كنت في المنزل أو في الطريق.",
+  "@onboardingSubtitle1": {
+    "description": "الوصف للخطوة الثانية من شاشة الترحيب"
+  },
+  "onboardingTitle2": "استمتع بسهولة شراء التذاكر لرحلتك",
+  "@onboardingTitle2": {
+    "description": "عنوان الخطوة الأولى من شاشة الترحيب"
+  },
+  "onboardingSubtitle2": "خطط، احجز، وأدِر رحلاتك كلها في مكان واحد بسهولة.",
+  "@onboardingSubtitle2": {
+    "description": "الوصف للخطوة الأولى من شاشة الترحيب"
+  },
+  "onboardingTitle3": "الوصول من هاتفك الذكي في أي مكان",
+  "@onboardingTitle3": {
+    "description": "عنوان الخطوة الثالثة من شاشة الترحيب"
+  },
+  "onboardingSubtitle3": "ابقَ على اتصال مع التحديثات الفورية والوصول السريع إلى حجوزاتك.",
+  "@onboardingSubtitle3": {
+    "description": "الوصف للخطوة الثالثة من شاشة الترحيب"
+  },
+  "skipButton": "تخطى",
+  "@skipButton": {
+    "description": "النص على زر التخطى"
+  },
+  "nextButton": "التالي",
+  "@nextButton": {
+    "description": "النص على زر التالي"
+  },
+  "getStartedButton": "ابدأ",
+  "@getStartedButton": {
+    "description": "النص على زر البدء"
+  },
+  "signInButton": "تسجيل الدخول",
+  "@signInButton": {
+    "description": "نص زر تسجيل الدخول"
+  },
+  "signUpButton": "إنشاء حساب",
+  "@signUpButton": {
+    "description": "نص زر إنشاء حساب"
+  },
+  "loginTitle": "تسجيل الدخول",
+  "@loginTitle": {
+    "description": "عنوان صفحة تسجيل الدخول"
+  },
+  "loginSubtitle": "يرجى تسجيل الدخول باستخدام الحساب المسجل",
+  "@loginSubtitle": {
+    "description": "وصف صفحة تسجيل الدخول"
+  },
+  "registerTitle": "إنشاء حساب",
+  "@registerTitle": {
+    "description": "عنوان صفحة إنشاء الحساب"
+  },
+  "registerSubtitle": "ابدأ رحلتك معنا",
+  "@registerSubtitle": {
+    "description": "وصف صفحة إنشاء الحساب"
+  },
+  "registerQuestion": "لديك حساب؟",
+  "@registerQuestion": {
+    "description": "سؤال إذا كان لديك حساب بالفعل"
+  },
+  "loginQuestion": "ليس لديك حساب؟",
+  "@loginQuestion": {
+    "description": "سؤال إذا لم يكن لديك حساب"
+  },
+  "emailLabel": "البريد الإلكتروني",
+  "@emailLabel": {
+    "description": "ملصق حقل البريد الإلكتروني"
+  },
+  "emailHint": "أدخل بريدك الإلكتروني",
+  "@emailHint": {
+    "description": "تلميح حقل البريد الإلكتروني"
+  },
+  "emailError": "إدخال غير صالح، يجب أن يكون بريدًا إلكترونيًا صالحًا",
+  "@emailError": {
+    "description": "رسالة الخطأ لبريد إلكتروني غير صالح"
+  },
+  "usernameLabel": "اسم المستخدم",
+  "@usernameLabel": {
+    "description": "ملصق حقل اسم المستخدم"
+  },
+  "usernameHint": "أدخل اسم المستخدم",
+  "@usernameHint": {
+    "description": "تلميح حقل اسم المستخدم"
+  },
+  "usernameError": " يجب أن يكون اسم مستخدم صالح على الأقل 3 أحرف",
+  "@usernameError": {
+    "description": "رسالة الخطأ لاسم مستخدم غير صالح"
+  },
+  "passwordLabel": "كلمة المرور",
+  "@passwordLabel": {
+    "description": "ملصق حقل كلمة المرور"
+  },
+  "passwordHint": "أنشئ كلمة المرور الخاصة بك",
+  "@passwordHint": {
+    "description": "تلميح حقل كلمة المرور"
+  },
+  "passwordError": "يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل مع حرف كبير وحرف صغير",
+  "@passwordError": {
+    "description": "رسالة الخطأ لكلمة المرور غير صالحة"
+  },
+  "passwordRequired": "كلمة المرور مطلوبة !",
+  "@passwordRequired": {
+    "description": "رسالة الخطأ لكلمة المرور المطلوبة"
+  },
+  "confirmPasswordLabel": "تأكيد كلمة المرور",
+  "@confirmPasswordLabel": {
+    "description": "ملصق حقل تأكيد كلمة المرور"
+  },
+  "confirmPasswordHint": "أكد كلمة المرور الخاصة بك",
+  "@confirmPasswordHint": {
+    "description": "تلميح حقل تأكيد كلمة المرور"
+  },
+  "confirmPasswordError": "يجب أن تتطابق كلمة المرور",
+  "@confirmPasswordError": {
+    "description": "رسالة الخطأ لكلمة المرور غير متطابقة"
+  },
+  "forgotPassword": "هل نسيت كلمة المرور؟",
+  "@forgotPassword": {
+    "description": "نص خيار استعادة كلمة المرور"
+  },
+  "forgotPasswordTitle": "نسيت كلمة المرور",
+  "@forgotPasswordTitle": {
+    "description": "عنوان صفحة استعادة كلمة المرور"
+  },
+  "forgotPasswordSubtitle": "أدخل بريدك الإلكتروني لإعادة تعيين كلمة المرور",
+  "@forgotPasswordSubtitle": {
+    "description": "الوصف لصفحة استعادة كلمة المرور"
+  },
+  "resetPasswordButton": "إعادة تعيين كلمة المرور",
+  "@resetPasswordButton": {
+    "description": "نص زر إعادة تعيين كلمة المرور"
+  },
+  "resetPasswordError": "حدث خطأ أثناء إرسال البريد الإلكتروني",
+  "@resetPasswordError": {
+    "description": "رسالة خطأ إعادة تعيين كلمة المرور"
+  },
+  "loginError": "حدث خطأ أثناء تسجيل الدخول\n يرجى التحقق من البريد الإلكتروني وكلمة المرور الخاصة بك و الاتصال بالإنترنت والمحاولة مرة أخرى",
+  "@loginError": {
+    "description": "رسالة خطأ تسجيل الدخول"
+  },
+  "forgotError": "حدث خطأ أثناء ارسال البريد الالكتروني \n يرجى التحقق من البريد الإلكتروني  و الاتصال بالإنترنت والمحاولة مرة أخرى",
+  "@forgotError": {
+    "description": "رسالة خطأ تسجيل الدخول"
+  },
+  "registerError": "حدث خطأ أثناء إنشاء الحساب\n قد يكون البريد الإلكتروني موجودًا بالفعل و الاتصال الإنترنت الخاص بك وحاول مرة أخرى",
+  "@registerError": {
+    "description": "رسالة خطأ إنشاء الحساب"
+  },
+  "googleSignInError": "حدث خطأ أثناء تسجيل الدخول باستخدام جوجل",
+  "@googleSignInError": {
+    "description": "رسالة خطأ تسجيل الدخول باستخدام جوجل"
+  },
+  "generalError": "حدث خطأ، يرجى المحاولة مرة أخرى لاحقًا",
+  "@generalError": {
+    "description": "رسالة خطأ عامة"
+  },
+  "resetPasswordSuccess": "تم إرسال بريد إلكتروني لإعادة تعيين كلمة المرور بنجاح إلى ",
+  "@resetPasswordSuccess": {
+    "description": "رسالة نجاح إعاد�� تعيين كلمة المرور"
+  },
+  "termsAndConditions": "بالتسجيل فإنك توافق على ",
+  "@termsAndConditions": {
+    "description": "نص الشروط والأحكام"
+  },
+  "termsAndConditionsLink": "الشروط والأحكام",
+  "@termsAndConditionsLink": {
+    "description": "رابط الشروط والأحكام"
+  },
+  "orUsingOtherMethods": "أو باستخدام طرق أخرى",
+  "@orUsingOtherMethods": {
+    "description": "نص خيار تسجيل الدخول باستخدام حسابات أخرى"
+  },
+  "continueWithGoogle": "تسجيل الدخول باستخدام جوجل",
+  "@continueWithGoogle": {
+    "description": "نص زر تسجيل الدخول باستخدام جوجل"
+  },
+  "greetings": "مرحبا ",
+  "@greetings": {
+    "description": "رسالة ترحيب"
+  },
+  "greetingsSubtitle": "دعنا نأخذ عطلة",
+  "@greetingsSubtitle": {
+    "description": "وصف رسالة الترحيب"
+  },
+  "oneWay": "ذهاب",
+  "@oneWay": {
+    "description": "نص للرحلة ذهاب"
+  },
+  "roundTrip": "ذهاب وعودة",
+  "@roundTrip": {
+    "description": "نص للرحلة ذهاب وعودة"
+  },
+  "departure": "من",
+  "@from": {
+    "description": "نص للمغادرة"
+  },
+  "arrival": "إلى",
+  "@to": {
+    "description": "نص للوصول"
+  },
+  "cai": "القاهرة",
+  "alx": "الإسكندرية",
+  "asw": "أسوان",
+  "lxr": "الأقصر",
+  "atz": "أسيوط",
+  "bfs": "بني سويف",
+  "dtt": "دمياط",
+  "gby": "الغربية",
+  "giz": "الجيزة",
+  "ism": "الإسماعيلية",
+  "kfs": "كفر الشيخ",
+  "mtw": "مطروح",
+  "myn": "المنيا",
+  "sin": "شمال سيناء",
+  "psd": "بورسعيد",
+  "qal": "القليوبية",
+  "qna": "قنا",
+  "bav": "البحر الأحمر",
+  "shr": "الشرقية",
+  "swj": "سوهاج",
+  "ssh": "جنوب سيناء",
+  "suz": "السويس",
+  "dka": "الدقهلية",
+  "bah": "البحرية",
+  "wad": "الوادي الجديد",
+  "fym": "الفيوم",
+  "mnf": "المنوفية",
+  "trainDate": "تاريخ القطار",
+  "sameStationsError": "لا يمكن أن تكون محطتا المغادرة والوصول هما نفسهما",
+  "searchTrainButton": "ابحث عن القطار",
+  "hotNews": "أخبار ساخنة",
+  "searchResults": "نتائج البحث",
+  "emptyNews": "لا توجد أخبار",
+  "emptyHotNews": "لا توجد أخبار ساخنة",
+  "seeAll": "عرض الكل",
+  "newsDetails": "تفاصيل الخبر",
+  "fetchError": "حدث خطأ أثناء جلب البيانات",
+  "retryButton": "إعادة المحاولة",
+  "trendingNews": "أخبار الشائعة",
+  "emptyTrendingNews": "لا توجد أخبار شائعة",
+  "searchText": "ما الذي تبحث عنه؟",
+  "bestOffers": "أفضل العروض",
+  "emptyTrains": "لا توجد قطارات",
+  "remainingSeats": "المقاعد المتبقية",
+  "emptyBestOffers": "لا توجد عروض",
+  "discountEndsIn": "تنتهي في",
+  "egp": "ج.م",
+  "duration": "المدة",
+  "ticketType": "نوع التذكرة",
+  "ticketClass": "فئة التذكرة",
+  "firstClass": "الدرجة الأولى",
+  "economicClass": "الدرجة الاقتصادية",
+  "businessClass": "الدرجة الأعمال",
+  "sun": "الأحد",
+  "mon": "الإثنين",
+  "tue": "الثلاثاء",
+  "wed": "الأربعاء",
+  "thu": "الخميس",
+  "fri": "الجمعة",
+  "sat": "السبت",
+  "emptyUserTickets": "لا توجد تذاكر",
+  "express": "سريع",
+  "ordinary": "عادي",
+  "touristic": "سياحي",
+  "upComing": "القادمة",
+  "done": "تم",
+  "myTickets": "تذاكري",
+  "selectDate": "اختر التاريخ",
+  "selectDateDescription": "اختر التاريخ الذي تريد السفر فيه",
+  "selectButton": "اختر",
+  "all": "الكل",
+  "trainDetails": "تفاصيل القطار",
+  "scanQr": "مسح الرمز الاستجابة السريعة أدناه لدخول محطة القطار",
+  "selectSeat": "اختر مقعدك",
+  "trainSeats": "مقاعد القطار",
+  "totalPrice": "السعر الكلي",
+  "confirmButton": "تأكيد",
+  "cancelButton": "إلغاء",
+  "explore": "استكشاف",
+  "payment": "الدفع",
+  "paymentMethod": "طريقة الدفع",
+  "paymentMethodDescription": "اختر طريقة الدفع المفضلة لديك",
+  "creditCard": "بطاقة الائتمان",
+  "payNow": "ادفع الآن",
+  "paySuccess": "تم الدفع بنجاح",
+  "closeButton": "إغلاق",
+  "paySuccessInfo": "تمت عملية الدفع بنجاح، شكرًا لك!",
+  "paymentInfo" : "تذكرتك محجوزة لمدة 5 دقائق، يرجى الدفع الآن لتأكيد تذكرتك",
+  "paypal": "باي بال",
+  "fawry": "فوري",
+  "masterCard": "ماستر كارد",
+  "vodafoneCash": "فودافون كاش",
+  "selectStation": "اختر المحطة",
+  "selectStationDescription": "اختر المحطة التي تريد السفر منها",
+  "selectLanguage": "اختر اللغة",
+    "selectLanguageDescription": "اختر اللغة التي تفضلها",
+  "settings": "الإعدادات",
+  "general": "عام",
+  "editProfile": "تعديل الملف الشخصي",
+  "legal" : "السياسات القانونية",
+  "logout": "تسجيل الخروج",
+  "logoutConfirmation": "هل أنت متأكد من تسجيل الخروج؟",
+  "cancel": "إلغاء",
+  "confirm": "تأكيد",
+  "languageLabel": "اللغة",
+"preferences": "التفضيلات",
+  "termsAndConditionsLabel": "الشروط والأحكام",
+  "privacyPolicyLabel": "سياسة الخصوصية",
+  "changesToTheServiceAndOrTerms": "تغييرات على الخدمة و/أو الشروط",
+  "privacyPolicyContent" : "تحترم تطبيق محطتي خصوصية المستخدم. نحن لا نقوم بجمع البيانات الشخصية بدون موافقة. البيانات التي تم جمعها، مثل تفضيلات القراءة، ستستخدم لتحسين تجربة المستخدم. لا يتم مشاركة أي معلومات مع أطراف ثالثة.",
+  "termsAndConditionsContent": "باستخدام تطبيق محطتي، فإنك توافق على الشروط والأحكام التالية. إذا كنت لا توافق على هذه الشروط، فلا يجب عليك استخدام التطبيق.",
+  "changesToTheServiceAndOrTermsContent": "قد نقوم بتغيير الخدمة و/أو الشروط في أي وقت دون إشعار مسبق. يجب عليك مراجعة الشروط والأحكام بانتظام للتأكد من أنك توافق على الشروط الحالية."
+}
+

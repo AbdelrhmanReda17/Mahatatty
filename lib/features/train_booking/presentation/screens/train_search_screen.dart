@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mahattaty/features/train_booking/presentation/screens/seat_selection_screen.dart';
-
 import '../../../../core/generic components/mahattaty_empty_data.dart';
 import '../../../../core/generic components/mahattaty_error.dart';
 import '../../../../core/generic components/mahattaty_loading.dart';
@@ -13,6 +12,7 @@ import '../components/cards/train_card.dart';
 import '../components/date_list.dart';
 import '../controllers/get_trains_by_search_controller.dart';
 import '../controllers/search_train_controller.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TrainSearchScreen extends ConsumerWidget {
   final TicketType type;
@@ -70,7 +70,7 @@ class TrainSearchScreen extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Search Results',
+              AppLocalizations.of(context)!.searchResults,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.surface,
                 fontSize: 20,

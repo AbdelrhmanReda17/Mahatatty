@@ -3,6 +3,7 @@ import 'package:mahattaty/features/train_booking/presentation/components/user_ti
 import 'package:mahattaty/features/train_booking/presentation/components/user_tickets_upcoming.dart';
 import '../../domain/entities/ticket.dart';
 import '../../domain/entities/train.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserTicketsTabsController extends StatelessWidget {
   const UserTicketsTabsController({
@@ -69,11 +70,11 @@ class UserTicketsTabsController extends StatelessWidget {
               indicatorColor: Colors.transparent,
               indicator: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(16),
               ),
-              tabs: const [
-                Tab(text: 'Up Coming'),
-                Tab(text: 'Done'),
+              tabs:  [
+                Tab(text: AppLocalizations.of(context)!.upComing),
+                Tab(text: AppLocalizations.of(context)!.done),
               ],
             ),
             const SizedBox(height: 20),

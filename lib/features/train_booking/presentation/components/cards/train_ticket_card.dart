@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mahattaty/core/utils/app_localizations_extension.dart';
 import 'package:mahattaty/features/train_booking/domain/entities/ticket.dart';
 import 'package:mahattaty/features/train_booking/domain/entities/train_seat.dart';
 import 'package:mahattaty/features/train_booking/presentation/components/cards/helpers/custom_line.dart';
-import 'package:mahattaty/features/train_booking/presentation/components/cards/train_card.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TrainTicketCard extends StatelessWidget {
   const TrainTicketCard(
@@ -13,10 +14,14 @@ class TrainTicketCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final surfaceColor = Theme.of(context).colorScheme.surface;
+    final onPrimaryColor = Theme.of(context).colorScheme.onPrimary;
+    final onPrimaryContainerColor =
+        Theme.of(context).colorScheme.onPrimaryContainer;
     return Container(
       padding: const EdgeInsets.only(left: 16, right: 16),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
+        color: surfaceColor,
         borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(16),
           bottomRight: Radius.circular(16),
@@ -34,19 +39,19 @@ class TrainTicketCard extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: 'Type\n',
+                        text: '${AppLocalizations.of(context)!.ticketType}\n',
                         style: TextStyle(
                           color:
-                              Theme.of(context).colorScheme.onPrimaryContainer,
+                          onPrimaryContainerColor,
                           fontWeight: FontWeight.bold,
                         ),
                         children: [
                           TextSpan(
-                            text: ticketType.name,
+                            text: AppLocalizations.of(context)!.ticket(ticketType),
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
-                              color: Theme.of(context).colorScheme.onPrimary,
+                              color: onPrimaryColor,
                             ),
                           ),
                         ],
@@ -62,15 +67,14 @@ class TrainTicketCard extends StatelessWidget {
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: 'Class\n',
+                        text: '${AppLocalizations.of(context)!.ticketClass}\n',
                         style: TextStyle(
-                          color:
-                              Theme.of(context).colorScheme.onPrimaryContainer,
+                          color: onPrimaryContainerColor,
                           fontWeight: FontWeight.bold,
                         ),
                         children: [
                           TextSpan(
-                            text: seatType.name,
+                            text: AppLocalizations.of(context)!.seat(seatType),
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,

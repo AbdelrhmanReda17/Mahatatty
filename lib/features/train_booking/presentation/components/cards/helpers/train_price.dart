@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:skeletonizer/skeletonizer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mahattaty/core/utils/app_localizations_extension.dart';
 
 class TrainPrice extends StatelessWidget {
   final double trainPrice;
   final double discountTrainPrice;
-  final double seatDiscount;
   final bool isShowDiscount;
 
   const TrainPrice({
     super.key,
     required this.trainPrice,
     required this.discountTrainPrice,
-    required this.seatDiscount,
     required this.isShowDiscount,
   });
 
   @override
   Widget build(BuildContext context) {
+    final onPrimary = Theme.of(context).colorScheme.onPrimary;
+    final onPrimaryContainer = Theme.of(context).colorScheme.onPrimaryContainer;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
@@ -27,11 +29,11 @@ class TrainPrice extends StatelessWidget {
               RichText(
                 textAlign: TextAlign.center,
                 text: TextSpan(
-                  text: '${trainPrice.toStringAsFixed(2)}  ',
+                  text : ' ${AppLocalizations.of(context)!.arabicOrEnglish(trainPrice.toStringAsFixed(2))} ',
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimary,
+                    color: onPrimary,
                     fontWeight: FontWeight.bold,
-                    fontSize: 12,
+                    fontSize: 15,
                     decoration: TextDecoration.lineThrough,
                   ),
                 ),
@@ -39,20 +41,20 @@ class TrainPrice extends StatelessWidget {
             RichText(
               text: TextSpan(
                 text: isShowDiscount
-                    ? ' ${discountTrainPrice.toStringAsFixed(2)}'
-                    : ' ${trainPrice.toStringAsFixed(2)}',
+            ? AppLocalizations.of(context)!.arabicOrEnglish(discountTrainPrice.toStringAsFixed(2))
+                    : AppLocalizations.of(context)!.arabicOrEnglish(trainPrice.toStringAsFixed(2)),
                 style: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimary,
+                  color: onPrimary,
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 ),
                 children: [
                   TextSpan(
-                    text: ' EGP',
+                    text: AppLocalizations.of(context)!.egp,
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      color: onPrimaryContainer,
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                      fontSize: 16,
                     ),
                   ),
                 ],

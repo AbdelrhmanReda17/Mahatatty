@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'dart:developer';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mahattaty/core/utils/app_localizations_extension.dart';
 
 class CountdownTimer extends ConsumerStatefulWidget {
   final DateTime targetDateTime;
@@ -22,7 +22,6 @@ class CountdownTimerState extends ConsumerState<CountdownTimer> {
   @override
   void initState() {
     super.initState();
-    // Calculate the remaining duration at the start
     remainingDuration = widget.targetDateTime.difference(DateTime.now());
 
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -57,12 +56,14 @@ class CountdownTimerState extends ConsumerState<CountdownTimer> {
       return "$twoDigitHours:$twoDigitMinutes:$twoDigitSeconds";
     }
 
+    final onPrimary = Theme.of(context).colorScheme.onPrimary;
+    final onPrimaryContainer = Theme.of(context).colorScheme.onPrimaryContainer;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(7),
       decoration: BoxDecoration(
-        color:
-            Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(0.3),
+        color: onPrimaryContainer.withOpacity(0.3),
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -72,24 +73,24 @@ class CountdownTimerState extends ConsumerState<CountdownTimer> {
         children: [
           Icon(
             Icons.timer,
-            color: Theme.of(context).colorScheme.onPrimary,
+            color: onPrimary,
           ),
           const SizedBox(width: 5),
           RichText(
             textAlign: TextAlign.center,
             text: TextSpan(
-              text: 'Ends in ',
+              text: " ${AppLocalizations.of(context)!.discountEndsIn} ",
               style: TextStyle(
                 fontSize: 16,
-                color: Theme.of(context).colorScheme.onPrimary,
+                color: onPrimary,
               ),
               children: [
                 TextSpan(
-                  text: formatDuration(remainingDuration),
+                  text: AppLocalizations.of(context)!.arabicOrEnglish(formatDuration(remainingDuration)),
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w900,
-                    color: Theme.of(context).colorScheme.onPrimary,
+                    color: onPrimary,
                   ),
                 ),
               ],

@@ -1,0 +1,332 @@
+{
+  "language": "English",
+  "@language": {
+    "description": "The current language"
+  },
+  "languageCode": "en",
+  "otherLanguage": "العربية",
+  "appName": "Mahattaty",
+  "@appName": {
+    "description": "The name of the app"
+  },
+    "otherLanguageCode": "ar",
+  "onboardingTitle1": "Easy To Get Train Tickets From Anywhere",
+  "@onboardingTitle1": {
+    "description": "Title for the second onboarding step"
+  },
+  "onboardingSubtitle1": "Book tickets on the go, hassle-free, whether you're at home or on the move.",
+  "@onboardingSubtitle1": {
+    "description": "Subtitle for the second onboarding step"
+  },
+  "onboardingTitle2": "Enjoy The Convenience Of Buying Tickets For Your Trip",
+  "@onboardingTitle2": {
+    "description": "Title for the first onboarding step"
+  },
+  "onboardingSubtitle2": "Plan, book, and manage your journeys all in one place, effortlessly.",
+  "@onboardingSubtitle2": {
+    "description": "Subtitle for the first onboarding step"
+  },
+  "onboardingTitle3": "Access From Your Smartphone Anywhere",
+  "@onboardingTitle3": {
+    "description": "Title for the third onboarding step"
+  },
+  "onboardingSubtitle3": "Stay connected with real-time updates and instant access to your bookings.",
+  "@onboardingSubtitle3": {
+    "description": "Subtitle for the third onboarding step"
+  },
+  "skipButton": "Skip",
+  "@skipButton": {
+    "description": "The text on the skip button"
+  },
+  "nextButton": "Next",
+  "@nextButton": {
+    "description": "The text on the next button"
+  },
+  "getStartedButton": "Get Started",
+  "@getStartedButton": {
+    "description": "The text on the get started button"
+  },
+  "signInButton": "Sign In",
+  "@signInButton": {
+    "description": "Text for the sign-in button"
+  },
+  "signUpButton": "Sign Up",
+  "@signUpButton": {
+    "description": "Text for the sign-up button"
+  },
+  "registerQuestion": "Don't have an account?",
+  "@registerQuestion": {
+    "description": "Question for the register option"
+  },
+  "loginQuestion": "Already have an account?",
+  "@loginQuestion": {
+    "description": "Question for the login option"
+  },
+  "registerTitle": "Create an Account",
+  "@registerTitle": {
+    "description": "Title for the register page"
+  },
+  "registerSubtitle": "Start your journey with us",
+  "@registerSubtitle": {
+    "description": "Subtitle for the register page"
+  },
+  "loginTitle": "Login to your Account",
+  "@loginTitle": {
+    "description": "Title for the login page"
+  },
+  "loginSubtitle": "Please login using your registered account",
+  "@loginSubtitle": {
+    "description": "Subtitle for the login page"
+  },
+  "emailLabel": "Email",
+  "@emailLabel": {
+    "description": "Label for email field"
+  },
+  "emailHint": "Enter your email",
+  "@emailHint": {
+    "description": "Hint for email field"
+  },
+  "emailError": "Invalid Input  , must be a valid email",
+  "@emailError": {
+    "description": "Error message for invalid email"
+  },
+  "usernameLabel": "Username",
+  "@usernameLabel": {
+    "description": "Label for username field"
+  },
+  "usernameHint": "Enter your username",
+  "@usernameHint": {
+    "description": "Hint for username field"
+  },
+  "usernameError": "Invalid Input , must be at least 3 characters",
+  "@usernameError": {
+    "description": "Error message for invalid username"
+  },
+  "passwordLabel": "Password",
+  "@passwordLabel": {
+    "description": "Label for password field"
+  },
+  "passwordHint": "Create your password",
+  "@passwordHint": {
+    "description": "Hint for password field"
+  },
+  "passwordError": "Invalid Input , must be at least 8 characters With at least one uppercase letter, one lowercase letter",
+  "@passwordError": {
+    "description": "Error message for invalid password"
+  },
+  "passwordRequired": "Password is required !",
+  "@passwordRequired": {
+    "description": "Error message for required password"
+  },
+  "confirmPasswordLabel": "Confirm Password",
+  "@confirmPasswordLabel": {
+    "description": "Label for confirm password field"
+  },
+  "confirmPasswordHint": "Confirm your password",
+  "@confirmPasswordHint": {
+    "description": "Hint for confirm password field"
+  },
+  "confirmPasswordError": "Invalid Input , must be the same as the password",
+  "@confirmPasswordError": {
+    "description": "Error message for password mismatch"
+  },
+  "forgotPassword": "Forgot Password?",
+  "@forgotPassword": {
+    "description": "Label for forgot password option"
+  },
+  "forgotPasswordTitle": "Forgot Password",
+  "@forgotPasswordTitle": {
+    "description": "Title for the forgot password page"
+  },
+  "forgotPasswordSubtitle": "Enter your email to reset your password",
+  "@forgotPasswordSubtitle": {
+    "description": "Subtitle for the forgot password page"
+  },
+  "resetPasswordButton": "Reset Password",
+  "@resetPasswordButton": {
+    "description": "Text for the reset password button"
+  },
+  "resetPasswordError": "An error occurred while sending the email",
+  "@resetPasswordError": {
+    "description": "Error message for password reset"
+  },
+  "loginError": "An error occurred while logging in\n please check your credentials or your internet connection and try again",
+  "@loginError": {
+    "description": "Error message for login"
+  },
+  "forgotError": "An error occurred while sending the email\n please check your email and your internet connection and try again",
+  "@forgotError": {
+    "description": "Error message for forgot password"
+  },
+  "registerError": "An error occurred while registering\n email might be exists or your internet connection and try again",
+  "@registerError": {
+    "description": "Error message for registration"
+  },
+  "googleSignInError": "An error occurred while signing in with Google",
+  "@googleSignInError": {
+    "description": "Error message for Google sign-in"
+  },
+  "generalError": "An error occurred, please try again later",
+  "@generalError": {
+    "description": "General error message"
+  },
+  "resetPasswordSuccess": "Password reset email sent successfully to ",
+  "@resetPasswordSuccess": {
+    "description": "Success message for password reset"
+  },
+  "termsAndConditions": "by signing up you agree to the ",
+  "@termsAndConditions": {
+    "description": "Text for terms and conditions"
+  },
+  "termsAndConditionsLink": "Terms & Conditions & Privacy Policy",
+  "@termsAndConditionsLink": {
+    "description": "Text for terms and conditions link"
+  },
+  "orUsingOtherMethods": "Or using other methods",
+  "@orUsingOtherMethods": {
+    "description": "Text for social account login"
+  },
+  "continueWithGoogle": "Continue with Google",
+  "@continueWithGoogle": {
+    "description": "Text for Google login button"
+  },
+  "greetings": "Welcome",
+  "@greetings": {
+    "description": "Greeting message"
+  },
+  "greetingsSubtitle": "Let\\'s take a vacation",
+  "@greetingsSubtitle": {
+    "description": "Greeting subtitle"
+  },
+  "oneWay": "One Way",
+  "@oneWay": {
+    "description": "One way trip type"
+  },
+  "roundTrip": "Round Trip",
+  "@roundTrip": {
+    "description": "Round trip type"
+  },
+  "departure": "From",
+  "@from": {
+    "description": "Label for the from field"
+  },
+  "arrival": "To",
+  "@to": {
+    "description": "Label for the to field"
+  },
+  "cai": "Cairo",
+  "alx": "Alexandria",
+  "asw": "Aswan",
+  "lxr": "Luxor",
+  "atz": "Assiut",
+  "bfs": "Beni Suef",
+  "dtt": "Damietta",
+  "gby": "Gharbia",
+  "giz": "Giza",
+  "ism": "Ismailia",
+  "kfs": "Kafr El Sheikh",
+  "mtw": "Matrouh",
+  "myn": "Minya",
+  "sin": "North Sinai",
+  "psd": "Port Said",
+  "qal": "Qalyubia",
+  "qna": "Qena",
+  "bav": "Red Sea",
+  "shr": "Sharqia",
+  "swj": "Sohag",
+  "ssh": "South Sinai",
+  "suz": "Suez",
+  "dka": "Dakahlia",
+  "bah": "Beheira",
+  "wad": "New Valley",
+  "fym": "Fayoum",
+  "mnf": "Monofia",
+
+"trainDate": "Train Date",
+  "sameStationsError": "Departure and arrival stations must be different",
+  "searchTrainButton": "Search for Trains",
+  "hotNews": "Hot News",
+  "searchResults": "Search Results",
+  "emptyNews": "No news available",
+  "newsDetails": "News Details",
+  "emptyTrains": "No trains available",
+  "emptyHotNews": "No hot news available",
+  "seeAll": "See All",
+  "fetchError": "An error occurred while fetching data",
+  "retryButton": "Retry",
+  "trendingNews": "Trending News",
+  "emptyTrendingNews": "No trending news available",
+  "searchText": "What are you looking for?",
+  "bestOffers": "Best Offers",
+  "emptyBestOffers": "No offers available",
+  "discountEndsIn": "Ends in",
+  "egp": "EGP",
+  "duration": "Duration",
+  "ticketType": "Ticket Type",
+  "ticketClass": "Ticket Class",
+  "firstClass": "First Class",
+  "economicClass": "Economic Class",
+  "businessClass": "Business Class",
+  "sun": "Sun",
+    "mon": "Mon",
+    "tue": "Tues",
+    "wed": "Wed",
+    "thu": "Thu",
+    "fri": "Fri",
+    "sat": "Sat",
+  "emptyUserTickets": "No tickets available",
+  "express": "Express",
+  "ordinary": "Ordinary",
+  "touristic": "Touristic",
+  "upComing": "Up Coming",
+  "done": "Done",
+  "myTickets": "My Tickets",
+  "selectDate": "Select Date",
+  "selectDateDescription": "Select the date you want to travel",
+  "selectButton": "Select",
+  "all": "All",
+  "trainDetails": "Train Details",
+  "scanQr": "Scan the QR code below to enter the train station",
+  "selectSeat": "Select your seat",
+  "trainSeats" : "Train Seats",
+  "remainingSeats" : "Remaining Seats",
+  "totalPrice" : "Total Price",
+  "confirmButton" : "Confirm",
+  "cancelButton" : "Cancel",
+  "explore": "Explore",
+  "payment": "Payment",
+  "payNow": "Pay Now",
+  "paymentMethod": "Payment Method",
+  "paymentMethodDescription": "Select a payment method to proceed.",
+  "paySuccess": "Payment Successful",
+  "closeButton": "Close",
+  "paySuccessInfo" : "Your ticket for the journey has been successful. Thank you!",
+  "paymentInfo" : "Your ticket on hold for 5 minutes please pay now to confirm your ticket",
+  "paypal": "Paypal",
+  "masterCard": "Master Card",
+  "fawry": "Fawry",
+  "vodafoneCash": "Vodafone Cash",
+  "selectStation": "Select Station",
+  "selectStationDescription": "Select the station you want to travel",
+  "selectLanguage": "Select Language",
+    "selectLanguageDescription": "Select the language you want to use",
+  "settings": "Settings",
+  "general": "General",
+  "editProfile": "Edit Profile",
+  "legal": "Legal Policies",
+  "logout": "Logout",
+  "logoutConfirmation": "Are you sure you want to logout?",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+  "languageLabel": "Language",
+  "preferences": "Preferences",
+  "termsAndConditionsLabel": "Terms & Conditions",
+  "privacyPolicyLabel": "Privacy Policy",
+  "changesToTheServiceAndOrTerms": "Changes to the Service and/or Terms",
+  "changesToTheServiceAndOrTermsContent": "Book Train Ticket reserves the right to update, modify, or change the content available in the app, as well as the terms and conditions, at any time. Users will be notified of major updates. By continuing to use the app, users accept these changes and agree to any updated terms.",
+  "privacyPolicyContent" : "Book Train Ticket respects user privacy. We do not collect personal data without consent. Data collected, such as reading preferences, will be used to improve user experience. No information is shared with third parties,",
+  "termsAndConditionsContent" : "By using the app, users agree to the terms and conditions. Users must be at least 18 years old to use the app. Users are responsible for maintaining the confidentiality of their account information. Book Train Ticket is not responsible for any loss or damage resulting from unauthorized access to user accounts."
+
+}
+
+

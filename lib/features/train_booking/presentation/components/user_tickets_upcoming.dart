@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mahattaty/core/generic%20components/mahattaty_empty_data.dart';
-
 import '../../../../core/utils/open_screens.dart';
 import '../../domain/entities/ticket.dart';
 import '../../domain/entities/train.dart';
 import '../screens/ticket_details_screen.dart';
 import 'cards/train_card.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserTicketsUpComing extends StatelessWidget {
   const UserTicketsUpComing({super.key, required this.tickets});
@@ -15,7 +15,7 @@ class UserTicketsUpComing extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (tickets.isEmpty) {
-      return const MahattatyEmptyData(message: 'No upcoming tickets');
+      return MahattatyEmptyData(message: AppLocalizations.of(context)!.emptyUserTickets);
     }
     return ListView.builder(
       itemCount: tickets.length,

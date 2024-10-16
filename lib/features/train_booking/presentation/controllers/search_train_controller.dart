@@ -11,8 +11,8 @@ class TrainSearchState {
 
   TrainSearchState({
     this.ticketType = TicketType.oneWay,
-    this.fromStation = TrainStations.alexandria,
-    this.toStation = TrainStations.cairo,
+    this.fromStation = TrainStations.cairo,
+    this.toStation = TrainStations.alexandria,
     Timestamp? departureDate,
   }) : departureDate = departureDate ?? Timestamp.now();
 

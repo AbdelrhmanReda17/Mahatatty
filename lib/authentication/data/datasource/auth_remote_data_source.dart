@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -123,6 +125,11 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
       return userModel;
     } on FirebaseAuthException catch (e) {
       throw AuthException(e, AuthErrorAction.signIn);
+    } catch (e) {
+      throw AuthException(
+          FirebaseAuthException(
+              message: "An Error occurred while signing in", code: 'unknown'),
+          AuthErrorAction.signIn);
     }
   }
 
@@ -137,13 +144,21 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
       if (result.user != null) {
         await result.user!.updateDisplayName(username);
         await result.user!.reload();
-        UserModel userModel = UserModel.fromFirebaseUser(result.user!);
-        await _saveUserToPreferences(userModel);
-        return userModel;
+        User? updatedUser = firebaseAuth.currentUser;
+        if (updatedUser != null) {
+          UserModel userModel = UserModel.fromFirebaseUser(updatedUser);
+          await _saveUserToPreferences(userModel);
+          return userModel;
+        }
       }
       return null;
     } on FirebaseAuthException catch (e) {
       throw AuthException(e, AuthErrorAction.signUp);
+    } catch (e) {
+      throw AuthException(
+          FirebaseAuthException(
+              message: "An Error occurred while signing up", code: 'unknown'),
+          AuthErrorAction.signUp);
     }
   }
 

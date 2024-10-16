@@ -3,9 +3,10 @@ import 'package:mahattaty/core/utils/open_screens.dart';
 import '../../../authentication/presentation/screens/authentication_screen.dart';
 import '../../../core/generic components/mahattaty_button.dart';
 import '../../domain/entities/onboarding_step.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OnboardingStep extends StatefulWidget {
-  OnboardingStep({
+  const OnboardingStep({
     super.key,
     required this.onBoardingStep,
     required this.controller,
@@ -13,7 +14,7 @@ class OnboardingStep extends StatefulWidget {
   });
 
   final OnboardingStepData onBoardingStep;
-  bool? isLastElement;
+  final bool? isLastElement;
   final PageController controller;
 
   @override
@@ -42,11 +43,17 @@ class _MahattatyOnboardingState extends State<OnboardingStep>
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).colorScheme.primary;
+    final onPrimaryContainerColor =
+        Theme.of(context).colorScheme.onPrimaryContainer;
+    final bodyLarge = Theme.of(context).textTheme.bodyLarge!;
+    final headlineMedium = Theme.of(context).textTheme.headlineMedium!;
+
     return LayoutBuilder(
       builder: (context, constraints) {
         var nextButton = FloatingActionButton(
-          tooltip: 'Next',
-          backgroundColor: Theme.of(context).colorScheme.primary,
+          tooltip: AppLocalizations.of(context)!.nextButton,
+          backgroundColor: primaryColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(50),
           ),
@@ -56,15 +63,17 @@ class _MahattatyOnboardingState extends State<OnboardingStep>
               curve: Curves.easeIn,
             );
           },
-          child: const Icon(Icons.arrow_forward),
+          child: const Icon(
+            Icons.arrow_forward,
+            color: Colors.white,
+          ),
         );
-
         var getStartedButton = SizedBox(
           width: constraints.maxWidth * 0.45,
           child: MahattatyButton(
             style: MahattatyButtonStyle.primary,
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            text: 'Get Started',
+            backgroundColor: primaryColor,
+            text: AppLocalizations.of(context)!.getStartedButton,
             onPressed: () {
               OpenScreen.open(
                 context: context,
@@ -78,11 +87,11 @@ class _MahattatyOnboardingState extends State<OnboardingStep>
           width: constraints.maxWidth * 0.45,
           child: MahattatyButton(
             style: MahattatyButtonStyle.secondary,
-            text: 'Login',
-            borderColor: Theme.of(context).colorScheme.primary,
-            textStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+            text: AppLocalizations.of(context)!.signInButton,
+            borderColor: primaryColor,
+            textStyle: bodyLarge.copyWith(
+              color: primaryColor,
+            ),
             onPressed: () {
               OpenScreen.open(
                 context: context,
@@ -94,10 +103,10 @@ class _MahattatyOnboardingState extends State<OnboardingStep>
         );
         var skipButton = TextButton(
           style: TextButton.styleFrom(
-            foregroundColor: Theme.of(context).colorScheme.primary,
-            textStyle: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+            foregroundColor: primaryColor,
+            textStyle: bodyLarge.copyWith(
+              color: primaryColor,
+            ),
           ),
           onPressed: () {
             widget.controller.animateToPage(
@@ -106,58 +115,51 @@ class _MahattatyOnboardingState extends State<OnboardingStep>
               curve: Curves.easeInOut,
             );
           },
-          child: const Text('Skip'),
+          child: Text(AppLocalizations.of(context)!.skipButton),
         );
-        return ListView(
+
+        return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
-          children: [
-            FadeTransition(
-              opacity: _controller,
-              child: Image.asset(
-                widget.onBoardingStep.image,
-                height: constraints.maxHeight * 0.56,
+          child: Column(
+            children: [
+              FadeTransition(
+                opacity: _controller,
+                child: Image.asset(
+                  widget.onBoardingStep.image,
+                  height: constraints.maxHeight * 0.56,
+                ),
               ),
-            ),
-            FadeTransition(
-              opacity: _controller,
-              child: Column(
-                children: [
-                  SizedBox(height: constraints.maxHeight * 0.08),
-                  Text(
-                    widget.onBoardingStep.title,
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headlineMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    textAlign: TextAlign.center,
-                    widget.onBoardingStep.description,
-                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                          color: Colors.grey,
-                        ),
-                  ),
-                  Align(
-                    widthFactor: 1,
-                    heightFactor: 3,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        if (!widget.isLastElement!) skipButton else loginButton,
-                        if (widget.isLastElement!)
-                          getStartedButton
-                        else
-                          nextButton,
-                      ],
-                    ),
-                  ),
-                ],
+              const SizedBox(height: 20),
+              Text(
+                widget.onBoardingStep.title,
+                textAlign: TextAlign.center,
+                style: headlineMedium.copyWith(
+                  color: primaryColor,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-          ],
+              const SizedBox(height: 10),
+              Text(
+                textAlign: TextAlign.center,
+                widget.onBoardingStep.description,
+                style: bodyLarge.copyWith(
+                  color: onPrimaryContainerColor,
+                ),
+              ),
+              const Spacer(),
+              Container(
+                margin: const EdgeInsets.only(bottom: 25),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    if (!widget.isLastElement!) skipButton else loginButton,
+                    if (widget.isLastElement!) getStartedButton else nextButton,
+                  ],
+                ),
+              ),
+            ],
+          ),
         );
       },
     );

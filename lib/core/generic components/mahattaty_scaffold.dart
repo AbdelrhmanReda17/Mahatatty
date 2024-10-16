@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 // ignore: camel_case_types
 enum backgroundHeight { small, medium, large }
@@ -36,6 +37,7 @@ class MahattatyScaffold extends StatelessWidget {
       },
       child: Scaffold(
         backgroundColor: const Color(0xFFf5f5f5),
+        drawerEdgeDragWidth: 0,
         appBar: AppBar(
           shadowColor: Colors.transparent,
           surfaceTintColor: Colors.transparent,
@@ -43,13 +45,26 @@ class MahattatyScaffold extends StatelessWidget {
           titleSpacing: 0,
           backgroundColor: Theme.of(context).colorScheme.primary,
           iconTheme: const IconThemeData(color: Colors.white),
-          elevation: 0.0,
+          elevation: 0,
           title: appBarContent,
         ),
         body: Stack(
+          clipBehavior: Clip.none,
           children: [
             Container(
-              color: Theme.of(context).colorScheme.primary,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: const [0.0, 0.8],
+                  colors: [
+                    Theme.of(context).colorScheme.primary,
+                    Theme.of(context).colorScheme.primary.withOpacity(0.8),
+                  ],
+                ),
+              ),
+              margin: const EdgeInsets.all(0),
+              padding: const EdgeInsets.all(0),
               height: bgHeight == backgroundHeight.small
                   ? MediaQuery.of(context).size.height * 0.1
                   : bgHeight == backgroundHeight.medium

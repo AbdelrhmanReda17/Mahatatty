@@ -9,23 +9,25 @@ import '../components/trending_topics.dart';
 import '../controllers/all_news_controller.dart';
 import '../controllers/latest_news_controller.dart';
 import '../controllers/search_news_controller.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NewsScreen extends ConsumerWidget {
   const NewsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final surfaceColor = Theme.of(context).colorScheme.surface;
     return MahattatyScaffold(
       appBarContent: Padding(
         padding: const EdgeInsets.only(left: 10),
         child: Padding(
           padding: const EdgeInsets.only(left: 10, right: 10),
           child: Text(
-            'Hot News',
+            AppLocalizations.of(context)!.hotNews,
             style: TextStyle(
-              color: Theme.of(context).colorScheme.surface,
+              color: surfaceColor,
               fontSize: 20,
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.bold
             ),
           ),
         ),
@@ -37,28 +39,31 @@ class NewsScreen extends ConsumerWidget {
           ref.refresh(latestNewsController);
           ref.refresh(allNewsController);
         },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          child: Column(
-            children: [
-              MahattatySearch(
-                onPressed: (value) {
-                  ref.read(newsSearchProvider.notifier).state =
-                      ref.read(newsSearchProvider).copyWith(query: value);
-                  OpenScreen.openScreenWithSmoothAnimation(
-                    context,
-                    const NewsSearchScreen(),
-                    false,
-                  );
-                },
-              ),
-              const SizedBox(height: 20),
-              const TrendingTopics(),
-              const SizedBox(height: 20),
-              const Expanded(
-                child: LatestNews(),
-              ),
-            ],
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: Column(
+              children: [
+                MahattatySearch(
+                  onPressed: (value) {
+                    ref.read(newsSearchProvider.notifier).state =
+                        ref.read(newsSearchProvider).copyWith(query: value);
+                    OpenScreen.openScreenWithSmoothAnimation(
+                      context,
+                      const NewsSearchScreen(),
+                      false,
+                    );
+                  },
+                ),
+                const SizedBox(height: 20),
+                const TrendingTopics(),
+                const SizedBox(height: 20),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  child: const LatestNews(),
+                ),
+              ],
+            ),
           ),
         ),
       ),

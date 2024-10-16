@@ -3,6 +3,6 @@ import 'package:mahattaty/features/train_booking/presentation/providers/train_pr
 
 import '../../domain/usecases/get_train_by_search_usecase.dart';
 
-final getTrainsBySearchUseCaseProvider = Provider<GetTrainsBySearch>((ref) {
+final getTrainsBySearchUseCaseProvider = Provider.autoDispose<GetTrainsBySearch>((ref) {
   return GetTrainsBySearch(ref.read(trainRepositoryProvider));
 });

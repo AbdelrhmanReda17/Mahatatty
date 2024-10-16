@@ -4,6 +4,7 @@ import '../../../../core/generic components/mahattaty_empty_data.dart';
 import '../../domain/entities/ticket.dart';
 import '../../domain/entities/train.dart';
 import 'cards/train_card.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserTicketsDone extends StatelessWidget {
   const UserTicketsDone({super.key, required this.tickets});
@@ -13,7 +14,7 @@ class UserTicketsDone extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (tickets.isEmpty) {
-      return const MahattatyEmptyData(message: 'No done tickets');
+      return MahattatyEmptyData(message: AppLocalizations.of(context)!.emptyUserTickets);
     }
     return ListView.builder(
       itemCount: tickets.length,

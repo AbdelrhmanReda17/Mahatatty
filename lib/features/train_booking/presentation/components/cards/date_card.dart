@@ -18,20 +18,22 @@ class DateCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final onPrimaryContainer = Theme.of(context).colorScheme.onPrimaryContainer;
+    final primary = Theme.of(context).colorScheme.primary;
+    final surface = Theme.of(context).colorScheme.surface;
+
     return GestureDetector(
       onTap: isEnabled ? onSelect : null,
       child: Container(
-        width: 50,
+        width: 59,
         height: 90,
         decoration: BoxDecoration(
           color: !isEnabled
-              ? Theme.of(context)
-                  .colorScheme
-                  .onPrimaryContainer
+              ?  onPrimaryContainer
                   .withOpacity(0.1)
               : isSelected
-                  ? Theme.of(context).colorScheme.primary
-                  : Theme.of(context).colorScheme.primaryContainer,
+                  ? primary
+                  : surface,
           borderRadius: BorderRadius.circular(30),
         ),
         child: Padding(
@@ -43,7 +45,7 @@ class DateCard extends StatelessWidget {
                 style: isSelected
                     ? TextStyle(
                         fontWeight: FontWeight.w900,
-                        color: Theme.of(context).colorScheme.onSecondary,
+                        color: surface,
                         fontSize: 20)
                     : const TextStyle(
                         fontWeight: FontWeight.w900, fontSize: 20),
@@ -52,10 +54,10 @@ class DateCard extends StatelessWidget {
                 day,
                 style: isSelected
                     ? TextStyle(
-                        color: Theme.of(context).colorScheme.onSecondary)
+                        color: surface)
                     : TextStyle(
                         color:
-                            Theme.of(context).colorScheme.onPrimaryContainer),
+                            onPrimaryContainer),
               )
             ],
           ),

@@ -54,21 +54,9 @@ void mahattatyAlertDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Row(
-          children: [
-            Icon(
-              icon,
-              color: color,
-            ),
-            const SizedBox(width: 10),
-            Text(
-              type.toString().split('.').last.toUpperCase(),
-              style: TextStyle(
-                color: color,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
+        title: Icon(
+          icon,
+          color: color,
         ),
         content: Text(message),
         actions: [okButton, if (showCancelButton) cancelButton],

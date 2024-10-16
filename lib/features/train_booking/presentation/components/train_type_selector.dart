@@ -33,7 +33,7 @@ class _TrainTypeSelectorState extends State<TrainTypeSelector>{
     return GestureDetector(
       onTap: (){
         setState(() {
-          _isSelected = !_isSelected; // Toggle selection state
+          _isSelected = !_isSelected;
         });
         widget.onSelected(_isSelected);
       },

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:mahattaty/features/news/data/datasource/news_remote_data_source.dart';
 import 'package:mahattaty/features/news/domain/entities/news.dart';
 import 'package:mahattaty/features/news/domain/repository/news_repository.dart';
@@ -19,10 +17,6 @@ class NewsRepository extends BaseNewsRepository {
     return newsRemoteDataSource.getLatestNews();
   }
 
-  @override
-  Future<List<News>> getNewsByCategory(String category) {
-    return newsRemoteDataSource.getNewsByCategory(category);
-  }
 
   @override
   Future<List<News>> getNewsByQuery(String query) {

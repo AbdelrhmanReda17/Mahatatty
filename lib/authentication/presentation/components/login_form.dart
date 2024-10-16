@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mahattaty/authentication/Exceptions/auth_exception.dart';
+import 'package:mahattaty/authentication/presentation/components/form_error.dart';
 import 'package:mahattaty/authentication/presentation/controllers/auth_controller.dart';
 import 'package:mahattaty/core/utils/open_dialogs.dart';
 import 'package:mahattaty/core/utils/validations.dart';
 import '../../../core/generic components/mahattaty_button.dart';
 import '../../../core/generic components/mahattaty_text_form_field.dart';
 import 'dialogs/forget_password.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginForm extends ConsumerWidget {
   LoginForm({super.key});
@@ -24,6 +26,8 @@ class LoginForm extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authControllerProvider);
     final authNotifier = ref.read(authControllerProvider.notifier);
+    final primaryColor = Theme.of(context).colorScheme.primary;
+    final bodyMedium = Theme.of(context).textTheme.bodyMedium!;
 
     return Form(
       key: _loginFormKey,
@@ -35,57 +39,62 @@ class LoginForm extends ConsumerWidget {
           children: [
             MahattatyTextFormField(
               fieldKey: _loginKeys[0],
-              labelText: 'Email ',
+              labelText: AppLocalizations.of(context)!.emailLabel,
               controller: _loginControllers[0],
               iconData: FontAwesomeIcons.envelope,
-              errorText:
-                  authState.exception?.action == AuthErrorAction.signIn &&
-                          authState.exception?.code == AuthErrorType.emailError
-                      ? authState.exception?.message
-                      : null,
-              validator: (value) => value!.isValidPhoneOrEmail
+              validator: (value) => value!.isValidEmail
                   ? null
-                  : 'Invalid Input, Please enter a valid email ',
-              hintText: 'Enter your email',
+                  : AppLocalizations.of(context)!.emailError,
+              hintText: AppLocalizations.of(context)!.emailHint,
+              onChanged: (value) {
+                if (authState.exception != null) authNotifier.clearException();
+              },
             ),
             const SizedBox(height: 20),
             MahattatyTextFormField(
               fieldKey: _loginKeys[1],
-              labelText: 'Password',
+              labelText: AppLocalizations.of(context)!.passwordLabel,
               controller: _loginControllers[1],
               isPassword: true,
-              errorText: authState.exception?.action ==
-                          AuthErrorAction.signIn &&
-                      authState.exception?.code == AuthErrorType.passwordError
-                  ? authState.exception?.message
-                  : null,
               iconData: FontAwesomeIcons.lock,
-              hintText: 'Create your password',
-              validator: (value) =>
-                  value!.isEmpty ? 'Password is required' : null,
+              hintText: AppLocalizations.of(context)!.passwordHint,
+              validator: (value) => value!.isEmpty
+                  ? AppLocalizations.of(context)!.passwordRequired
+                  : null,
+              onChanged: (value) {
+                if (authState.exception != null) authNotifier.clearException();
+              },
             ),
             const SizedBox(height: 20),
             Row(
               children: [
                 const Spacer(),
                 GestureDetector(
-                  onTap: () => OpenDialogs.openCustomDialog(
-                    context: context,
-                    dialog: ForgetPassword(),
-                  ),
+                  onTap: () => authState.isLoading
+                      ? null
+                      : OpenDialogs.openCustomDialog(
+                          context: context,
+                          dialog: ForgetPassword(),
+                        ),
                   child: Text(
-                    'Forgot Password?',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontSize: 16.5,
-                    ),
+                    AppLocalizations.of(context)!.forgotPassword,
+                    style: bodyMedium.copyWith(color: primaryColor),
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 20),
+            FormError(
+              isShow: (authState.exception != null &&
+                  authState.exception!.code != AuthErrorType.unknownError &&
+                  authState.exception!.action == AuthErrorAction.signIn),
+              message: authState.exception != null
+                  ? AppLocalizations.of(context)!.loginError
+                  : '',
+            ),
+            const SizedBox(height: 5),
             MahattatyButton(
-              text: 'Sign In',
+              text: AppLocalizations.of(context)!.signInButton,
               style: MahattatyButtonStyle.primary,
               disabled: authState.isLoading,
               onPressed: () async {

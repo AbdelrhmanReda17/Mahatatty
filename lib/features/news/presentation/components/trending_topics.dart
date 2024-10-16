@@ -7,6 +7,7 @@ import '../../../../core/utils/open_screens.dart';
 import '../controllers/all_news_controller.dart';
 import '../screens/news_screen.dart';
 import 'Cards/trending_news_card.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TrendingTopics extends ConsumerWidget {
   const TrendingTopics({super.key, this.seeMoreEnabled = false});
@@ -16,6 +17,8 @@ class TrendingTopics extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final newsState = ref.watch(allNewsController);
+    final surface = Theme.of(context).colorScheme.surface;
+    final bodyLarge = Theme.of(context).textTheme.bodyLarge!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,11 +27,11 @@ class TrendingTopics extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Trending Topic',
-              style: TextStyle(
+              AppLocalizations.of(context)!.trendingNews,
+              style: bodyLarge.copyWith(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.surface,
+                color: surface,
               ),
             ),
             if (seeMoreEnabled)
@@ -41,10 +44,8 @@ class TrendingTopics extends ConsumerWidget {
                   );
                 },
                 child: Text(
-                  'See All',
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimary,
-                      ),
+                  AppLocalizations.of(context)!.seeAll,
+                  style: bodyLarge.copyWith(color: surface),
                 ),
               ),
           ],
@@ -55,7 +56,7 @@ class TrendingTopics extends ConsumerWidget {
           child: newsState.when(
             data: (news) {
               if (news.isEmpty) {
-                return const MahattatyEmptyData(message: 'No News Available');
+                return  MahattatyEmptyData(message: AppLocalizations.of(context)!.emptyTrendingNews);
               }
               return ListView.builder(
                 scrollDirection: Axis.horizontal,

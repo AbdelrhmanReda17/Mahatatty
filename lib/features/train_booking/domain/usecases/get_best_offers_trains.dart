@@ -1,6 +1,4 @@
 import 'package:mahattaty/features/train_booking/domain/repository/train_repository.dart';
-
-import '../../data/repository/train_repository.dart';
 import '../entities/train.dart';
 
 class GetBestOffersTrainsUseCase {

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -8,6 +6,9 @@ import 'package:mahattaty/core/utils/validations.dart';
 import '../../../core/generic components/mahattaty_button.dart';
 import '../../../core/generic components/mahattaty_text_form_field.dart';
 import '../../Exceptions/auth_exception.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'form_error.dart';
 
 class RegisterForm extends ConsumerWidget {
   RegisterForm({super.key});
@@ -31,48 +32,38 @@ class RegisterForm extends ConsumerWidget {
             children: [
               MahattatyTextFormField(
                 fieldKey: _registerKeys[0],
-                labelText: 'Name',
+                labelText: AppLocalizations.of(context)!.usernameLabel,
                 controller: _registerControllers[0],
                 iconData: FontAwesomeIcons.user,
-                hintText: 'Enter your name',
+                hintText: AppLocalizations.of(context)!.usernameHint,
                 validator: (value) => value!.isValidUsername
                     ? null
-                    : 'Invalid Input , must be at least 3 characters',
+                    : AppLocalizations.of(context)!.usernameError,
                 onChanged: (value) => _registerKeys[0].currentState!.validate(),
               ),
               const SizedBox(height: 20),
               MahattatyTextFormField(
                 fieldKey: _registerKeys[1],
-                labelText: 'Email',
+                labelText: AppLocalizations.of(context)!.emailLabel,
                 controller: _registerControllers[1],
                 iconData: FontAwesomeIcons.envelope,
-                hintText: 'Enter your email',
-                errorText: authState.exception?.code ==
-                            AuthErrorType.emailError &&
-                        authState.exception?.action == AuthErrorAction.signUp
-                    ? authState.exception?.message
-                    : null,
-                validator: (value) => value!.isValidPhoneOrEmail
+                hintText: AppLocalizations.of(context)!.emailHint,
+                validator: (value) => value!.isValidEmail
                     ? null
-                    : 'Invalid Input  , must be a valid email',
+                    : AppLocalizations.of(context)!.emailError,
                 onChanged: (value) => _registerKeys[1].currentState!.validate(),
               ),
               const SizedBox(height: 20),
               MahattatyTextFormField(
                 fieldKey: _registerKeys[2],
-                labelText: 'Password',
+                labelText: AppLocalizations.of(context)!.passwordLabel,
                 controller: _registerControllers[2],
                 isPassword: true,
-                errorText: authState.exception?.code ==
-                            AuthErrorType.passwordError &&
-                        authState.exception?.action == AuthErrorAction.signUp
-                    ? authState.exception?.message
-                    : null,
                 iconData: FontAwesomeIcons.lock,
-                hintText: 'Create your password',
+                hintText: AppLocalizations.of(context)!.passwordHint,
                 validator: (value) => value!.isValidPassword
                     ? null
-                    : 'Invalid Input , must be at least 8 characters With at least one uppercase letter, one lowercase letter',
+                    : AppLocalizations.of(context)!.passwordError,
                 onChanged: (value) {
                   _registerKeys[2].currentState!.validate();
                   _registerKeys[3].currentState!.validate();
@@ -81,20 +72,29 @@ class RegisterForm extends ConsumerWidget {
               const SizedBox(height: 20),
               MahattatyTextFormField(
                 fieldKey: _registerKeys[3],
-                labelText: 'Confirm Password',
+                labelText: AppLocalizations.of(context)!.confirmPasswordLabel,
                 controller: _registerControllers[3],
                 isPassword: true,
                 iconData: FontAwesomeIcons.lock,
-                hintText: 'Confirm your password',
+                hintText: AppLocalizations.of(context)!.confirmPasswordHint,
                 validator: (value) =>
                     value!.isValidConfirmPassword(_registerControllers[2].text)
                         ? null
-                        : 'Invalid Input , must be the same as the password',
+                        : AppLocalizations.of(context)!.confirmPasswordError,
                 onChanged: (value) => _registerKeys[3].currentState!.validate(),
               ),
               const SizedBox(height: 20),
+              FormError(
+                isShow: (authState.exception != null &&
+                    authState.exception!.code != AuthErrorType.unknownError &&
+                    authState.exception!.action == AuthErrorAction.signUp),
+                message: authState.exception != null
+                    ? AppLocalizations.of(context)!.registerError
+                    : '',
+              ),
+              const SizedBox(height: 5),
               MahattatyButton(
-                text: 'Sign Up',
+                text: AppLocalizations.of(context)!.signUpButton,
                 style: MahattatyButtonStyle.primary,
                 disabled: authState.isLoading,
                 onPressed: () async {

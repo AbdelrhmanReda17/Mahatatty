@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mahattaty/core/generic%20components/mahattaty_dialog.dart';
+import 'package:mahattaty/core/utils/app_localizations_extension.dart';
 import 'package:mahattaty/features/train_booking/domain/entities/train.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MahattatyTrainStationPicker extends StatefulWidget {
   const MahattatyTrainStationPicker({super.key, required this.onSelected});
@@ -20,9 +22,9 @@ class _MahattatyTrainStationPickerState
   @override
   Widget build(BuildContext context) {
     return MahattatyDialog(
-      title: 'Select Station',
-      description: 'Select the station you want to travel from',
-      buttonText: 'Select',
+      title: AppLocalizations.of(context)!.selectStation,
+      description: AppLocalizations.of(context)!.selectStationDescription,
+      buttonText: AppLocalizations.of(context)!.selectButton,
       onButtonPressed: () {
         widget.onSelected(selectedStation);
         Navigator.of(context).pop();
@@ -49,7 +51,7 @@ class _MahattatyTrainStationPickerState
               for (var station in TrainStations.values)
                 Center(
                   child: Text(
-                    station.name,
+                    AppLocalizations.of(context)!.station(station.code),
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onPrimary,
                       fontSize: 20,

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PaymentMethodTile extends StatelessWidget {
@@ -9,13 +8,13 @@ class PaymentMethodTile extends StatelessWidget {
   final VoidCallback onTap;
 
   const PaymentMethodTile({
-    Key? key,
+    super.key,
     required this.assetPath,
     required this.label,
     required this.detail,
     required this.isSelected,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +40,7 @@ class PaymentMethodTile extends StatelessWidget {
                   width: 33,
                   height: 33,
                   errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                    return Icon(
+                    return const Icon(
                       Icons.image_not_supported,
                       size: 33,
                       color: Colors.grey,

@@ -50,21 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCfucmDUCKa6X7Z3X7QRRYZP5kLmBznMIQ',
-    appId: '1:750210986338:android:bf6ab16001511441ac7c3b',
-    messagingSenderId: '750210986338',
-    projectId: 'mahattaty',
-    storageBucket: 'mahattaty.appspot.com',
+    apiKey: 'AIzaSyBD3bbii4jjMJBHLqISnCzVX7ekzNxSm6g',
+    appId: '1:926644695193:android:615a451d35fa80e96d8808',
+    messagingSenderId: '926644695193',
+    projectId: 'mahattaty-application',
+    storageBucket: 'mahattaty-application.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAhllVODp4sFIP-yjRX0Ivc672ARC2LBXk',
-    appId: '1:750210986338:ios:b003b230165a0268ac7c3b',
-    messagingSenderId: '750210986338',
-    projectId: 'mahattaty',
-    storageBucket: 'mahattaty.appspot.com',
-    androidClientId: '750210986338-a9jdvles6mhlnkvr65c9gdneckuue0s2.apps.googleusercontent.com',
-    iosClientId: '750210986338-hmnj22iv8t8dkh9ecdl4duavljrm8dus.apps.googleusercontent.com',
+    apiKey: 'AIzaSyClxnoPyHjNt1arZ590TEKRfeEnjqh0mHQ',
+    appId: '1:926644695193:ios:45111c7987b4eea86d8808',
+    messagingSenderId: '926644695193',
+    projectId: 'mahattaty-application',
+    storageBucket: 'mahattaty-application.appspot.com',
+    iosClientId: '926644695193-g6dkfhpurcgop33jem7b4ecko44egtea.apps.googleusercontent.com',
     iosBundleId: 'com.example.mahattaty',
   );
 }

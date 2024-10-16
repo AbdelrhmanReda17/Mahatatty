@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mahattaty/core/utils/app_localizations_extension.dart';
 
 class LegalAndPoliciesScreen extends StatelessWidget {
   const LegalAndPoliciesScreen({super.key});
@@ -7,92 +9,76 @@ class LegalAndPoliciesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Legal and Policies"),
+        title: Text(AppLocalizations.of(context)!.legal),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () {},
-          ),
-        ],
       ),
-      body: const SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const ListTile(
-              contentPadding: EdgeInsets.all(0),
-              title: Text(
-                "Terms and Conditions",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              trailing: Text(
-                "1st January 2022",
-              ),
-            ),
-            SizedBox(height: 8),
-            Text(
-              // Terms content
-              "This app, 'Book Train Ticket', offers users an immersive reading "
-              "experience during their train journeys. Users can access a wide range of books "
-              "while offline, ensuring entertainment throughout their trip. By using this app, "
-              "users agree not to redistribute or share any content without the publisher's consent."
-              " Book Train Ticket holds no responsibility for external content accessed through third-party links.",
-              style: TextStyle(fontSize: 16),
-            ),
-            SizedBox(height: 24),
             ListTile(
-              contentPadding: EdgeInsets.all(0),
+              contentPadding: const EdgeInsets.all(0),
               title: Text(
-                "Changes to the Service and/or Terms",
-                style: TextStyle(
+                AppLocalizations.of(context)!.termsAndConditionsLabel,
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              trailing: Text(
-                "1st January 2022",
+              trailing:  Text(
+                AppLocalizations.of(context)!.arabicOrEnglish('1 / 10 / 2022'),
               ),
             ),
-            SizedBox(height: 8),
-            Text(
-              "Book Train Ticket reserves the right to update, modify, or change the "
-              "content available in the app, as well as the terms and conditions, at any time. "
-              "Users will be notified of major updates. By continuing to use the app, users accept these"
-              " changes and agree to any updated terms.",
-              style: TextStyle(fontSize: 16),
+            const SizedBox(height: 8),
+             Text(
+              AppLocalizations.of(context)!.termsAndConditionsContent,
+              style: const TextStyle(fontSize: 16),
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             ListTile(
-              contentPadding: EdgeInsets.all(0),
+              contentPadding: const EdgeInsets.all(0),
               title: Text(
-                "Privacy Policy",
-                style: TextStyle(
+                AppLocalizations.of(context)!.changesToTheServiceAndOrTerms,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              trailing:  Text(
+                AppLocalizations.of(context)!.arabicOrEnglish('1 / 11 / 2022'),
+              ),
+            ),
+            const SizedBox(height: 8),
+             Text(
+              AppLocalizations.of(context)!.changesToTheServiceAndOrTermsContent,
+              style: const TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 24),
+             ListTile(
+              contentPadding:const EdgeInsets.all(0),
+              title: Text(
+                AppLocalizations.of(context)!.privacyPolicyLabel,
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               trailing: Text(
-                "1st January 2022",
+                AppLocalizations.of(context)!.arabicOrEnglish('1 / 12 / 2022'),
               ),
             ),
-            SizedBox(height: 8),
-            Text(
-              "Book Train Ticket respects user privacy. We do not collect personal data "
-              "without consent. Data collected, such as reading preferences, will be used "
-              "to improve user experience. No information is shared with third parties",
-              style: TextStyle(fontSize: 16),
+            const SizedBox(height: 8),
+             Text(
+              AppLocalizations.of(context)!.privacyPolicyContent,
+              style: const TextStyle(fontSize: 16),
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
           ],
         ),
       ),

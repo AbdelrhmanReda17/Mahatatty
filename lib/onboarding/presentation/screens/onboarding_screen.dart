@@ -14,13 +14,13 @@ class OnboardingScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final PageController controller = PageController();
     final List<OnboardingStepData> onboardingSteps =
-        ref.watch(getOnboardingStepsProvider).execute();
+        ref.watch(getOnboardingStepsProvider).execute(context);
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        toolbarHeight: 100,
+        toolbarHeight: 50,
       ),
       backgroundColor: Colors.white,
       body: Stack(
@@ -29,10 +29,10 @@ class OnboardingScreen extends ConsumerWidget {
             controller: controller,
             steps: onboardingSteps,
           ),
-          Positioned(
-            bottom: MediaQuery.of(context).size.height * 0.05,
-            width: MediaQuery.of(context).size.width,
-            child: Center(
+          Align(
+            alignment: Alignment.center,
+            child: Container(
+              margin: const EdgeInsets.only(top: 70),
               child: SmoothPageIndicator(
                 controller: controller,
                 count: onboardingSteps.length,

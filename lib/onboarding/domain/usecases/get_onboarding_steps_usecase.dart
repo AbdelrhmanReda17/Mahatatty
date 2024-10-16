@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:mahattaty/onboarding/domain/repository/onboarding_repository.dart';
 import '../entities/onboarding_step.dart';
 
@@ -6,7 +7,7 @@ class GetOnboardingStepsUseCase {
 
   GetOnboardingStepsUseCase(this.repository);
 
-  List<OnboardingStepData> execute() {
-    return repository.getOnboardingSteps();
+  List<OnboardingStepData> execute(BuildContext context) {
+    return repository.getOnboardingSteps(context);
   }
 }

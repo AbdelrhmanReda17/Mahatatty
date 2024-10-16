@@ -10,6 +10,8 @@ enum SettingsError {
 enum SettingsErrorAction {
   changePassword,
   editProfile,
+  changeLanguage,
+  loadLanguage,
 }
 
 class SettingsException {

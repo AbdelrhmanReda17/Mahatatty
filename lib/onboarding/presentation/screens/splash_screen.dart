@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mahattaty/authentication/presentation/controllers/auth_controller.dart';
 import 'package:mahattaty/core/utils/app_constance.dart';
 import '../controllers/splash_controller.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -47,32 +48,22 @@ class SplashScreenState extends ConsumerState<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
+    final TextStyle textStyle = Theme.of(context)
+        .textTheme
+        .displayLarge!
+        .copyWith(fontWeight: FontWeight.bold);
+
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 0.0,
-      ),
       body: FadeTransition(
         opacity: Tween<double>(begin: 0, end: 1).animate(_controller).drive(
               CurveTween(curve: Curves.easeInOut),
             ),
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                AppConstance.mahattatyLogo,
-              ),
-              Text(
-                "Mahattaty",
-                style: Theme.of(context)
-                    .textTheme
-                    .displayLarge!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(AppConstance.mahattatyLogo),
+            Text(AppLocalizations.of(context)!.appName, style: textStyle),
+          ],
         ),
       ),
     );

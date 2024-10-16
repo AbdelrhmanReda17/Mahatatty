@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-
-import '../../authentication/presentation/screens/authentication_screen.dart';
-import '../../onboarding/presentation/screens/onboarding_screen.dart';
-
 class OpenScreen {
   static void open({
     required BuildContext context,

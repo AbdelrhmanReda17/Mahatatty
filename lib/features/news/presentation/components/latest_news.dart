@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,7 +6,7 @@ import 'package:mahattaty/core/generic%20components/mahattaty_error.dart';
 import 'package:mahattaty/core/utils/open_screens.dart';
 import 'package:mahattaty/features/news/presentation/components/cards/skeletons/news_card_skeleton.dart';
 import 'package:mahattaty/features/news/presentation/screens/news_screen.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../controllers/latest_news_controller.dart';
 import 'Cards/news_card.dart';
 
@@ -19,7 +18,8 @@ class LatestNews extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var newsState = ref.watch(latestNewsController);
-
+    var onPrimaryColor = Theme.of(context).colorScheme.onPrimary;
+    var bodyLarge = Theme.of(context).textTheme.bodyLarge!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -27,11 +27,11 @@ class LatestNews extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Latest News',
-              style: TextStyle(
+              AppLocalizations.of(context)!.hotNews,
+              style: bodyLarge.copyWith(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.onPrimary,
+                color: onPrimaryColor,
               ),
             ),
             if (seeMoreEnabled)
@@ -44,9 +44,9 @@ class LatestNews extends ConsumerWidget {
                   );
                 },
                 child: Text(
-                  'See All',
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimary,
+                  AppLocalizations.of(context)!.seeAll,
+                  style: bodyLarge.copyWith(
+                        color: onPrimaryColor,
                       ),
                 ),
               ),
@@ -57,7 +57,7 @@ class LatestNews extends ConsumerWidget {
           child: newsState.when(
             data: (news) {
               if (news.isEmpty) {
-                return const MahattatyEmptyData(message: 'No News Available');
+                return MahattatyEmptyData(message: AppLocalizations.of(context)!.emptyHotNews);
               }
               return ListView.builder(
                 itemCount: news.length,

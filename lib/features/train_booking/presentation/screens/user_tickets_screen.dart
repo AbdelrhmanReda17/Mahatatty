@@ -3,12 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mahattaty/core/generic%20components/Dialogs/mahattaty_data_picker.dart';
 import 'package:mahattaty/core/generic%20components/mahattaty_error.dart';
 import 'package:mahattaty/core/generic%20components/mahattaty_loading.dart';
+import 'package:mahattaty/core/utils/app_localizations_extension.dart';
 import 'package:mahattaty/core/utils/open_dialogs.dart';
 import 'package:mahattaty/features/train_booking/domain/entities/train.dart';
 import '../../../../core/generic components/mahattaty_scaffold.dart';
 import '../components/user_tickets_tabs_controller.dart';
-import '../controllers/book_ticket_controller.dart';
 import '../controllers/get_user_booked_trains_controller.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserTicketsScreen extends ConsumerStatefulWidget {
   const UserTicketsScreen({super.key});
@@ -24,17 +25,20 @@ class UserTicketsScreenState extends ConsumerState<UserTicketsScreen> {
   @override
   Widget build(BuildContext context) {
     final userTickets = ref.watch(getUserBookedTrainsController);
+    final surfaceColor = Theme.of(context).colorScheme.surface;
     return MahattatyScaffold(
       appBarContent: Padding(
         padding: const EdgeInsets.only(left: 15),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              'My Ticket',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-            ),
+             Padding(
+               padding: const EdgeInsets.all(8.0),
+               child: Text(
+                AppLocalizations.of(context)!.myTickets,
+                style: TextStyle(color: surfaceColor, fontWeight: FontWeight.w600),
+                           ),
+             ),
             IconButton(
               onPressed: () {
                 OpenDialogs.openCustomDialog(
@@ -76,8 +80,10 @@ class UserTicketsScreenState extends ConsumerState<UserTicketsScreen> {
               ),
             ),
             loading: () => const Expanded(child: MahattatyLoading()),
-            error: (error, _) => MahattatyError(
-              onRetry: () => ref.refresh(getUserBookedTrainsController),
+            error: (error, _) => Expanded(
+              child: MahattatyError(
+                onRetry: () => ref.refresh(getUserBookedTrainsController),
+              ),
             ),
           ),
         ],
@@ -99,9 +105,11 @@ class FilterWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<String> filters = [
-      'All',
-      for (final TrainType status in TrainType.values) status.name
+      AppLocalizations.of(context)!.all,
+      for (final TrainType status in TrainType.values) AppLocalizations.of(context)!.train(status),
     ];
+    final primaryColor = Theme.of(context).colorScheme.primary;
+    final surfaceColor = Theme.of(context).colorScheme.surface;
 
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.085,
@@ -116,15 +124,15 @@ class FilterWidget extends StatelessWidget {
             child: ChoiceChip(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               showCheckmark: false,
-              backgroundColor: Theme.of(context).colorScheme.primary,
+              backgroundColor: primaryColor,
               selectedColor: Colors.white,
               disabledColor: Colors.white,
               labelStyle: isSelected
                   ? TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
+                      color: primaryColor,
                       fontSize: 17,
                     )
-                  : TextStyle(color: Theme.of(context).colorScheme.surface),
+                  : TextStyle(color: surfaceColor),
               label: Text(filters[index]),
               selected: isSelected,
               onSelected: (bool selected) {

@@ -9,6 +9,7 @@ import '../components/Cards/news_card.dart';
 import '../components/cards/skeletons/news_card_skeleton.dart';
 import '../controllers/news_by_query_controller.dart';
 import '../controllers/search_news_controller.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NewsSearchScreen extends ConsumerWidget {
   const NewsSearchScreen({super.key});
@@ -17,10 +18,12 @@ class NewsSearchScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final newsData =
         ref.watch(newsByQueryController(ref.watch(newsSearchProvider)));
+
+    final surfaceColor = Theme.of(context).colorScheme.surface;
     var screenBody = newsData.when(
       data: (news) {
         if (news.isEmpty) {
-          return const MahattatyEmptyData(message: 'No News Available');
+          return  MahattatyEmptyData(message: AppLocalizations.of(context)!.emptyNews);
         }
         return ListView.builder(
           itemCount: news.length,
@@ -50,9 +53,9 @@ class NewsSearchScreen extends ConsumerWidget {
         child: Row(
           children: [
             Text(
-              'Search Results',
+              AppLocalizations.of(context)!.searchResults,
               style: TextStyle(
-                color: Theme.of(context).colorScheme.surface,
+                color: surfaceColor,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -61,25 +64,30 @@ class NewsSearchScreen extends ConsumerWidget {
         ),
       ),
       bgHeight: backgroundHeight.small,
-      body: Padding(
-        padding: const EdgeInsets.only(left: 2, right: 2, top: 10),
-        child: Column(
+      body:
+         Column(
           children: [
-            MahattatySearch(
-              onPressed: (value) {
-                ref.read(newsSearchProvider.notifier).state =
-                    ref.read(newsSearchProvider).copyWith(query: value);
-                ref.refresh(
-                    newsByQueryController(ref.watch(newsSearchProvider)));
-              },
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: MahattatySearch(
+                onPressed: (value) {
+                  ref.read(newsSearchProvider.notifier).state =
+                      ref.read(newsSearchProvider).copyWith(query: value);
+                  ref.refresh(
+                      newsByQueryController(ref.watch(newsSearchProvider)));
+                },
+              ),
             ),
             const SizedBox(height: 10),
             Expanded(
-              child: screenBody,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: screenBody,
+              ),
             ),
           ],
         ),
-      ),
+
     );
   }
 }

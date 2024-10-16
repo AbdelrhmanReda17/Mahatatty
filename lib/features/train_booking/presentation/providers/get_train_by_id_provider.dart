@@ -3,7 +3,7 @@ import 'package:mahattaty/features/train_booking/presentation/providers/train_pr
 
 import '../../domain/entities/train.dart';
 
-final getTrainByIdProvider = FutureProvider.family<Train, String>((ref, trainId) async {
+final getTrainByIdProvider = FutureProvider.family.autoDispose<Train, String>((ref, trainId) async {
   final repository = ref.read(trainRepositoryProvider);
   final train = await repository.getTrainById(trainId);
   return train;

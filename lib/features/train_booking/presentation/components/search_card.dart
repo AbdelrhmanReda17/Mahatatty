@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,8 +12,8 @@ import '../../../../core/generic components/mahattaty_alert.dart';
 import '../../../../core/generic components/mahattaty_button.dart';
 import '../../../../core/utils/time_converter.dart';
 import '../../domain/entities/ticket.dart';
-import '../controllers/get_trains_by_search_controller.dart';
 import 'cards/helpers/train_station_details.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SearchCardForm extends ConsumerWidget {
   const SearchCardForm({super.key});
@@ -22,10 +21,14 @@ class SearchCardForm extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchState = ref.watch(trainSearchProvider);
+    final primaryColor = Theme.of(context).colorScheme.primary;
+    final onPrimaryContainer = Theme.of(context).colorScheme.onPrimaryContainer;
+    final onPrimary = Theme.of(context).colorScheme.onPrimary;
+    final surface = Theme.of(context).colorScheme.surface;
 
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
+        color: surface,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Padding(
@@ -35,18 +38,18 @@ class SearchCardForm extends ConsumerWidget {
             Row(
               children: [
                 ChoiceChip.elevated(
-                  label: const Text('One Way'),
+                  label: Text(AppLocalizations.of(context)!.oneWay),
                   selected: searchState.ticketType == TicketType.oneWay,
-                  selectedColor: Theme.of(context).colorScheme.primary,
+                  selectedColor: primaryColor,
                   onSelected: (_) =>
                       ref.read(trainSearchProvider.notifier).state =
                           searchState.copyWith(ticketType: TicketType.oneWay),
                 ),
                 const SizedBox(width: 10),
                 ChoiceChip.elevated(
-                  label: const Text('Round-trip'),
+                  label: Text(AppLocalizations.of(context)!.roundTrip),
                   selected: searchState.ticketType == TicketType.roundTrip,
-                  selectedColor: Theme.of(context).colorScheme.primary,
+                  selectedColor: primaryColor,
                   onSelected: (_) => ref
                           .read(trainSearchProvider.notifier)
                           .state =
@@ -55,7 +58,6 @@ class SearchCardForm extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 16),
-            // From and To Station Picker
             Stack(
               alignment: Alignment.centerRight,
               children: [
@@ -78,7 +80,6 @@ class SearchCardForm extends ConsumerWidget {
                         code: searchState.fromStation.code,
                         location: searchState.fromStation.name,
                         direction: TrainStationDirection.origin,
-                        style: TrainStationDetailsStyle.secondary,
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -98,18 +99,22 @@ class SearchCardForm extends ConsumerWidget {
                         code: searchState.toStation.code,
                         location: searchState.toStation.name,
                         direction: TrainStationDirection.destination,
-                        style: TrainStationDetailsStyle.secondary,
                       ),
                     ),
                   ],
                 ),
                 Positioned(
-                  right: 40,
+                  right: AppLocalizations.of(context)!.localeName == 'en'
+                      ? 40
+                      : null,
+                  left: AppLocalizations.of(context)!.localeName == 'ar'
+                      ? 40
+                      : null,
                   child: Container(
                     width: 50,
                     height: 50,
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.primary,
+                      color: primaryColor,
                       borderRadius: BorderRadius.circular(50),
                     ),
                     child: Icon(
@@ -130,9 +135,7 @@ class SearchCardForm extends ConsumerWidget {
                   padding: const EdgeInsets.all(8),
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Theme.of(context).colorScheme.onPrimaryContainer,
-                    ),
+                    border: Border.all(color: onPrimaryContainer),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: InkWell(
@@ -151,15 +154,13 @@ class SearchCardForm extends ConsumerWidget {
                     },
                     child: RichText(
                       text: TextSpan(
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.onPrimary),
+                        style: TextStyle(color: onPrimary),
                         children: [
                           TextSpan(
-                            text: 'Train Date\n',
+                            text:
+                                '${AppLocalizations.of(context)!.trainDate}\n',
                             style: TextStyle(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onPrimaryContainer,
+                              color: onPrimaryContainer,
                             ),
                           ),
                           const WidgetSpan(child: SizedBox(height: 25)),
@@ -167,14 +168,16 @@ class SearchCardForm extends ConsumerWidget {
                             alignment: PlaceholderAlignment.middle,
                             child: Icon(
                               FontAwesomeIcons.solidCalendarDays,
-                              color: Theme.of(context).colorScheme.primary,
+                              color: primaryColor,
                             ),
                           ),
                           const WidgetSpan(child: SizedBox(width: 10)),
                           TextSpan(
-                            text: TimeConverter.convertTimeToDate(
-                                searchState.departureDate,
-                                isDay: true),
+                            text: " ${TimeConverter.convertTimeToDate(
+                              searchState.departureDate,
+                              isNumber: true,
+                              isDay: true,
+                            )} ",
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ],
@@ -191,7 +194,7 @@ class SearchCardForm extends ConsumerWidget {
                 if (searchState.fromStation == searchState.toStation) {
                   mahattatyAlertDialog(
                     context,
-                    message: 'Please select different stations',
+                    message: AppLocalizations.of(context)!.sameStationsError,
                     type: MahattatyAlertType.error,
                   );
                   return;
@@ -206,7 +209,7 @@ class SearchCardForm extends ConsumerWidget {
                 );
               },
               style: MahattatyButtonStyle.primary,
-              text: 'Search for trains',
+              text: AppLocalizations.of(context)!.searchTrainButton,
             ),
           ],
         ),

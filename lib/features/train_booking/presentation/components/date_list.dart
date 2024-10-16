@@ -3,7 +3,8 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:mahattaty/core/utils/app_localizations_extension.dart';
 import '../controllers/search_train_controller.dart';
 import 'cards/date_card.dart';
 
@@ -20,14 +21,14 @@ class DateList extends ConsumerStatefulWidget {
 
 class DateListState extends ConsumerState<DateList> {
   int? selectedIndex;
-  final List<String> weekdays = [
-    "Sun",
-    "Mon",
-    "Tue",
-    "Wed",
-    "Thu",
-    "Fri",
-    "Sat"
+  late final List<String> weekdays = [
+    AppLocalizations.of(context)!.sun,
+    AppLocalizations.of(context)!.mon,
+    AppLocalizations.of(context)!.tue,
+    AppLocalizations.of(context)!.wed,
+    AppLocalizations.of(context)!.thu,
+    AppLocalizations.of(context)!.fri,
+    AppLocalizations.of(context)!.sat,
   ];
 
   @override
@@ -63,7 +64,7 @@ class DateListState extends ConsumerState<DateList> {
       dateWidgets.add(DateCard(
         isEnabled: isSameMonth ? i >= DateTime.now().day - 1 : true,
         day: weekdays[i % 7],
-        date: (i + 1).toString(),
+        date: AppLocalizations.of(context)!.arabicOrEnglish(i + 1),
         isSelected: selectedIndex == i,
         onSelect: () => selectDate(i),
       ));
@@ -78,7 +79,7 @@ class DateListState extends ConsumerState<DateList> {
       height: 80,
       child: ListView(
           controller: ScrollController(
-              initialScrollOffset: selectedIndex! * 51.0 - 100.0),
+              initialScrollOffset: selectedIndex! * 58),
           scrollDirection: Axis.horizontal,
           children: _buildDateList()),
     );

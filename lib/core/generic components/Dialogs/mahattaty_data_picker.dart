@@ -1,8 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:mahattaty/core/generic%20components/mahattaty_dialog.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MahattatyDataPicker extends StatefulWidget {
   const MahattatyDataPicker({super.key, required this.onDateSelected});
@@ -26,17 +25,14 @@ class _MahattatyDataPickerState extends State<MahattatyDataPicker> {
   @override
   Widget build(BuildContext context) {
     return MahattatyDialog(
-      title: 'Select Date',
-      description: 'Select the date you want to travel',
+      title: AppLocalizations.of(context)!.selectDate,
+      description: AppLocalizations.of(context)!.selectDateDescription,
       content: [
         SfDateRangePicker(
           view: DateRangePickerView.year,
-          // Set the view to Year
           selectionMode: DateRangePickerSelectionMode.single,
-          // Single selection mode
           showNavigationArrow: false,
           allowViewNavigation: false,
-          // Disable view navigation to prevent selecting specific dates
           headerStyle: DateRangePickerHeaderStyle(
             textStyle: TextStyle(
               color: Theme.of(context).colorScheme.onPrimary,
@@ -62,7 +58,7 @@ class _MahattatyDataPickerState extends State<MahattatyDataPicker> {
           },
         ),
       ],
-      buttonText: 'Select',
+      buttonText: AppLocalizations.of(context)!.selectButton,
       onButtonPressed: () {
         widget.onDateSelected(args.value);
         Navigator.of(context).pop();

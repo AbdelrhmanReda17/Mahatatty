@@ -16,11 +16,9 @@ enum AuthErrorAction {
 class AuthException {
   final AuthErrorType code;
   final AuthErrorAction action;
-  final String message;
 
   AuthException(FirebaseAuthException e, this.action)
-      : code = _mapFirebaseAuthExceptionToAuthErrorType(e),
-        message = e.message ?? 'Error !';
+      : code = _mapFirebaseAuthExceptionToAuthErrorType(e);
 
   static AuthErrorType _mapFirebaseAuthExceptionToAuthErrorType(
       FirebaseAuthException e) {

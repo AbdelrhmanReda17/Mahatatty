@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mahattaty/authentication/presentation/screens/authentication_screen.dart';
+import 'package:mahattaty/features/settings/presentation/components/mahattaty_lang.dart';
+import 'package:mahattaty/core/utils/open_dialogs.dart';
 import 'package:mahattaty/core/utils/open_screens.dart';
-
 import '../../../../authentication/presentation/controllers/auth_controller.dart';
 import '../../../../core/generic components/mahattaty_alert.dart';
 import '../components/section_header.dart';
 import '../components/settings_tile.dart';
 import 'edit_profile_screen.dart';
 import 'legal_and_policies_screen.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -17,14 +19,14 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: Text(AppLocalizations.of(context)!.settings),
       ),
       body: ListView(
         children: [
-          const SectionHeader(title: 'General'),
+           SectionHeader(title: AppLocalizations.of(context)!.general),
           SettingsTile(
             icon: Icons.person_outline,
-            title: 'Edit Profile',
+            title: AppLocalizations.of(context)!.editProfile,
             onTap: () {
               OpenScreen.openScreenWithSmoothAnimation(
                 context,
@@ -35,14 +37,19 @@ class SettingsScreen extends ConsumerWidget {
           ),
           SettingsTile(
             icon: Icons.language_outlined,
-            title: 'Language',
-            trailingText: 'English',
-            onTap: () {},
+            title: AppLocalizations.of(context)!.languageLabel,
+            trailingText: AppLocalizations.of(context)!.language,
+            onTap: () {
+              OpenDialogs.openCustomDialog(
+                context: context,
+                dialog: const MahattatyLang(),
+              );
+            },
           ),
-          const SectionHeader(title: 'Preferences'),
+    SectionHeader(title: AppLocalizations.of(context)!.preferences),
           SettingsTile(
             icon: Icons.policy_outlined,
-            title: 'Legal and Policies',
+            title: AppLocalizations.of(context)!.legal,
             onTap: () {
               OpenScreen.openScreenWithSmoothAnimation(
                 context,
@@ -53,13 +60,13 @@ class SettingsScreen extends ConsumerWidget {
           ),
           SettingsTile(
             icon: Icons.logout,
-            title: 'Logout',
+            title: AppLocalizations.of(context)!.logout,
             iconColor: Colors.red,
             textColor: Colors.red,
             onTap: () {
               mahattatyAlertDialog(
                 context,
-                message: 'Are you sure you want to logout?',
+                message: AppLocalizations.of(context)!.logoutConfirmation,
                 type: MahattatyAlertType.info,
                 showCancelButton: true,
                 onOk: () {

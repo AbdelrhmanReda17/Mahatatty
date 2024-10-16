@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MahattatySearch extends StatelessWidget {
   const MahattatySearch({
@@ -10,11 +11,17 @@ class MahattatySearch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final primaryColor = Theme.of(context).colorScheme.primary;
+    final onPrimaryColor = Theme.of(context).colorScheme.onPrimary;
+    final primaryContainer = Theme.of(context).colorScheme.primaryContainer;  
+    final surface = Theme.of(context).colorScheme.surface;
+    
+    
     final TextEditingController searchController = TextEditingController();
     return TextField(
       controller: searchController,
-      cursorColor: Theme.of(context).colorScheme.surface,
-      style: TextStyle(color: Theme.of(context).colorScheme.surface),
+      cursorColor: surface,
+      style: TextStyle(color: surface),
       onSubmitted: (value) {
         if (searchController.text.isNotEmpty) {
           onPressed(value);
@@ -22,24 +29,24 @@ class MahattatySearch extends StatelessWidget {
         }
       },
       decoration: InputDecoration(
-        hintText: 'What are you looking for?',
+        hintText: AppLocalizations.of(context)!.searchText,
         hintStyle:
-            TextStyle(color: Theme.of(context).colorScheme.primaryContainer),
-        fillColor: Theme.of(context).colorScheme.primary,
+            TextStyle(color: primaryContainer),
+        fillColor: primaryColor,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20.0),
           borderSide: BorderSide(
-              color: Theme.of(context).colorScheme.surface, width: 0.5),
+              color: surface, width: 0.5),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15.0),
           borderSide: BorderSide(
-              color: Theme.of(context).colorScheme.surface, width: 1.0),
+              color: surface, width: 1.0),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15.0),
           borderSide: BorderSide(
-              color: Theme.of(context).colorScheme.surface, width: 1.0),
+              color: surface, width: 1.0),
         ),
         filled: true,
         contentPadding:
@@ -47,7 +54,7 @@ class MahattatySearch extends StatelessWidget {
         suffixIcon: IconButton(
           icon: Icon(
             Icons.search,
-            color: Theme.of(context).colorScheme.surface,
+            color: surface,
           ),
           onPressed: () {
             if (searchController.text.isNotEmpty) {

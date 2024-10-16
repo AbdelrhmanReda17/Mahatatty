@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:mahattaty/features/train_booking/data/models/train_seat_model.dart';
 import 'package:mahattaty/features/train_booking/domain/entities/train.dart';
 
@@ -62,6 +60,28 @@ class TrainModel extends Train {
         ),
         seatDiscountDate: map['seatDiscountEndDate'],
         seatDiscount: double.parse(map['seatDiscount'].toString()));
+  }
+
+  Map<String, Object> toMap() {
+    return {
+      'trainName': trainName,
+      'trainNumber': trainNumber,
+      'trainType': trainType.toString().split('.').last,
+      'trainSeats': trainSeats.map((e) => e.toMap()).toList(),
+      'trainDepartureTime': trainDepartureTime,
+      'trainArrivalTime': trainArrivalTime,
+      'trainSeatsStatus': trainSeatsStatus.name,
+      'trainDepartureStation': trainDepartureStation.name,
+      'trainArrivalStation': trainArrivalStation.name,
+      'trainBookedSeats': trainBookedSeats,
+      'trainTotalSeats': trainTotalSeats,
+      'trainDepartureDate': trainDepartureDate,
+      'trainArrivalDate': trainArrivalDate,
+      'trainDuration': trainDuration,
+      'trainStatus': trainStatus.toString().split('.').last,
+      'seatDiscountEndDate': seatDiscountDate,
+      'seatDiscount': seatDiscount,
+    };
   }
 
   @override

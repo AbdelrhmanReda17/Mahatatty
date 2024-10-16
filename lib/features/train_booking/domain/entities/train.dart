@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mahattaty/features/train_booking/data/models/train_seat_model.dart';
 import 'package:mahattaty/features/train_booking/domain/entities/train_seat.dart';
 
 enum TrainStatus {
@@ -13,47 +14,45 @@ enum TrainSeatsStatus {
 }
 
 enum TrainStations {
-  cairo('Cairo', 'CAI'),
-  alexandria('Alexandria', 'ALX'),
-  aswan('Aswan', 'ASW'),
-  luxor('Luxor', 'LXR'),
-  asyut('Asyut', 'ATZ'),
-  beni_suef('Beni Suef', 'BFS'),
-  damietta('Damietta', 'DTT'),
-  faiyum('Faiyum', 'FYM'),
-  gharbia('Gharbia', 'GBY'),
-  giza('Giza', 'GIZ'),
-  ismailia('Ismailia', 'ISM'),
-  kafr_el_sheikh('Kafr El Sheikh', 'KFS'),
-  matruh('Matruh', 'MTW'),
-  minya('Minya', 'MYN'),
-  monufia('Monufia', 'MNF'),
-  new_valley('New Valley', 'WAD'),
-  north_sinai('North Sinai', 'SIN'),
-  port_said('Port Said', 'PSD'),
-  qalyubia('Qalyubia', 'QAL'),
-  qena('Qena', 'QNA'),
-  red_sea('Red Sea', 'BAV'),
-  sharqia('Sharqia', 'SHR'),
-  sohag('Sohag', 'SWJ'),
-  south_sinai('South Sinai', 'SSH'),
-  suez('Suez', 'SUZ'),
-  dakahlia('Dakahlia', 'DKA'),
-  el_bahariya('El Bahariya', 'BAH'),
-  el_wadi_el_gedid('El Wadi El Gedid', 'WAD'),
-  el_fayoum('El Fayoum', 'FYM'),
-  el_menoufia('El Menoufia', 'MNF'),
-  el_monufia('El Monufia', 'MNF'),
-  ;
+  cairo('CAI'),
+  alexandria('ALX'),
+  aswan('ASW'),
+  luxor('LXR'),
+  asyut('ATZ'),
+  beni_suef('BFS'),
+  damietta('DTT'),
+  faiyum('FYM'),
+  gharbia('GBY'),
+  giza('GIZ'),
+  ismailia('ISM'),
+  kafr_el_sheikh('KFS'),
+  matruh('MTW'),
+  minya('MYN'),
+  monufia('MNF'),
+  new_valley('WAD'),
+  north_sinai('SIN'),
+  port_said('PSD'),
+  qalyubia('QAL'),
+  qena('QNA'),
+  red_sea('BAV'),
+  sharqia('SHR'),
+  sohag('SWJ'),
+  south_sinai('SSH'),
+  suez('SUZ'),
+  dakahlia('DKA'),
+  el_bahariya('BAH'),
+  el_wadi_el_gedid('WAD'),
+  el_fayoum('FYM'),
+  el_menoufia('MNF'),
+  el_monufia('MNF');
 
-  final String name;
   final String code;
 
-  const TrainStations(this.name, this.code);
+  const TrainStations(this.code);
 
   @override
   String toString() {
-    return 'TrainStations(name: $name, code: $code)';
+    return 'TrainStations(code: $code)';
   }
 
   // get all stations
@@ -94,7 +93,8 @@ enum TrainStations {
 
 enum TrainType {
   express('Express'),
-  ordinary('Ordinary');
+  ordinary('Ordinary'),
+  touristic('Touristic');
 
   final String name;
 
@@ -107,7 +107,7 @@ class Train {
   final String trainNumber;
   final TrainType trainType;
   final String trainDepartureTime;
-  final List<TrainSeats> trainSeats;
+  final List<TrainSeatModel> trainSeats;
   final int trainBookedSeats;
   final TrainSeatsStatus trainSeatsStatus;
   final int trainTotalSeats;

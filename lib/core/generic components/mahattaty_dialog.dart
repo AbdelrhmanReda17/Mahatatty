@@ -32,9 +32,16 @@ class MahattatyDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Only extracting the desired styles
+    final titleStyle = Theme.of(context).textTheme.titleLarge!.copyWith(
+          fontWeight: FontWeight.bold,
+        );
+    final descriptionStyle = Theme.of(context).textTheme.bodyMedium?.copyWith(
+          color: Theme.of(context).colorScheme.onPrimaryContainer,
+        );
+
     return Padding(
-      padding: const EdgeInsets.only(
-          left: 30.0, right: 30.0, top: 30.0, bottom: 30.0),
+      padding: const EdgeInsets.all(30.0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,31 +49,13 @@ class MahattatyDialog extends StatelessWidget {
           if (contentPlacement == ContentPlacement.beforeTitle) ...[
             ...content,
             const SizedBox(height: 20),
-            _buildAlignedText(
-                title,
-                Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(fontWeight: FontWeight.bold)),
+            _buildAlignedText(title, titleStyle),
             const SizedBox(height: 10),
-            _buildAlignedText(
-                description,
-                Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimaryContainer,
-                    )),
+            _buildAlignedText(description, descriptionStyle),
           ] else ...[
-            _buildAlignedText(
-                title,
-                Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(fontWeight: FontWeight.bold)),
+            _buildAlignedText(title, titleStyle),
             const SizedBox(height: 10),
-            _buildAlignedText(
-                description,
-                Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimaryContainer,
-                    )),
+            _buildAlignedText(description, descriptionStyle),
             const SizedBox(height: 20),
             ...content,
           ],

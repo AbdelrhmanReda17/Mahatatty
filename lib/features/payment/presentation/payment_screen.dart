@@ -1,9 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mahattaty/core/screens/root_screen.dart';
 import 'package:mahattaty/core/utils/open_dialogs.dart';
+import '../../../core/generic components/mahattaty_alert.dart';
 import '../../../core/generic components/mahattaty_button.dart';
 import '../../../core/generic components/mahattaty_scaffold.dart';
 import '../../train_booking/domain/entities/ticket.dart';
@@ -11,8 +10,9 @@ import '../../train_booking/domain/entities/train.dart';
 import '../../train_booking/domain/entities/train_seat.dart';
 import '../../train_booking/presentation/components/cards/train_card.dart';
 import '../../train_booking/presentation/controllers/book_ticket_controller.dart';
-import '../components/count_down_timer.dart';
+import '../../../core/generic components/count_down_timer.dart';
 import '../components/payment_method_dialog.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PaymentScreen extends ConsumerStatefulWidget {
   final Train train;
@@ -43,15 +43,33 @@ class PaymentScreenState extends ConsumerState<PaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    ref.listen<BookingTicketState>(
+      bookTicketControllerProvider,
+          (previous, next) {
+        if (next.error != null){
+          mahattatyAlertDialog(
+            context,
+            message: next.error!,
+            type: MahattatyAlertType.error,
+          );
+        }
+
+      },
+    );
+
+    final surface = Theme.of(context).colorScheme.surface;
+    final primary = Theme.of(context).colorScheme.primary;
+    final paymentState = ref.watch(bookTicketControllerProvider);
     return MahattatyScaffold(
       onWillPop: () async {
         await ref.watch(bookTicketControllerProvider.notifier).cancelTicket(
               widget.ticketId,
             );
       },
-      appBarContent: const Text(
-        'Payment',
-        style: TextStyle(color: Colors.white),
+      appBarContent:  Text(
+        AppLocalizations.of(context)!.payment,
+        style: TextStyle(color:surface),
       ),
       bgHeight: backgroundHeight.large,
       body: SingleChildScrollView(
@@ -60,17 +78,9 @@ class PaymentScreenState extends ConsumerState<PaymentScreen> {
           children: [
             const SizedBox(height: 20),
             Text(
-              'Ticket ID: ${widget.ticketId}',
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              'Your ticket on hold for 10 seconds please pay now to confirm your ticket',
+              AppLocalizations.of(context)!.paymentInfo,
               style: TextStyle(
-                color: Theme.of(context).colorScheme.surface,
+                color: surface,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
@@ -88,7 +98,7 @@ class PaymentScreenState extends ConsumerState<PaymentScreen> {
                   },
                 ),
               },
-              targetDateTime: DateTime.now().add(const Duration(seconds: 10)),
+              targetDateTime: DateTime.now().add(const Duration(minutes: 5)),
             ),
             const SizedBox(height: 20),
             TrainCard(
@@ -102,7 +112,8 @@ class PaymentScreenState extends ConsumerState<PaymentScreen> {
             const SizedBox(height: 20),
             MahattatyButton(
               style: MahattatyButtonStyle.primary,
-              text: "Pay now",
+              text: AppLocalizations.of(context)!.payNow,
+              disabled: paymentState.isLoading,
               onPressed: () {
                 handleDialog();
                 OpenDialogs.openCustomDialog(
@@ -115,7 +126,7 @@ class PaymentScreenState extends ConsumerState<PaymentScreen> {
                   ),
                 );
               },
-              backgroundColor: Theme.of(context).colorScheme.primary,
+              backgroundColor:primary,
               textStyle: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,

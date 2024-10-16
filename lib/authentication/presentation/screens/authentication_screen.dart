@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mahattaty/authentication/Exceptions/auth_exception.dart';
 import 'package:mahattaty/authentication/presentation/controllers/auth_controller.dart';
-import 'package:mahattaty/core/generic%20components/mahattaty_button.dart';
 import 'package:mahattaty/core/screens/root_screen.dart';
-import 'package:mahattaty/onboarding/presentation/controllers/splash_controller.dart';
-
 import '../../../core/generic components/mahattaty_alert.dart';
 import '../../../core/utils/open_screens.dart';
 import '../components/login_form.dart';
 import '../components/register_form.dart';
 import '../components/social_account_login.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AuthenticationScreen extends ConsumerStatefulWidget {
   const AuthenticationScreen({super.key = const Key('login_screen')});
@@ -45,6 +43,11 @@ class AuthenticationScreenState extends ConsumerState<AuthenticationScreen>
 
   @override
   Widget build(BuildContext context) {
+    final headLineSmall = Theme.of(context).textTheme.headlineSmall!;
+    final bodyMedium = Theme.of(context).textTheme.bodyMedium!;
+    final onPrimaryContainerColor =
+        Theme.of(context).colorScheme.onPrimaryContainer;
+    final primaryColor = Theme.of(context).colorScheme.primary;
     bool isLogin =
         ModalRoute.of(context)!.settings.name == widget.loginRouteName ||
             widget.key == const Key('login_screen');
@@ -56,7 +59,9 @@ class AuthenticationScreenState extends ConsumerState<AuthenticationScreen>
             next.exception!.code == AuthErrorType.unknownError) {
           mahattatyAlertDialog(
             context,
-            message: next.exception!.message,
+            message: next.exception!.action == AuthErrorAction.forgetPassword
+                ? AppLocalizations.of(context)!.resetPasswordError
+                : AppLocalizations.of(context)!.generalError,
             type: MahattatyAlertType.error,
           );
         }
@@ -80,24 +85,22 @@ class AuthenticationScreenState extends ConsumerState<AuthenticationScreen>
           padding: const EdgeInsets.all(20),
           children: [
             AppBar(
+              centerTitle: false,
               titleSpacing: 0,
-              toolbarHeight: 80,
               title: RichText(
+                textAlign: TextAlign.start,
                 text: TextSpan(
-                  text: isLogin ? "Login Account\n" : "Create Account\n",
-                  style: Theme.of(context).textTheme.headlineSmall!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  text: isLogin
+                      ? '${AppLocalizations.of(context)!.loginTitle}\n'
+                      : '${AppLocalizations.of(context)!.registerTitle}\n',
+                  style: headLineSmall.copyWith(fontWeight: FontWeight.bold),
                   children: [
                     TextSpan(
                       text: isLogin
-                          ? "Please login with registered account"
-                          : "Start learning with create your account",
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .onPrimaryContainer,
-                          ),
+                          ? AppLocalizations.of(context)!.loginSubtitle
+                          : AppLocalizations.of(context)!.registerSubtitle,
+                      style:
+                          bodyMedium.copyWith(color: onPrimaryContainerColor),
                     ),
                   ],
                 ),
@@ -113,52 +116,59 @@ class AuthenticationScreenState extends ConsumerState<AuthenticationScreen>
               children: [
                 Text(
                   isLogin
-                      ? "Don't have an account?"
-                      : "Already have an account?",
-                  style: Theme.of(context).textTheme.bodyMedium,
+                      ? AppLocalizations.of(context)!.registerQuestion
+                      : AppLocalizations.of(context)!.loginQuestion,
+                  style: bodyMedium,
                 ),
                 TextButton(
-                  onPressed: () {
-                    OpenScreen.open(
-                      context: context,
-                      screen: isLogin
-                          ? const AuthenticationScreen(
-                              key: Key('register_screen'),
-                            )
-                          : const AuthenticationScreen(
-                              key: Key('login_screen'),
-                            ),
-                      isReplace: true,
-                    );
-                  },
+                  onPressed: ref.watch(authControllerProvider).isLoading == true
+                      ? null
+                      : () {
+                          ref
+                              .read(authControllerProvider.notifier)
+                              .clearException();
+                          OpenScreen.open(
+                            context: context,
+                            screen: isLogin
+                                ? const AuthenticationScreen(
+                                    key: Key('register_screen'),
+                                  )
+                                : const AuthenticationScreen(
+                                    key: Key('login_screen'),
+                                  ),
+                            isReplace: true,
+                          );
+                        },
                   child: Text(
-                    isLogin ? 'Sign Up' : 'Sign In',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
+                    isLogin
+                        ? AppLocalizations.of(context)!.signUpButton
+                        : AppLocalizations.of(context)!.signInButton,
+                    style: bodyMedium.copyWith(
+                      color: primaryColor,
+                    ),
                   ),
                 ),
               ],
             ),
             const SocialAccountsLogin(),
             const SizedBox(height: 8),
-            isLogin
-                ? const SizedBox()
-                : RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      text: 'by signing up you agree to the ',
-                      style: Theme.of(context).textTheme.titleSmall,
-                      children: [
-                        TextSpan(
-                          text: 'Terms & Conditions & Privacy Policy',
-                          style: Theme.of(context).textTheme.titleSmall?.apply(
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                        ),
-                      ],
+            if (!isLogin)
+              RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  text: AppLocalizations.of(context)!.termsAndConditions,
+                  style: bodyMedium,
+                  children: [
+                    TextSpan(
+                      text:
+                          AppLocalizations.of(context)!.termsAndConditionsLink,
+                      style: bodyMedium.apply(
+                        color: primaryColor,
+                      ),
                     ),
-                  ),
+                  ],
+                ),
+              ),
           ],
         ),
       ),

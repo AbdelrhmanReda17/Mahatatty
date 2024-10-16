@@ -56,7 +56,8 @@ class BookTicketController extends StateNotifier<BookingTicketState> {
       );
       state = BookingTicketState(ticketId: result);
     } catch (e) {
-      state = BookingTicketState(error: e.toString());
+      log(e.toString());
+      state = BookingTicketState(error: e.toString() ,isLoading: false);
     }
   }
 
@@ -64,7 +65,10 @@ class BookTicketController extends StateNotifier<BookingTicketState> {
     try {
       state = BookingTicketState(isLoading: true);
       final result = await changeTrainTicketStatusUseCase.call(
-          ticketId: ticketId, status: status);
+        ticketId: ticketId,
+        status: status,
+      );
+      state = BookingTicketState(isLoading: false);
       return result;
     } catch (e) {
       state = BookingTicketState(error: e.toString());
