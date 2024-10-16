@@ -1,9 +1,14 @@
+import 'dart:developer';
+
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class BaseSettingsLocalDataResource {
   Future<void> changeLanguage(String language);
 
-  Future<String> loadSelectedLanguage();
+  Future<MapEntry<ThemeMode,String>> loadSettings();
+
+  Future<void> changeMode(ThemeMode mode);
 }
 
 class SettingsLocalDataResource implements BaseSettingsLocalDataResource {
@@ -16,10 +21,18 @@ class SettingsLocalDataResource implements BaseSettingsLocalDataResource {
   }
 
   @override
-  Future<String> loadSelectedLanguage() async {
+  Future<void> changeMode(ThemeMode mode) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    log(mode.name.toString());
+    await prefs.setString('selected_mode', mode.name.toString());
+  }
+
+  @override
+  Future<MapEntry<ThemeMode,String>> loadSettings() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? languageCode = prefs.getString('selected_language') ?? 'en';
-    return languageCode;
+    ThemeMode? mode = prefs.getString('selected_mode') == 'dark' ? ThemeMode.dark : ThemeMode.light;
+    return MapEntry(mode, languageCode);
   }
 
 }

@@ -1,28 +1,32 @@
-import 'dart:ui';
 
+import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mahattaty/authentication/presentation/controllers/auth_controller.dart';
 import 'package:mahattaty/features/settings/Exceptions/settings_exception.dart';
 import 'package:mahattaty/features/settings/domain/usecases/change_language_usecase.dart';
 import 'package:mahattaty/features/settings/domain/usecases/change_password_usecase.dart';
-import 'package:mahattaty/features/settings/domain/usecases/load_lanuage_usecase.dart';
+import '../../domain/usecases/change_mode_usecase.dart';
 import '../../domain/usecases/edit_profile_usecase.dart';
+import '../../domain/usecases/load_lanuage_usecase.dart';
 import '../Providers/change_lang_usecase_provider.dart';
+import '../Providers/change_mode_usecase_provider.dart';
 import '../Providers/change_password_usecase_provider.dart';
 import '../Providers/edit_profile_usecase_provider.dart';
-import '../Providers/load_language_usecase_provider.dart';
+import '../Providers/load_settings_usecase_provider.dart';
 
 class SettingsState {
   final bool isLoading;
   final SettingsException? exception;
   final String language;
+  final ThemeMode? mode;
   final bool isSuccessful;
 
   SettingsState({
     this.isLoading = false,
     this.exception,
     this.language = 'en',
+    this.mode = ThemeMode.light,
     this.isSuccessful = false,
   });
 
@@ -30,12 +34,14 @@ class SettingsState {
     bool? isLoading,
     SettingsException? exception,
     String? language,
+    ThemeMode? mode,
     bool? isSuccessful,
   }) {
     return SettingsState(
       isLoading: isLoading ?? this.isLoading,
       exception: exception ?? this.exception,
       language: language ?? this.language,
+      mode: mode ?? this.mode,
       isSuccessful: isSuccessful ?? this.isSuccessful,
     );
   }
@@ -50,10 +56,11 @@ class SettingsState {
 class SettingsController extends StateNotifier<SettingsState> {
   final EditProfileUseCase editProfileUseCase;
   final ChangePasswordUseCase changePasswordUseCase;
-  final LoadLanguageUseCase loadLanguageUseCase;
+  final LoadSettingsUseCase loadSettingsUseCase;
   final ChangeLanguageUseCase changeLanguageUseCase;
+  final ChangeModeUseCase changeModeUseCase;
 
-  SettingsController(this.editProfileUseCase, this.changePasswordUseCase , this.loadLanguageUseCase , this.changeLanguageUseCase)
+  SettingsController(this.editProfileUseCase, this.changePasswordUseCase , this.loadSettingsUseCase , this.changeLanguageUseCase , this.changeModeUseCase)
       : super(SettingsState());
 
   Future<void> editProfile(
@@ -77,11 +84,27 @@ class SettingsController extends StateNotifier<SettingsState> {
     state = SettingsState();
   }
 
-  Future<void> loadLanguage() async {
+  Future<void> loadSettings() async {
+    try {
+      state = state.copyWith(isLoading: true);
+      MapEntry<ThemeMode,String> result = await loadSettingsUseCase.call();
+      state = state.copyWith(isSuccessful: true, isLoading: false , language: result.value , mode: result.key);
+    } on FirebaseAuthException catch (e) {
+      state = state.copyWith(
+        exception: SettingsException.fromFirebaseException(
+          e,
+          SettingsErrorAction.loadLanguage,
+        ),
+        isLoading: false,
+      );
+    }
+  }
+
+  Future<void> changeMode(ThemeMode mode) async {
     state = state.copyWith(isLoading: true);
     try {
-      var result = await loadLanguageUseCase.call();
-      state = state.copyWith(isSuccessful: true, isLoading: false, language: result);
+       await changeModeUseCase.call(mode);
+      state = state.copyWith(isSuccessful: true, isLoading: false, mode: mode);
     } on FirebaseAuthException catch (e) {
       state = state.copyWith(
         exception: SettingsException.fromFirebaseException(
@@ -126,12 +149,16 @@ class SettingsController extends StateNotifier<SettingsState> {
   }
 }
 
+
+
 final settingsControllerProvider =
     StateNotifierProvider<SettingsController, SettingsState>(
   (ref) => SettingsController(
     ref.read(editProfileUseCaseProvider),
     ref.read(changePasswordUseCaseProvider),
-    ref.read(loadLanguageUseCaseProvider),
-    ref.read(changeLanguageUseCaseProvider)
+    ref.read(loadSettingsUseCaseProvider),
+    ref.read(changeLanguageUseCaseProvider),
+    ref.read(changeModeUseCaseProvider),
+
   ),
 );

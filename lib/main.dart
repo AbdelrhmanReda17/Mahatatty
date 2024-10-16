@@ -44,7 +44,7 @@ class MyAppState extends ConsumerState<MyApp> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(settingsControllerProvider.notifier).loadLanguage();
+      ref.read(settingsControllerProvider.notifier).loadSettings();
     });
   }
 
@@ -67,7 +67,7 @@ class MyAppState extends ConsumerState<MyApp> {
       title: 'Mahattaty',
       theme: lightTheme,
       darkTheme: darkTheme,
-      themeMode: ThemeMode.system,
+      themeMode: settings.mode,
       debugShowCheckedModeBanner: false,
       supportedLocales: L10n.all,
       locale: Locale(settings.language),

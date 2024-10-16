@@ -18,11 +18,11 @@ class OnboardingScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.onSecondary,
         elevation: 0,
         toolbarHeight: 50,
       ),
-      backgroundColor: Colors.white,
+      backgroundColor:Theme.of(context).colorScheme.onSecondary,
       body: Stack(
         children: [
           OnBoardingSteps(

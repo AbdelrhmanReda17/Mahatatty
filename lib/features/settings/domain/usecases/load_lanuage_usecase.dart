@@ -1,11 +1,13 @@
+import 'package:flutter/material.dart';
+
 import '../repository/settings_repository.dart';
 
-class LoadLanguageUseCase {
+class LoadSettingsUseCase {
   final BaseSettingsRepository _userRepository;
 
-  LoadLanguageUseCase(this._userRepository);
+  LoadSettingsUseCase(this._userRepository);
 
-  Future<String> call() async {
-    return _userRepository.loadSelectedLanguage();
+  Future<MapEntry<ThemeMode,String>> call() async {
+    return _userRepository.loadSettings();
   }
 }

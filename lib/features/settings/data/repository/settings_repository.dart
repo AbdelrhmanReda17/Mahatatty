@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:mahattaty/features/settings/data/datasource/settings_remote_data_resource.dart';
 import 'package:mahattaty/features/settings/domain/repository/settings_repository.dart';
 
@@ -15,8 +16,8 @@ class SettingsRepository implements BaseSettingsRepository {
   }
 
   @override
-  Future<String> loadSelectedLanguage() {
-    return localDataSource.loadSelectedLanguage();
+  Future<MapEntry<ThemeMode,String>> loadSettings() {
+    return localDataSource.loadSettings();
   }
 
   @override
@@ -27,5 +28,10 @@ class SettingsRepository implements BaseSettingsRepository {
   @override
   Future<void> editProfile(String name, String email) {
     return remoteDataSource.editProfile(name, email);
+  }
+
+  @override
+  Future<void> changeMode(ThemeMode mode) {
+    return localDataSource.changeMode(mode);
   }
 }

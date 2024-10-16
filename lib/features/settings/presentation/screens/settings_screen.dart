@@ -4,6 +4,7 @@ import 'package:mahattaty/authentication/presentation/screens/authentication_scr
 import 'package:mahattaty/features/settings/presentation/components/change_language_dialog.dart';
 import 'package:mahattaty/core/utils/open_dialogs.dart';
 import 'package:mahattaty/core/utils/open_screens.dart';
+import 'package:mahattaty/features/settings/presentation/controllers/settings_controller.dart';
 import '../../../../authentication/presentation/controllers/auth_controller.dart';
 import '../../../../core/generic components/mahattaty_alert.dart';
 import '../components/section_header.dart';
@@ -45,6 +46,22 @@ class SettingsScreen extends ConsumerWidget {
               OpenDialogs.openCustomDialog(
                 context: context,
                 dialog: const ChangeLanguageDialog(),
+              );
+            },
+          ),
+          SettingsTile(
+            trailingText: '',
+            icon: ref.read(settingsControllerProvider).mode == ThemeMode.light
+                ? Icons.dark_mode_outlined
+                : Icons.light_mode_outlined,
+            title: ref.read(settingsControllerProvider).mode == ThemeMode.light
+                ? AppLocalizations.of(context)!.darkMode
+                : AppLocalizations.of(context)!.lightMode,
+            onTap: () async {
+              await ref.read(settingsControllerProvider.notifier).changeMode(
+                  ref.read(settingsControllerProvider).mode == ThemeMode.dark
+                    ? ThemeMode.light
+                    : ThemeMode.dark,
               );
             },
           ),

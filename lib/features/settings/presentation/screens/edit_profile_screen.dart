@@ -123,6 +123,7 @@ class EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               const SizedBox(height: 16),
               MahattatyButton(
                 text: AppLocalizations.of(context)!.changePassword,
+                textStyle:  TextStyle(color:Theme.of(context).colorScheme.primary),
                 onPressed: () {
                   OpenDialogs.openCustomDialog(
                     context: context,
@@ -144,6 +145,7 @@ class EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 children: [
                   Expanded(
                     child: MahattatyButton(
+                      textStyle:  TextStyle(color:Theme.of(context).colorScheme.primary),
                       text: AppLocalizations.of(context)!.cancel,
                       onPressed: state.isLoading
                           ? null

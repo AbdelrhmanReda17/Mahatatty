@@ -337,7 +337,9 @@
   "googleAuthMes": "You are using a Google account, so you can't change your email",
   "saveChanges": "Save Changes",
   "profileUpdated": "Profile updated successfully",
-    "profileUpdateError": "An error occurred while updating your profile"
+    "profileUpdateError": "An error occurred while updating your profile",
+  "darkMode": "Dark Mode",
+  "lightMode": "Light Mode"
 }
 
 
