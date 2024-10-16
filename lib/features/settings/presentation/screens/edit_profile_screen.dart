@@ -6,11 +6,13 @@ import 'package:mahattaty/core/generic%20components/mahattaty_alert.dart';
 import 'package:mahattaty/core/generic%20components/mahattaty_text_form_field.dart';
 import 'package:mahattaty/core/utils/open_dialogs.dart';
 import 'package:mahattaty/core/utils/validations.dart';
+import '../../../../authentication/Exceptions/auth_exception.dart';
 import '../../../../authentication/domain/entities/User.dart';
 import '../../../../core/generic%20components/mahattaty_button.dart';
 import '../../Exceptions/settings_exception.dart';
 import '../components/change_password_dialog.dart';
 import '../controllers/settings_controller.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EditProfileScreen extends ConsumerStatefulWidget {
   const EditProfileScreen({super.key});
@@ -34,14 +36,33 @@ class EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen<AuthState>(
+        authControllerProvider,
+            (old, state) {
+          if (state.exception != null &&
+              state.exception!.action == AuthErrorAction.getCurrentUser) {
+            mahattatyAlertDialog(
+              context,
+              message: AppLocalizations.of(context)!.profileUpdateError,
+              showCancelButton: false,
+              type: MahattatyAlertType.error,
+              onOk: () {
+                Navigator.of(context).pop();
+              },
+            );
+          }
+
+          }
+    );
     ref.listen<SettingsState>(
       settingsControllerProvider,
       (old, state) {
         if (state.exception != null &&
-            state.exception!.action == SettingsErrorAction.editProfile) {
+            state.exception!.action == SettingsErrorAction.editProfile
+        ) {
           mahattatyAlertDialog(
             context,
-            message: state.exception!.message,
+            message: AppLocalizations.of(context)!.profileUpdateError,
             showCancelButton: false,
             type: MahattatyAlertType.error,
             onOk: () {
@@ -49,10 +70,10 @@ class EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             },
           );
         }
-        if (state.isSuccessful) {
+        if (state.isSuccessful && !state.isLoading && !ref.read(authControllerProvider).isLoading) {
           mahattatyAlertDialog(
             context,
-            message: 'Profile updated successfully',
+            message: AppLocalizations.of(context)!.profileUpdated,
             showCancelButton: false,
             type: MahattatyAlertType.success,
             onOk: () {
@@ -67,8 +88,10 @@ class EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     final user = ref.watch(authControllerProvider).user;
 
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.onSecondary,
       appBar: AppBar(
-        title: const Text('Edit Profile'),
+        backgroundColor: Theme.of(context).colorScheme.onSecondary,
+        title:  Text(AppLocalizations.of(context)!.editProfile),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -99,7 +122,7 @@ class EditProfileScreenState extends ConsumerState<EditProfileScreen> {
               _buildEmailField(user, state),
               const SizedBox(height: 16),
               MahattatyButton(
-                text: 'Change Password',
+                text: AppLocalizations.of(context)!.changePassword,
                 onPressed: () {
                   OpenDialogs.openCustomDialog(
                     context: context,
@@ -121,7 +144,7 @@ class EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                 children: [
                   Expanded(
                     child: MahattatyButton(
-                      text: 'Cancel',
+                      text: AppLocalizations.of(context)!.cancel,
                       onPressed: state.isLoading
                           ? null
                           : () {
@@ -130,10 +153,10 @@ class EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                       style: MahattatyButtonStyle.secondary,
                     ),
                   ),
-                  const SizedBox(width: 16), // Add spacing between buttons
+                  const SizedBox(width: 16),
                   Expanded(
                     child: MahattatyButton(
-                      text: 'Save Changes',
+                      text: AppLocalizations.of(context)!.saveChanges,
                       disabled: state.isLoading,
                       onPressed: state.isLoading
                           ? null
@@ -141,13 +164,13 @@ class EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                               if (_formKey.currentState!.validate() &&
                                   (_usernameController.text != user?.name ||
                                       _emailController.text != user?.email)) {
-                                await ref
+                               await ref
                                     .read(settingsControllerProvider.notifier)
                                     .editProfile(
                                       name: _usernameController.text,
                                       email: _emailController.text,
                                     );
-                                await ref
+                               await ref
                                     .read(authControllerProvider.notifier)
                                     .updateCurrentUser();
                               }
@@ -172,7 +195,7 @@ class EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
-        'You are using a Google account, so you can\'t change your email.',
+        AppLocalizations.of(context)!.googleAuthMes,
         style: TextStyle(
           color: Colors.grey[600],
           fontSize: 16,
@@ -185,14 +208,14 @@ class EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     return MahattatyTextFormField(
       controller: _usernameController,
       iconData: Icons.person,
-      labelText: 'Username',
+      labelText: AppLocalizations.of(context)!.usernameLabel,
       disabled: state.isLoading,
-      hintText: 'Enter your username',
+      hintText: AppLocalizations.of(context)!.usernameHint,
       errorText: state.getError(
           SettingsErrorAction.editProfile, SettingsError.invalidUserName),
       validator: (value) => value!.isValidUsername
           ? null
-          : 'Invalid input. Please enter a valid username.',
+          : AppLocalizations.of(context)!.usernameError,
       keyboardType: TextInputType.name,
     );
   }
@@ -201,14 +224,14 @@ class EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     return MahattatyTextFormField(
       controller: _emailController,
       iconData: Icons.email,
-      labelText: 'Email',
+      labelText: AppLocalizations.of(context)!.emailLabel,
       disabled: true,
-      hintText: 'Enter your email',
+      hintText: AppLocalizations.of(context)!.emailHint,
       errorText: state.getError(
           SettingsErrorAction.editProfile, SettingsError.invalidEmail),
       validator: (value) => value!.isValidEmail
           ? null
-          : 'Invalid input. Please enter a valid email.',
+          : AppLocalizations.of(context)!.emailError,
       keyboardType: TextInputType.emailAddress,
     );
   }

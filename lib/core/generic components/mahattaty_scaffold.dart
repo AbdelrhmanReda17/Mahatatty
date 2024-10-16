@@ -36,7 +36,7 @@ class MahattatyScaffold extends StatelessWidget {
         return Future.value(false);
       },
       child: Scaffold(
-        backgroundColor: const Color(0xFFf5f5f5),
+        backgroundColor: Theme.of(context).colorScheme.onSecondary,
         drawerEdgeDragWidth: 0,
         appBar: AppBar(
           shadowColor: Colors.transparent,
@@ -44,7 +44,7 @@ class MahattatyScaffold extends StatelessWidget {
           foregroundColor: Colors.transparent,
           titleSpacing: 0,
           backgroundColor: Theme.of(context).colorScheme.primary,
-          iconTheme: const IconThemeData(color: Colors.white),
+          iconTheme: IconThemeData(color: Theme.of(context).colorScheme.surface),
           elevation: 0,
           title: appBarContent,
         ),

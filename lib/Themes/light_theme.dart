@@ -16,7 +16,7 @@ ColorScheme colorScheme = const ColorScheme.light(
   onSurface: Colors.black,
   error: Colors.red,
   onError: Colors.white,
-  onSecondary: Colors.white,
+  onSecondary: Color(0xFFf5f5f5),
 );
 
 AppBarTheme lightAppBarTheme = const AppBarTheme(

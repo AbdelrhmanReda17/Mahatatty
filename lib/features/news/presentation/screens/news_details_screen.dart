@@ -18,8 +18,7 @@ class NewsDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final surfaceColor = Theme.of(context).colorScheme.surface;
-    final onPrimaryColor = Theme.of(context).colorScheme.onPrimary;
-    final onPrimaryContainerColor = Theme.of(context).colorScheme.onPrimaryContainer;
+    final primaryColor = Theme.of(context).colorScheme.primary;
     final titleMedium = Theme.of(context).textTheme.titleMedium!;
 
     return MahattatyScaffold(
@@ -51,7 +50,7 @@ class NewsDetailScreen extends StatelessWidget {
           Text(
             'By ${news.author} • ${TimeConverter.convertTimeToString(news.publishedAt)}',
             style: titleMedium.copyWith(
-                  color: onPrimaryContainerColor
+                  color: surfaceColor.withOpacity(0.7),
                 ),
           ),
           const SizedBox(height: 23),
@@ -91,7 +90,7 @@ class NewsDetailScreen extends StatelessWidget {
             news.description,
             style: TextStyle(
               fontSize: 20,
-              color: onPrimaryColor,
+              color: primaryColor,
               height: 1.5,
             ),
           ),

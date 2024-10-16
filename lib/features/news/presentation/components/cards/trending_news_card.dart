@@ -71,7 +71,7 @@ class TrendingNewsCard extends StatelessWidget {
                     Text(
                       news.title,
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.onPrimary,
+                        color: Theme.of(context).colorScheme.onSurface,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),

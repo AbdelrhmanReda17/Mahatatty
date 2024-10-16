@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mahattaty/authentication/presentation/screens/authentication_screen.dart';
-import 'package:mahattaty/features/settings/presentation/components/mahattaty_lang.dart';
+import 'package:mahattaty/features/settings/presentation/components/change_language_dialog.dart';
 import 'package:mahattaty/core/utils/open_dialogs.dart';
 import 'package:mahattaty/core/utils/open_screens.dart';
 import '../../../../authentication/presentation/controllers/auth_controller.dart';
@@ -18,7 +18,9 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.onSecondary,
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.onSecondary,
         title: Text(AppLocalizations.of(context)!.settings),
       ),
       body: ListView(
@@ -42,7 +44,7 @@ class SettingsScreen extends ConsumerWidget {
             onTap: () {
               OpenDialogs.openCustomDialog(
                 context: context,
-                dialog: const MahattatyLang(),
+                dialog: const ChangeLanguageDialog(),
               );
             },
           ),

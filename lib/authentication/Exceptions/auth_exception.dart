@@ -11,6 +11,7 @@ enum AuthErrorAction {
   signUp,
   signOut,
   forgetPassword,
+  getCurrentUser,
 }
 
 class AuthException {

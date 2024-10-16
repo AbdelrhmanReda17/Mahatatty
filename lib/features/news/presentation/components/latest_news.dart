@@ -18,7 +18,7 @@ class LatestNews extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var newsState = ref.watch(latestNewsController);
-    var onPrimaryColor = Theme.of(context).colorScheme.onPrimary;
+    var primary = Theme.of(context).colorScheme.primary;
     var bodyLarge = Theme.of(context).textTheme.bodyLarge!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,7 +31,7 @@ class LatestNews extends ConsumerWidget {
               style: bodyLarge.copyWith(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: onPrimaryColor,
+                color: primary,
               ),
             ),
             if (seeMoreEnabled)
@@ -46,7 +46,7 @@ class LatestNews extends ConsumerWidget {
                 child: Text(
                   AppLocalizations.of(context)!.seeAll,
                   style: bodyLarge.copyWith(
-                        color: onPrimaryColor,
+                        color: primary,
                       ),
                 ),
               ),

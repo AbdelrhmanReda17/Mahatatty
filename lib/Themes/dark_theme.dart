@@ -5,14 +5,14 @@ import 'package:google_fonts/google_fonts.dart';
 ColorScheme colorScheme = const ColorScheme.dark(
   primary: Color(0xFF005667),
   onPrimary: Color(0xFF181d31),
-  onPrimaryContainer: Color.fromARGB(255, 206, 210, 222),
+  onPrimaryContainer: Color.fromARGB(255, 55, 56, 57),
   primaryContainer: Color.fromARGB(255, 251, 251, 253),
   secondary: Color.fromARGB(255, 8, 40, 48),
   surface: Colors.black,
   onSurface: Colors.white,
   error: Colors.red,
   onError: Colors.white,
-  onSecondary: Colors.white,
+  onSecondary: Color(0xff131313),
 );
 
 AppBarTheme appBarTheme = const AppBarTheme(
@@ -73,6 +73,7 @@ CheckboxThemeData checkboxTheme = CheckboxThemeData(
     colorScheme.surface,
   ),
 );
+
 ThemeData darkTheme = ThemeData(
   colorScheme: colorScheme,
   textTheme: GoogleFonts.outfitTextTheme().apply(

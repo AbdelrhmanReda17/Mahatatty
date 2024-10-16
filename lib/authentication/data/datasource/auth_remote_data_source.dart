@@ -170,12 +170,19 @@ class AuthRemoteDataSource implements BaseAuthRemoteDataSource {
 
   @override
   Future<UserModel?> getCurrentUser() async {
-    final user = firebaseAuth.currentUser;
-    if (user != null) {
-      UserModel userModel = UserModel.fromFirebaseUser(user);
-      await _saveUserToPreferences(userModel);
-      return userModel;
+    try{
+      final user = firebaseAuth.currentUser;
+      if (user != null) {
+        UserModel userModel = UserModel.fromFirebaseUser(user);
+        await _saveUserToPreferences(userModel);
+        return userModel;
+      }
+      return await _getUserFromPreferences();
+    }catch(e){
+      throw AuthException(
+          FirebaseAuthException(
+              message: "An Error occurred while getting current user", code: 'unknown'),
+          AuthErrorAction.getCurrentUser);
     }
-    return await _getUserFromPreferences();
   }
 }

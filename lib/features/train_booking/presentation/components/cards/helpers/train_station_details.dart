@@ -24,7 +24,6 @@ class TrainStationDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final onPrimaryContainer = Theme.of(context).colorScheme.onPrimaryContainer;
-    final onPrimary = Theme.of(context).colorScheme.onPrimary;
     final primary = Theme.of(context).colorScheme.primary;
     return Container(
       padding: const EdgeInsets.all(8.0),
@@ -53,7 +52,7 @@ class TrainStationDetails extends StatelessWidget {
               text: '${AppLocalizations.of(context)!.station(code)}  ',
               style: TextStyle(
                 fontWeight: FontWeight.w900,
-                color: onPrimary
+                color: primary
               ),
             ),
             TextSpan(

@@ -51,15 +51,6 @@ class TrainCard extends StatelessWidget {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.9,
       child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primaryContainer,
-          borderRadius: displayTrainTicketCard
-              ? const BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  topRight: Radius.circular(16),
-                )
-              : BorderRadius.circular(16),
-        ),
         margin: EdgeInsets.only(bottom: displayTrainTicketCard ? 0 : 10),
         child: InkWell(
           onTap: _handleTrainSelection,
@@ -113,7 +104,10 @@ class TrainCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+        ),
       ),
       padding: const EdgeInsets.all(15),
       child: Column(

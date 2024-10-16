@@ -16,7 +16,7 @@ class BestOffers extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final trainsState = ref.watch(bestOffersTrainsController);
-    final onPrimary = Theme.of(context).colorScheme.onPrimary;
+    final primary = Theme.of(context).colorScheme.primary;
     return Column(
       children: [
         Row(
@@ -27,7 +27,7 @@ class BestOffers extends ConsumerWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: onPrimary
+                color: primary
               ),
             )
           ],

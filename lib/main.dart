@@ -1,4 +1,3 @@
-import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
@@ -26,7 +25,6 @@ Future<void> main() async {
   } catch (e) {
     log('Error initializing Firebase: $e');
   }
-
   runApp(
     const ProviderScope(
       child: MyApp(),
@@ -45,7 +43,7 @@ class MyAppState extends ConsumerState<MyApp> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(settingsControllerProvider.notifier).loadLanguage();
     });
   }
@@ -53,12 +51,10 @@ class MyAppState extends ConsumerState<MyApp> {
   @override
   Widget build(BuildContext context) {
     final settings = ref.watch(settingsControllerProvider);
-
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -67,9 +63,6 @@ class MyAppState extends ConsumerState<MyApp> {
         systemNavigationBarIconBrightness: Brightness.dark,
       ),
     );
-
-    log('Current language: ${settings.language}');
-
     return MaterialApp(
       title: 'Mahattaty',
       theme: lightTheme,

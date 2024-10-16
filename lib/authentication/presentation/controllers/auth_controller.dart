@@ -87,8 +87,13 @@ class AuthController extends StateNotifier<AuthState> {
   }
 
   Future<void> updateCurrentUser() async {
-    final user = await getCurrentUserUseCase.call();
-    state = AuthState(user: user);
+    try{
+      state = AuthState(isLoading: true);
+      final user = await getCurrentUserUseCase.call();
+      state = AuthState(user: user, isLoading: false);
+    } on AuthException catch (e) {
+      state = AuthState(exception: e, isLoading: false);
+    }
   }
 
   void clearState() {

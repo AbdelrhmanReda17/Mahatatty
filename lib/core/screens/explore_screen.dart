@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mahattaty/core/generic%20components/mahattaty_search.dart';
+import 'package:mahattaty/features/news/presentation/components/news_search.dart';
 import 'package:mahattaty/features/news/presentation/components/trending_topics.dart';
 import 'package:mahattaty/features/train_booking/presentation/components/best_offers.dart';
 import '../../features/news/presentation/controllers/search_news_controller.dart';
@@ -43,7 +43,7 @@ class ExploreScreenState extends ConsumerState<ExploreScreen> {
       body: ListView(
         padding: const EdgeInsets.only(left: 20, right: 20, top: 30),
         children: [
-          MahattatySearch(
+          NewsSearch(
             onPressed: (value) {
               ref.read(newsSearchProvider.notifier).state =
                   ref.read(newsSearchProvider).copyWith(query: value);

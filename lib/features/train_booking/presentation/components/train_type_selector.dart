@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mahattaty/features/train_booking/domain/entities/train.dart';
 
 class TrainTypeSelector extends StatefulWidget {
 

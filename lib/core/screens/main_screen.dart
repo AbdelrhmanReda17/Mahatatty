@@ -20,8 +20,9 @@ class MainScreen extends ConsumerWidget {
         padding: const EdgeInsets.only(left: 10, right: 10),
         child: Row(
           children: [
-            const CircleAvatar(
+             CircleAvatar(
               radius: 20,
+              backgroundColor: Theme.of(context).colorScheme.onSecondary,
               child: Icon(Icons.person),
             ),
             const SizedBox(width: 10),
@@ -29,7 +30,7 @@ class MainScreen extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '${AppLocalizations.of(context)!.greetings}${ref.watch(authControllerProvider).user!.name} !',
+                  '${AppLocalizations.of(context)!.greetings}  ${ref.watch(authControllerProvider).user!.name} !',
                   style: TextStyle(
                     fontSize: 16,
                     color: surfaceColor,

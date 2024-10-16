@@ -25,7 +25,6 @@ class CountdownTimerState extends ConsumerState<CountdownTimer> {
     remainingDuration = widget.targetDateTime.difference(DateTime.now());
 
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      // Update the remaining duration
       setState(() {
         remainingDuration = widget.targetDateTime.difference(DateTime.now());
         if (remainingDuration.isNegative) {
@@ -56,14 +55,14 @@ class CountdownTimerState extends ConsumerState<CountdownTimer> {
       return "$twoDigitHours:$twoDigitMinutes:$twoDigitSeconds";
     }
 
-    final onPrimary = Theme.of(context).colorScheme.onPrimary;
-    final onPrimaryContainer = Theme.of(context).colorScheme.onPrimaryContainer;
+    final primary = Theme.of(context).colorScheme.surface;
+    final onPrimaryContainer = Theme.of(context).colorScheme.onPrimaryContainer.withOpacity(0.6);
 
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(7),
       decoration: BoxDecoration(
-        color: onPrimaryContainer.withOpacity(0.3),
+        color: onPrimaryContainer,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Row(
@@ -73,7 +72,7 @@ class CountdownTimerState extends ConsumerState<CountdownTimer> {
         children: [
           Icon(
             Icons.timer,
-            color: onPrimary,
+            color: primary,
           ),
           const SizedBox(width: 5),
           RichText(
@@ -82,7 +81,7 @@ class CountdownTimerState extends ConsumerState<CountdownTimer> {
               text: " ${AppLocalizations.of(context)!.discountEndsIn} ",
               style: TextStyle(
                 fontSize: 16,
-                color: onPrimary,
+                color: primary,
               ),
               children: [
                 TextSpan(
@@ -90,7 +89,7 @@ class CountdownTimerState extends ConsumerState<CountdownTimer> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w900,
-                    color: onPrimary,
+                    color: primary,
                   ),
                 ),
               ],

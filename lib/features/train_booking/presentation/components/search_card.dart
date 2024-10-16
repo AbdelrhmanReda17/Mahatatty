@@ -154,7 +154,7 @@ class SearchCardForm extends ConsumerWidget {
                     },
                     child: RichText(
                       text: TextSpan(
-                        style: TextStyle(color: onPrimary),
+                        style: TextStyle(color: primaryColor),
                         children: [
                           TextSpan(
                             text:

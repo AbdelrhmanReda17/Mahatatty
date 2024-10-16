@@ -21,15 +21,18 @@ class SettingsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, color: iconColor ?? Colors.black),
+      leading: Icon(icon, color: iconColor ),
       title: Text(
         title,
-        style: TextStyle(color: textColor ?? Colors.black),
+        style: TextStyle(color: textColor) ,
       ),
       trailing: trailingText != null
           ? Text(
         trailingText!,
-        style: const TextStyle(color: Colors.black45),
+        style: const TextStyle(
+          color: Colors.grey,
+          fontSize: 14,
+        ),
       )
           : const Icon(Icons.arrow_forward_ios, size: 16),
       onTap: onTap,

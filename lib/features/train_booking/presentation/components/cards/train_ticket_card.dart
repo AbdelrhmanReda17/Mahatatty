@@ -15,7 +15,7 @@ class TrainTicketCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final surfaceColor = Theme.of(context).colorScheme.surface;
-    final onPrimaryColor = Theme.of(context).colorScheme.onPrimary;
+    final primaryColor = Theme.of(context).colorScheme.primary;
     final onPrimaryContainerColor =
         Theme.of(context).colorScheme.onPrimaryContainer;
     return Container(
@@ -51,7 +51,7 @@ class TrainTicketCard extends StatelessWidget {
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
-                              color: onPrimaryColor,
+                              color: primaryColor,
                             ),
                           ),
                         ],
@@ -78,7 +78,7 @@ class TrainTicketCard extends StatelessWidget {
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
-                              color: Theme.of(context).colorScheme.onPrimary,
+                              color: primaryColor,
                             ),
                           ),
                         ],

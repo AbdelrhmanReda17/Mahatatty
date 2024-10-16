@@ -16,7 +16,7 @@ class TrainPrice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final onPrimary = Theme.of(context).colorScheme.onPrimary;
+    final primary = Theme.of(context).colorScheme.primary;
     final onPrimaryContainer = Theme.of(context).colorScheme.onPrimaryContainer;
 
     return Column(
@@ -31,7 +31,7 @@ class TrainPrice extends StatelessWidget {
                 text: TextSpan(
                   text : ' ${AppLocalizations.of(context)!.arabicOrEnglish(trainPrice.toStringAsFixed(2))} ',
                   style: TextStyle(
-                    color: onPrimary,
+                    color: primary,
                     fontWeight: FontWeight.bold,
                     fontSize: 15,
                     decoration: TextDecoration.lineThrough,
@@ -44,7 +44,7 @@ class TrainPrice extends StatelessWidget {
             ? AppLocalizations.of(context)!.arabicOrEnglish(discountTrainPrice.toStringAsFixed(2))
                     : AppLocalizations.of(context)!.arabicOrEnglish(trainPrice.toStringAsFixed(2)),
                 style: TextStyle(
-                  color: onPrimary,
+                  color: primary,
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 ),

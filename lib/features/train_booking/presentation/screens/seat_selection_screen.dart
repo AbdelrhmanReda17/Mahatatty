@@ -45,9 +45,8 @@ class SeatSelectionScreenState extends ConsumerState<SeatSelectionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final onPrimary = Theme.of(context).colorScheme.onPrimary;
-    final onPrimaryContainer = Theme.of(context).colorScheme.onPrimaryContainer;
     final primary = Theme.of(context).colorScheme.primary;
+    final onPrimaryContainer = Theme.of(context).colorScheme.onPrimaryContainer;
     final surface = Theme.of(context).colorScheme.surface;
     ref.listen(
       bookTicketControllerProvider,
@@ -105,7 +104,7 @@ class SeatSelectionScreenState extends ConsumerState<SeatSelectionScreen> {
                     seat.seatType,
                   ),
                   style: TextStyle(
-                    color: onPrimary,
+                    color: primary,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -113,7 +112,7 @@ class SeatSelectionScreenState extends ConsumerState<SeatSelectionScreen> {
                 trailing: Text(
                   '${AppLocalizations.of(context)!.arabicOrEnglish(seat.seatPrice)}  ${AppLocalizations.of(context)!.egp}',
                   style: TextStyle(
-                    color: onPrimary,
+                    color: primary,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -208,7 +207,11 @@ class SeatSelectionScreenState extends ConsumerState<SeatSelectionScreen> {
                   text: AppLocalizations.of(context)!.confirmButton,
                 ),
               ),
+
             ],
+          ),
+          const SizedBox(
+            height: 20,
           ),
         ],
       ),

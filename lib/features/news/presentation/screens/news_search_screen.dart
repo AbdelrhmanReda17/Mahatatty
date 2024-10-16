@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/generic components/mahattaty_empty_data.dart';
 import '../../../../core/generic components/mahattaty_error.dart';
 import '../../../../core/generic components/mahattaty_scaffold.dart';
-import '../../../../core/generic components/mahattaty_search.dart';
+import '../components/news_search.dart';
 import '../components/Cards/news_card.dart';
 import '../components/cards/skeletons/news_card_skeleton.dart';
 import '../controllers/news_by_query_controller.dart';
@@ -69,7 +69,7 @@ class NewsSearchScreen extends ConsumerWidget {
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: MahattatySearch(
+              child: NewsSearch(
                 onPressed: (value) {
                   ref.read(newsSearchProvider.notifier).state =
                       ref.read(newsSearchProvider).copyWith(query: value);

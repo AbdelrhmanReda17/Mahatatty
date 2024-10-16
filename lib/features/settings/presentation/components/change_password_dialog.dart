@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:mahattaty/core/generic%20components/mahattaty_text_form_field.dart';
 import 'package:mahattaty/core/utils/validations.dart';
 import '../../../../core/generic components/mahattaty_dialog.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../../../core/generic components/mahattaty_text_form_field.dart';
 
 class ChangePasswordDialog extends StatelessWidget {
   final _passwordFormKey = GlobalKey<FormState>();
@@ -20,40 +22,40 @@ class ChangePasswordDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MahattatyDialog(
-      title: 'Create new password',
-      description: 'Enter your new password and confirm it',
+      title: AppLocalizations.of(context)!.changePassword,
+      description: AppLocalizations.of(context)!.changePasswordDescription,
       content: [
         Form(
           key: _passwordFormKey,
           child: Column(
             children: [
               MahattatyTextFormField(
-                labelText: 'Password',
+                labelText: AppLocalizations.of(context)!.passwordLabel,
                 isPassword: true,
                 iconData: FontAwesomeIcons.lock,
-                hintText: 'Create your password',
+                hintText: AppLocalizations.of(context)!.passwordHint,
                 controller: passwordTextControllers[0],
                 validator: (value) => value!.isValidPassword
                     ? null
-                    : 'Password must be at least 8 characters, include an uppercase letter, a lowercase letter, and a number',
+                    : AppLocalizations.of(context)!.passwordError,
               ),
               const SizedBox(height: 20),
               MahattatyTextFormField(
-                labelText: 'Confirm Password',
+                labelText: AppLocalizations.of(context)!.confirmPasswordLabel,
                 isPassword: true,
                 iconData: FontAwesomeIcons.lock,
                 controller: passwordTextControllers[1],
-                hintText: 'Enter your password again',
+                hintText: AppLocalizations.of(context)!.confirmPasswordHint,
                 validator: (value) => value!
                         .isValidConfirmPassword(passwordTextControllers[0].text)
                     ? null
-                    : 'Passwords do not match',
+                    : AppLocalizations.of(context)!.confirmPasswordError,
               ),
             ],
           ),
         ),
       ],
-      buttonText: 'Change Password',
+      buttonText: AppLocalizations.of(context)!.changePassword,
       onButtonPressed: () {
         if (_passwordFormKey.currentState!.validate()) {
           onButtonPressed(passwordTextControllers[0].text);

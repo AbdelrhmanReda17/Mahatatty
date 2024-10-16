@@ -8,7 +8,10 @@ class LegalAndPoliciesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.onSecondary,
       appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.onSecondary,
+
         title: Text(AppLocalizations.of(context)!.legal),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
