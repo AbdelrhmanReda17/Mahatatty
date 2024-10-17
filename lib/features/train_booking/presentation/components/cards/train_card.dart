@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mahattaty/core/utils/app_localizations_extension.dart';
@@ -84,7 +82,6 @@ class TrainCard extends StatelessWidget {
           .seatPrice;
       discountTrainPrice =
           trainPrice - (trainPrice * (train.seatDiscount / 100));
-      log('discountTrainPrice: $discountTrainPrice');
       isShowDiscount = train.seatDiscount != 0 &&
           train.seatDiscountDate.toDate().isAfter(DateTime.now());
     }
@@ -141,35 +138,30 @@ class TrainCard extends StatelessWidget {
 
   Widget _buildTrainDetails(
       BuildContext context, Map<String, dynamic> trainPriceData) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Expanded(
-          child: Row(
-            children: [
-              const Icon(FontAwesomeIcons.trainSubway),
-              const SizedBox(width: 8),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.35,
-                child: Text(
-                  overflow: TextOverflow.ellipsis,
-                  train!.trainName,
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-              ),
-            ],
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const Icon(FontAwesomeIcons.trainSubway),
+            const SizedBox(width: 8),
+            Text(
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              softWrap: false,
+              train!.trainName,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+          ],
         ),
         if(isShowPrice)
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.36,
-          child: TrainPrice(
-            trainPrice: trainPriceData['trainPrice'],
-            discountTrainPrice: trainPriceData['discountTrainPrice'],
-            isShowDiscount: trainPriceData['isShowDiscount'],
-          ),
-        ),
+             TrainPrice(
+              trainPrice: trainPriceData['trainPrice'],
+              discountTrainPrice: trainPriceData['discountTrainPrice'],
+              isShowDiscount: trainPriceData['isShowDiscount'],
+            ),
       ],
     );
   }

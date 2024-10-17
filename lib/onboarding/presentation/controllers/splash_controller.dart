@@ -1,11 +1,8 @@
-import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mahattaty/authentication/domain/entities/User.dart';
-import 'package:mahattaty/authentication/domain/usecases/get_current_user_usecase.dart';
+import 'package:mahattaty/authentication/domain/entities/user.dart';
 import 'package:mahattaty/core/screens/root_screen.dart';
 import '../../../authentication/presentation/controllers/auth_controller.dart';
-import '../../../authentication/presentation/providers/get_current_user_provider.dart';
 import '../../../authentication/presentation/screens/authentication_screen.dart';
 import '../../../core/utils/open_screens.dart';
 import '../../domain/usecases/check_onboarding_status_usecase.dart';

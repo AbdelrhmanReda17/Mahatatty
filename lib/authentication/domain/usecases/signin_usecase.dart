@@ -1,4 +1,4 @@
-import '../entities/User.dart';
+import '../entities/user.dart';
 import '../repository/user_repository.dart';
 
 class SignInUseCase {

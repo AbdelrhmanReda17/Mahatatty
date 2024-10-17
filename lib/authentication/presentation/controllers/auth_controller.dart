@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mahattaty/authentication/Exceptions/auth_exception.dart';
 import 'package:mahattaty/authentication/domain/usecases/forget_password_usecase.dart';
-import '../../domain/entities/User.dart';
+import '../../domain/entities/user.dart';
 import '../../domain/usecases/get_current_user_usecase.dart';
 import '../../domain/usecases/signin_usecase.dart';
 import '../../domain/usecases/signout_usecase.dart';

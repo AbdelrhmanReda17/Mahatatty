@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mahattaty/features/train_booking/data/models/train_seat_model.dart';
 import '../../domain/entities/ticket.dart';
@@ -55,17 +53,22 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
           .collection('tickets')
           .where('userId', isEqualTo: userId)
           .get().timeout(const Duration(seconds: 5));
-      if (oldTicket.docs.isNotEmpty) {
-        final TicketModel ticketModel = TicketModel.fromFireStore(
-            oldTicket.docs.first.data(),
-            oldTicket.docs.first.id
-        );
-        if (ticketModel.status == TicketStatus.booked) {
-          throw ('You have already booked a ticket for this train');
-        } else {
-          await fireStore.collection('tickets')
-              .doc(ticketModel.id)
-              .delete();
+     if (oldTicket.docs.isNotEmpty)  {
+        for(var ticket in oldTicket.docs) {
+          final ticketModel = TicketModel.fromFireStore(
+              ticket.data(),
+              ticket.id
+          );
+          if (ticketModel.status == TicketStatus.booked &&
+              ticketModel.trainId == trainId ) {
+            throw ('You have already booked a ticket for this train');
+          } else {
+            if(ticketModel.status == TicketStatus.onHold || ticketModel.status == TicketStatus.canceled) {
+              await fireStore.collection('tickets')
+                  .doc(ticketModel.id)
+                  .delete();
+            }
+          }
         }
       }
       final train =
@@ -111,14 +114,12 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
 
       return ticket.id;
     } on FirebaseException catch (e) {
-      log('Firebase Error: ${e.message}');
       if (e.code == 'unavailable') {
         throw Exception('No network connection. Please check your internet.');
       } else {
         throw Exception('Firebase error: ${e.message}');
       }
     }  catch (e) {
-      log('Error: $e');
       rethrow;
     }
   }
@@ -140,24 +141,24 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
   Future<void> cancelTrainTicket(String ticketId) async {
     try {
       final ticket = await fireStore.collection('tickets').doc(ticketId).get().timeout(const Duration(seconds: 5));
-      final ticketData = ticket.data() as Map<String, dynamic>;
+      final TicketModel ticketData = TicketModel.fromFireStore(ticket.data()!, ticket.id);
       final train =
-          await fireStore.collection('trains').doc(ticketData['trainId']).get().timeout(const Duration(seconds: 5));
-      final trainData = train.data() as Map<String, dynamic>;
+          await fireStore.collection('trains').doc(ticketData.trainId).get().timeout(const Duration(seconds: 5));
+      final TrainModel trainData = TrainModel.fromFireStore(train.data()!, train.id);
       await fireStore.collection('tickets').doc(ticketId).delete();
-      await fireStore.collection('trains').doc(ticketData['trainId']).update({
-        'trainBookedSeats': trainData['trainBookedSeats'] - 1,
+      await fireStore.collection('trains').doc(ticketData.trainId).update({
+        'trainBookedSeats': trainData.trainBookedSeats - 1,
         'TrainSeatsStatus':
-            trainData['trainBookedSeats'] - 1 == trainData['trainTotalSeats']
+            trainData.trainBookedSeats - 1 == trainData.trainTotalSeats
                 ? 'booked'
                 : 'available',
-        'trainSeats': trainData['trainSeats'].map((e) {
-          if (e['seatType'] == ticketData['seatType']) {
+        'trainSeats': trainData.trainSeats.map((e) {
+          if (e.seatType == ticketData.seatType) {
             return {
-              'seatType': e['seatType'],
-              'numberOfSeats': e['numberOfSeats'],
-              'bookedSeats': e['bookedSeats'] - 1,
-              'seatPrice': e['seatPrice'],
+              'seatType': e.seatType,
+              'numberOfSeats': e.numberOfSeats,
+              'bookedSeats': e.bookedSeats - 1,
+              'seatPrice': e.seatPrice,
             };
           }
           return e;

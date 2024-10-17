@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,7 +21,6 @@ class SettingsLocalDataResource implements BaseSettingsLocalDataResource {
   @override
   Future<void> changeMode(ThemeMode mode) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    log(mode.name.toString());
     await prefs.setString('selected_mode', mode.name.toString());
   }
 

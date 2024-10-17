@@ -29,7 +29,6 @@ dependencies:
   transparent_image: ^2.0.1
   syncfusion_flutter_datepicker: ^27.1.51
   qr_flutter: ^4.1.0
-  device_preview: ^1.2.0
   arabic_numbers: ^1.0.0
   connectivity_plus: ^6.0.5
   flutter_connectivity: ^0.0.3

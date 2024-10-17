@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mahattaty/features/train_booking/domain/entities/train_seat.dart';
@@ -56,7 +55,6 @@ class BookTicketController extends StateNotifier<BookingTicketState> {
       );
       state = BookingTicketState(ticketId: result);
     } catch (e) {
-      log(e.toString());
       state = BookingTicketState(error: e.toString() ,isLoading: false);
     }
   }

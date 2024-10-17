@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:mahattaty/features/train_booking/domain/entities/train_seat.dart';
 
 class TrainSeatModel extends TrainSeats {
@@ -11,7 +9,6 @@ class TrainSeatModel extends TrainSeats {
   });
 
   factory TrainSeatModel.fromFireStore(Map<String, dynamic> data) {
-    log('TrainSeatModel.fromFireStore: $data');
     return TrainSeatModel(
       seatType: SeatType.values.firstWhere(
         (element) => element.toString() == 'SeatType.${data["seatType"]}',

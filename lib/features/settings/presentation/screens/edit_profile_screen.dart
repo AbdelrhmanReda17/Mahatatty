@@ -7,7 +7,7 @@ import 'package:mahattaty/core/generic%20components/mahattaty_text_form_field.da
 import 'package:mahattaty/core/utils/open_dialogs.dart';
 import 'package:mahattaty/core/utils/validations.dart';
 import '../../../../authentication/Exceptions/auth_exception.dart';
-import '../../../../authentication/domain/entities/User.dart';
+import '../../../../authentication/domain/entities/user.dart';
 import '../../../../core/generic%20components/mahattaty_button.dart';
 import '../../Exceptions/settings_exception.dart';
 import '../components/change_password_dialog.dart';

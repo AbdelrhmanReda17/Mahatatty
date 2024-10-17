@@ -1,4 +1,4 @@
-import 'package:mahattaty/authentication/domain/entities/User.dart' as entity;
+import 'package:mahattaty/authentication/domain/entities/user.dart' as entity;
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UserModel extends entity.User {

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mahattaty/features/news/presentation/controllers/search_news_controller.dart';
 
@@ -10,7 +8,6 @@ final newsByQueryController =
     FutureProvider.family<List<News>, NewsSearchState>((ref, query) {
   ref.state = const AsyncValue.loading();
   try {
-    log('Query: ${query.query}');
     final news = ref.read(getNewsByQueryProvider).execute(
           query.query,
         );

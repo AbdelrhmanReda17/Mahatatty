@@ -26,40 +26,49 @@ class TrainPrice extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             if (isShowDiscount)
-              RichText(
-                textAlign: TextAlign.center,
-                text: TextSpan(
-                  text : ' ${AppLocalizations.of(context)!.arabicOrEnglish(trainPrice.toStringAsFixed(2))} ',
-                  style: TextStyle(
-                    color: primary,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                    decoration: TextDecoration.lineThrough,
-                  ),
-                ),
-              ),
-            RichText(
-              text: TextSpan(
-                text: isShowDiscount
-            ? AppLocalizations.of(context)!.arabicOrEnglish(discountTrainPrice.toStringAsFixed(2))
-                    : AppLocalizations.of(context)!.arabicOrEnglish(trainPrice.toStringAsFixed(2)),
-                style: TextStyle(
-                  color: primary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-                children: [
-                  TextSpan(
-                    text: AppLocalizations.of(context)!.egp,
-                    style: TextStyle(
-                      color: onPrimaryContainer,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
+ RichText(
+                     textAlign: TextAlign.end,
+
+                     maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    text: TextSpan(
+                      text : AppLocalizations.of(context)!.arabicOrEnglish(trainPrice.toStringAsFixed(2)),
+                      style: TextStyle(
+                        color: primary,
+                        overflow: TextOverflow.ellipsis,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15,
+                        decoration: TextDecoration.lineThrough,
+                      ),
                     ),
+                                   ),
+            RichText(
+                   textAlign: TextAlign.end,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  text: TextSpan(
+                    text: isShowDiscount
+                               ? ' ${AppLocalizations.of(context)!.arabicOrEnglish(discountTrainPrice.toStringAsFixed(2))}'
+                        : ' ${AppLocalizations.of(context)!.arabicOrEnglish(trainPrice.toStringAsFixed(2))}',
+                    style: TextStyle(
+                      color: primary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: ' ${AppLocalizations.of(context)!.egp}',
+                        style: TextStyle(
+                          color: onPrimaryContainer,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
+                               ),
+
+
           ],
         ),
       ],

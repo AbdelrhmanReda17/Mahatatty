@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,7 +36,6 @@ class DateListState extends ConsumerState<DateList> {
   }
 
   void selectDate(int index) {
-    log('Selected Date: ${index + 1}');
     DateTime x = DateTime.now();
     ref.read(trainSearchProvider.notifier).state =
         ref.read(trainSearchProvider).copyWith(

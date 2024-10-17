@@ -78,7 +78,6 @@ class PaymentMethodDialogState extends ConsumerState<PaymentMethodDialog> {
       buttonText: AppLocalizations.of(context)!.paySuccess,
       contentPlacement: ContentPlacement.afterTitle,
       onButtonPressed: () async {
-        Navigator.of(context).pop();
         await ref
             .watch(bookTicketControllerProvider.notifier)
             .changeTicketStatus(
@@ -88,6 +87,7 @@ class PaymentMethodDialogState extends ConsumerState<PaymentMethodDialog> {
         if(paymentState.error != null) {
           return;
         }
+        Navigator.of(context).pop();
         showPaymentSuccessBottomSheet(
           context,
           widget.onClose,

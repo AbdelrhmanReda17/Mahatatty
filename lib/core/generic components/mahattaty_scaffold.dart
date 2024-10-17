@@ -27,10 +27,10 @@ class MahattatyScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () {
-        log('onWillPop');
+      onWillPop: () async {
         if (onWillPop != null) {
-          onWillPop!();
+          await onWillPop!();
+          return Future.value(false);
         }
         Navigator.of(context).pop();
         return Future.value(false);

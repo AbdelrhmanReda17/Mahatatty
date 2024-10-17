@@ -1,6 +1,6 @@
 import 'package:mahattaty/authentication/domain/repository/user_repository.dart';
 
-import '../../domain/entities/User.dart';
+import '../../domain/entities/user.dart';
 import '../datasource/auth_remote_data_source.dart';
 
 class AuthRepository implements BaseAuthRepository {

@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-
 import '../../domain/entities/news.dart';
 
 class NewsModel extends News {

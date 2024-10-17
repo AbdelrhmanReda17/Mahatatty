@@ -43,7 +43,6 @@ class PaymentScreenState extends ConsumerState<PaymentScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     ref.listen<BookingTicketState>(
       bookTicketControllerProvider,
           (previous, next) {
@@ -64,8 +63,14 @@ class PaymentScreenState extends ConsumerState<PaymentScreen> {
     return MahattatyScaffold(
       onWillPop: () async {
         await ref.watch(bookTicketControllerProvider.notifier).cancelTicket(
-              widget.ticketId,
-            );
+          widget.ticketId,
+        );
+        Navigator.of(context).popUntil(
+          (route) {
+            return route.settings.name == const RootScreen().homeRouteName;
+          },
+        );
+        return true;
       },
       appBarContent:  Text(
         AppLocalizations.of(context)!.payment,
@@ -87,8 +92,8 @@ class PaymentScreenState extends ConsumerState<PaymentScreen> {
             ),
             const SizedBox(height: 20),
             CountdownTimer(
-              onTimerEnd: () => {
-                ref.watch(bookTicketControllerProvider.notifier).cancelTicket(
+              onTimerEnd: () async =>  {
+                await ref.watch(bookTicketControllerProvider.notifier).cancelTicket(
                       widget.ticketId,
                     ),
                 Navigator.of(context).popUntil(
@@ -121,7 +126,11 @@ class PaymentScreenState extends ConsumerState<PaymentScreen> {
                   dialog: PaymentMethodDialog(
                     ticketId: widget.ticketId,
                     onClose: () {
-                      Navigator.of(context).pop();
+                      Navigator.of(context).popUntil(
+                            (route) {
+                          return route.settings.name == const RootScreen().homeRouteName;
+                        },
+                      );
                     },
                   ),
                 );

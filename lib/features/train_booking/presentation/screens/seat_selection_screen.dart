@@ -62,89 +62,15 @@ class SeatSelectionScreenState extends ConsumerState<SeatSelectionScreen> {
     );
 
     return MahattatyScaffold(
-      appBarContent: Padding(
-        padding: const EdgeInsets.only(left: 10),
-        child: Row(
-          children: [
-            Text(
-              AppLocalizations.of(context)!.selectSeat,
-              style: TextStyle(
-                  color: surface,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
-            )
-          ],
-        ),
-      ),
-      bgHeight: backgroundHeight.small,
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TrainCard(
-              train: widget.train,
-              departureStation: widget.train.trainDepartureStation,
-              arrivalStation: widget.train.trainArrivalStation,
-              isShowPrice: false,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0 , right: 8.0),
-            child: Text(
-              AppLocalizations.of(context)!.trainSeats,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-          ),
-          ...widget.train.trainSeats.map(
-            (seat) {
-              return ListTile(
-                onTap: null,
-                title: Text(
-                  AppLocalizations.of(context)!.seat(
-                    seat.seatType,
-                  ),
-                  style: TextStyle(
-                    color: primary,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                trailing: Text(
-                  '${AppLocalizations.of(context)!.arabicOrEnglish(seat.seatPrice)}  ${AppLocalizations.of(context)!.egp}',
-                  style: TextStyle(
-                    color: primary,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                subtitle: Text(
-                    '${AppLocalizations.of(context)!.remainingSeats} ${AppLocalizations.of(context)!.arabicOrEnglish(seat.numberOfSeats - seat.bookedSeats)}'),
-              );
-            },
-          ),
-           Padding(
-            padding:const EdgeInsets.all(8.0),
-            child: Text(
-              AppLocalizations.of(context)!.selectSeat,
-              style:const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-          ),
-          SizedBox(
-            height: 60,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                _selectSeatWidget(context , primary , onPrimaryContainer),
-              ],
-            ),
-          ),
-          const Spacer(),
+      bottomNavigationBar: Column(
+          mainAxisSize: MainAxisSize.min,
+       children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                 Text(
+                Text(
                   AppLocalizations.of(context)!.totalPrice,
                   style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
@@ -180,13 +106,12 @@ class SeatSelectionScreenState extends ConsumerState<SeatSelectionScreen> {
                     await ref
                         .watch(bookTicketControllerProvider.notifier)
                         .bookTicket(
-                          ticketType: widget.ticketType,
-                          trainId: widget.train.id,
-                          bookingDate: Timestamp.now(),
-                          seat:
-                              widget.train.trainSeats[_isSeatSelected].seatType,
-                          userId: ref.watch(authControllerProvider).user!.uuid,
-                        );
+                      ticketType: widget.ticketType,
+                      trainId: widget.train.id,
+                      bookingDate: Timestamp.now(),
+                      seat: widget.train.trainSeats[_isSeatSelected].seatType,
+                      userId: ref.watch(authControllerProvider).user!.uuid,
+                    );
 
                     if (ref.watch(bookTicketControllerProvider).error == null) {
                       OpenScreen.openScreenWithSmoothAnimation(
@@ -195,9 +120,9 @@ class SeatSelectionScreenState extends ConsumerState<SeatSelectionScreen> {
                           train: widget.train,
                           ticketType: widget.ticketType,
                           seatType:
-                              widget.train.trainSeats[_isSeatSelected].seatType,
+                          widget.train.trainSeats[_isSeatSelected].seatType,
                           ticketId:
-                              ref.watch(bookTicketControllerProvider).ticketId!,
+                          ref.watch(bookTicketControllerProvider).ticketId!,
                         ),
                         true,
                       );
@@ -210,10 +135,87 @@ class SeatSelectionScreenState extends ConsumerState<SeatSelectionScreen> {
 
             ],
           ),
-          const SizedBox(
-            height: 20,
-          ),
-        ],
+        ]
+      ),
+      appBarContent: Padding(
+        padding: const EdgeInsets.only(left: 10),
+        child: Row(
+          children: [
+            Text(
+              AppLocalizations.of(context)!.selectSeat,
+              style: TextStyle(
+                  color: surface,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+            )
+          ],
+        ),
+      ),
+      bgHeight: backgroundHeight.small,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TrainCard(
+                train: widget.train,
+                departureStation: widget.train.trainDepartureStation,
+                arrivalStation: widget.train.trainArrivalStation,
+                isShowPrice: false,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0 , right: 8.0),
+              child: Text(
+                AppLocalizations.of(context)!.trainSeats,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            ...widget.train.trainSeats.map(
+              (seat) {
+                return ListTile(
+                  onTap: null,
+                  title: Text(
+                    AppLocalizations.of(context)!.seat(
+                      seat.seatType,
+                    ),
+                    style: TextStyle(
+                      color: primary,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  trailing: Text(
+                    '${AppLocalizations.of(context)!.arabicOrEnglish(seat.seatPrice)}  ${AppLocalizations.of(context)!.egp}',
+                    style: TextStyle(
+                      color: primary,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  subtitle: Text(
+                      '${AppLocalizations.of(context)!.remainingSeats} ${AppLocalizations.of(context)!.arabicOrEnglish(seat.numberOfSeats - seat.bookedSeats)}'),
+                );
+              },
+            ),
+             Padding(
+              padding:const EdgeInsets.all(8.0),
+              child: Text(
+                AppLocalizations.of(context)!.selectSeat,
+                style:const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+            ),
+            SizedBox(
+              height: 60,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  _selectSeatWidget(context , primary , onPrimaryContainer),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

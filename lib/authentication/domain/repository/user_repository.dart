@@ -1,4 +1,4 @@
-import '../entities/User.dart';
+import '../entities/user.dart';
 
 abstract class BaseAuthRepository {
   Future<User?> signIn(String email, String password, bool isGoogle);

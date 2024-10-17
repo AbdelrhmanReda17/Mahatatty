@@ -1,4 +1,3 @@
-import '../entities/User.dart';
 import '../repository/user_repository.dart';
 
 class ForgetPasswordUseCase {
