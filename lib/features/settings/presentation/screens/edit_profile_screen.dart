@@ -97,92 +97,94 @@ class EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         padding: const EdgeInsets.all(16),
         child: Form(
           key: _formKey,
-          child: Column(
-            children: [
-              CircleAvatar(
-                radius: 50,
-                child: user?.photoUrl != null
-                    ? ClipRRect(
-                        borderRadius: BorderRadius.circular(50),
-                        child: Image.network(
-                          user!.photoUrl!,
-                          fit: BoxFit.cover,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                CircleAvatar(
+                  radius: 50,
+                  child: user?.photoUrl != null
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(50),
+                          child: Image.network(
+                            user!.photoUrl!,
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      : const Icon(
+                          FontAwesomeIcons.user,
+                          size: 50,
                         ),
-                      )
-                    : const Icon(
-                        FontAwesomeIcons.user,
-                        size: 50,
+                ),
+                const SizedBox(height: 16),
+                if (user?.isGoogle == true) _googleAccountNotice(context),
+                const SizedBox(height: 16),
+                _buildUsernameField(user, state),
+                const SizedBox(height: 16),
+                _buildEmailField(user, state),
+                const SizedBox(height: 16),
+                MahattatyButton(
+                  text: AppLocalizations.of(context)!.changePassword,
+                  textStyle:  TextStyle(color:Theme.of(context).colorScheme.primary),
+                  onPressed: () {
+                    OpenDialogs.openCustomDialog(
+                      context: context,
+                      dialog: ChangePasswordDialog(
+                        onButtonPressed: (password) async {
+                          await ref
+                              .read(settingsControllerProvider.notifier)
+                              .changePassword(password);
+                          Navigator.of(context).pop();
+                        },
                       ),
-              ),
-              const SizedBox(height: 16),
-              if (user?.isGoogle == true) _googleAccountNotice(context),
-              const SizedBox(height: 16),
-              _buildUsernameField(user, state),
-              const SizedBox(height: 16),
-              _buildEmailField(user, state),
-              const SizedBox(height: 16),
-              MahattatyButton(
-                text: AppLocalizations.of(context)!.changePassword,
-                textStyle:  TextStyle(color:Theme.of(context).colorScheme.primary),
-                onPressed: () {
-                  OpenDialogs.openCustomDialog(
-                    context: context,
-                    dialog: ChangePasswordDialog(
-                      onButtonPressed: (password) async {
-                        await ref
-                            .read(settingsControllerProvider.notifier)
-                            .changePassword(password);
-                        Navigator.of(context).pop();
-                      },
+                    );
+                  },
+                  style: MahattatyButtonStyle.secondary,
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: MahattatyButton(
+                        textStyle:  TextStyle(color:Theme.of(context).colorScheme.primary),
+                        text: AppLocalizations.of(context)!.cancel,
+                        onPressed: state.isLoading
+                            ? null
+                            : () {
+                                Navigator.of(context).pop();
+                              },
+                        style: MahattatyButtonStyle.secondary,
+                      ),
                     ),
-                  );
-                },
-                style: MahattatyButtonStyle.secondary,
-              ),
-              const Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: MahattatyButton(
-                      textStyle:  TextStyle(color:Theme.of(context).colorScheme.primary),
-                      text: AppLocalizations.of(context)!.cancel,
-                      onPressed: state.isLoading
-                          ? null
-                          : () {
-                              Navigator.of(context).pop();
-                            },
-                      style: MahattatyButtonStyle.secondary,
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: MahattatyButton(
+                        text: AppLocalizations.of(context)!.saveChanges,
+                        disabled: state.isLoading,
+                        onPressed: state.isLoading
+                            ? null
+                            : () async {
+                                if (_formKey.currentState!.validate() &&
+                                    (_usernameController.text != user?.name ||
+                                        _emailController.text != user?.email)) {
+                                 await ref
+                                      .read(settingsControllerProvider.notifier)
+                                      .editProfile(
+                                        name: _usernameController.text,
+                                        email: _emailController.text,
+                                      );
+                                 await ref
+                                      .read(authControllerProvider.notifier)
+                                      .updateCurrentUser();
+                                }
+                              },
+                        style: MahattatyButtonStyle.primary,
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: MahattatyButton(
-                      text: AppLocalizations.of(context)!.saveChanges,
-                      disabled: state.isLoading,
-                      onPressed: state.isLoading
-                          ? null
-                          : () async {
-                              if (_formKey.currentState!.validate() &&
-                                  (_usernameController.text != user?.name ||
-                                      _emailController.text != user?.email)) {
-                               await ref
-                                    .read(settingsControllerProvider.notifier)
-                                    .editProfile(
-                                      name: _usernameController.text,
-                                      email: _emailController.text,
-                                    );
-                               await ref
-                                    .read(authControllerProvider.notifier)
-                                    .updateCurrentUser();
-                              }
-                            },
-                      style: MahattatyButtonStyle.primary,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
