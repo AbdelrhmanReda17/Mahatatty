@@ -76,6 +76,10 @@
   "@loginQuestion": {
     "description": "Question for the login option"
   },
+  "editProfileError": "An error occurred while updating your profile",
+  "changeModeError": "An error occurred while changing the mode",
+  "changePasswordError": "An error occurred while changing the password",
+  "changeLanguageError": "An error occurred while changing the language",
   "registerTitle": "Create an Account",
   "@registerTitle": {
     "description": "Title for the register page"
@@ -266,7 +270,7 @@
   "emptyTrains": "No trains available",
   "emptyHotNews": "No hot news available",
   "seeAll": "See All",
-  "fetchError": "An error occurred while fetching data",
+  "fetchError": "An error occurred while fetching data please check your internet connection and try again",
   "retryButton": "Retry",
   "trendingNews": "Trending News",
   "emptyTrendingNews": "No trending news available",

@@ -1,4 +1,9 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:mahattaty/core/utils/check_connection.dart';
 import 'package:mahattaty/features/train_booking/data/models/train_seat_model.dart';
 import '../../domain/entities/ticket.dart';
 import '../../domain/entities/train.dart';
@@ -49,6 +54,8 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
     required String userId,
   }) async {
     try {
+      await  CheckConnection.checkInternetConnection();
+
       var oldTicket = await fireStore
           .collection('tickets')
           .where('userId', isEqualTo: userId)
@@ -113,13 +120,7 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
       });
 
       return ticket.id;
-    } on FirebaseException catch (e) {
-      if (e.code == 'unavailable') {
-        throw Exception('No network connection. Please check your internet.');
-      } else {
-        throw Exception('Firebase error: ${e.message}');
-      }
-    }  catch (e) {
+    } catch (e) {
       rethrow;
     }
   }
@@ -129,6 +130,8 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
   Future<void> changeTrainTicketStatus(
       String ticketId, TicketStatus status) async {
     try {
+      await  CheckConnection.checkInternetConnection();
+
       await fireStore.collection('tickets').doc(ticketId).update({
         'status': status.toString().split('.').last,
       }).timeout(const Duration(seconds: 5));
@@ -140,10 +143,11 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
   @override
   Future<void> cancelTrainTicket(String ticketId) async {
     try {
-      final ticket = await fireStore.collection('tickets').doc(ticketId).get().timeout(const Duration(seconds: 5));
+      await  CheckConnection.checkInternetConnection();
+      final ticket = await fireStore.collection('tickets').doc(ticketId).get();
       final TicketModel ticketData = TicketModel.fromFireStore(ticket.data()!, ticket.id);
       final train =
-          await fireStore.collection('trains').doc(ticketData.trainId).get().timeout(const Duration(seconds: 5));
+          await fireStore.collection('trains').doc(ticketData.trainId).get();
       final TrainModel trainData = TrainModel.fromFireStore(train.data()!, train.id);
       await fireStore.collection('tickets').doc(ticketId).delete();
       await fireStore.collection('trains').doc(ticketData.trainId).update({
@@ -170,8 +174,9 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
   }
 
   @override
-  Future<List<TrainModel>> getAllTrains() {
-    try {
+  Future<List<TrainModel>> getAllTrains() async{
+    try  {
+      await  CheckConnection.checkInternetConnection();
       return fireStore
           .collection('trains')
           .where('trainSeatsStatus', isEqualTo: 'available')
@@ -189,18 +194,28 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
   @override
   Future<List<TrainModel>> getBestOffersTrains() async {
     try {
+      await  CheckConnection.checkInternetConnection();
+
+      var connectivityResult = await Connectivity().checkConnectivity();
+      if (connectivityResult.contains(ConnectivityResult.none)) {
+        throw const SocketException('No Internet Connection');
+      }
       final result = await FirebaseFirestore.instance
           .collection('trains')
           .where('trainSeatsStatus', isEqualTo: 'available')
           .where('seatDiscount', isGreaterThan: 0)
           .where('seatDiscountEndDate', isGreaterThan: Timestamp.now())
-          .get().timeout(const Duration(seconds: 5));
+          .get();
       final trains = result.docs
           .map((doc) => TrainModel.fromFireStore(doc.data(), doc.id))
           .toList();
       return trains;
+    } on SocketException catch (e) {
+      log('Network Error: $e');
+      rethrow;
     } catch (e) {
-      throw Exception(e);
+      log('Error Fetching Best Offers Trains: $e');
+      rethrow;
     }
   }
 
@@ -211,6 +226,8 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
       required TrainStations to,
       DateTime? fromDateTime}) async {
     try {
+      await  CheckConnection.checkInternetConnection();
+
       final trains = await fireStore
           .collection('trains')
           .where('trainDepartureStation', isEqualTo: from.name.toLowerCase())
@@ -240,6 +257,8 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
   Future<Map<TicketModel, TrainModel>> getUserBookedTrains(
       String userId) async {
     try {
+      await  CheckConnection.checkInternetConnection();
+
       final result = await fireStore
           .collection('tickets')
           .where('userId', isEqualTo: userId)
@@ -265,6 +284,7 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
   @override
   Future<TrainModel> getTrainById(String trainId) async {
     try {
+      await CheckConnection.checkInternetConnection();
       final train = await fireStore.collection('trains').doc(trainId).get();
       if (train.exists) {
         return TrainModel.fromFireStore(train.data()!, trainId);

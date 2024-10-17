@@ -8,24 +8,27 @@ class MahattatyError extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Text(
-          AppLocalizations.of(context)!.fetchError,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.error,
-            fontSize: 20,
-            fontWeight: FontWeight.bold,
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Text(
+            textAlign: TextAlign.center,
+            AppLocalizations.of(context)!.fetchError,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.error,
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        ElevatedButton(
-          onPressed: onRetry,
-          child: Text(AppLocalizations.of(context)!.retryButton),
-        ),
-      ],
+          ElevatedButton(
+            onPressed: onRetry,
+            child: Text(AppLocalizations.of(context)!.retryButton),
+          ),
+        ],
+      ),
     );
   }
 }

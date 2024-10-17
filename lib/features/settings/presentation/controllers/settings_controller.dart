@@ -14,6 +14,7 @@ import '../Providers/change_mode_usecase_provider.dart';
 import '../Providers/change_password_usecase_provider.dart';
 import '../Providers/edit_profile_usecase_provider.dart';
 import '../Providers/load_settings_usecase_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingsState {
   final bool isLoading;
@@ -60,7 +61,9 @@ class SettingsController extends StateNotifier<SettingsState> {
   final ChangeLanguageUseCase changeLanguageUseCase;
   final ChangeModeUseCase changeModeUseCase;
 
-  SettingsController(this.editProfileUseCase, this.changePasswordUseCase , this.loadSettingsUseCase , this.changeLanguageUseCase , this.changeModeUseCase)
+  SettingsController(this.editProfileUseCase, this.changePasswordUseCase,
+      this.loadSettingsUseCase, this.changeLanguageUseCase,
+      this.changeModeUseCase)
       : super(SettingsState());
 
   Future<void> editProfile(
@@ -77,6 +80,17 @@ class SettingsController extends StateNotifier<SettingsState> {
         ),
         isLoading: false,
       );
+    } catch (e) {
+      state = state.copyWith(
+        exception: SettingsException(
+          'Error editing profile',
+          SettingsErrorAction.editProfile,
+          error: SettingsError.unknown,
+        ),
+        isSuccessful: false,
+
+        isLoading: false,
+      );
     }
   }
 
@@ -87,14 +101,20 @@ class SettingsController extends StateNotifier<SettingsState> {
   Future<void> loadSettings() async {
     try {
       state = state.copyWith(isLoading: true);
-      MapEntry<ThemeMode,String> result = await loadSettingsUseCase.call();
-      state = state.copyWith(isSuccessful: true, isLoading: false , language: result.value , mode: result.key);
-    } on FirebaseAuthException catch (e) {
+      MapEntry<ThemeMode, String> result = await loadSettingsUseCase.call();
+      state = state.copyWith(isSuccessful: true,
+          isLoading: false,
+          language: result.value,
+          mode: result.key);
+    } catch (e) {
       state = state.copyWith(
-        exception: SettingsException.fromFirebaseException(
-          e,
+        exception: SettingsException(
+          'Error loading settings',
           SettingsErrorAction.loadLanguage,
+          error: SettingsError.unknown,
         ),
+        isSuccessful: false,
+
         isLoading: false,
       );
     }
@@ -103,13 +123,14 @@ class SettingsController extends StateNotifier<SettingsState> {
   Future<void> changeMode(ThemeMode mode) async {
     state = state.copyWith(isLoading: true);
     try {
-       await changeModeUseCase.call(mode);
+      await changeModeUseCase.call(mode);
       state = state.copyWith(isSuccessful: true, isLoading: false, mode: mode);
-    } on FirebaseAuthException catch (e) {
+    } catch (e) {
       state = state.copyWith(
-        exception: SettingsException.fromFirebaseException(
-          e,
-          SettingsErrorAction.loadLanguage,
+        exception: SettingsException(
+          'Error changing mode',
+          SettingsErrorAction.changeMode,
+          error: SettingsError.unknown,
         ),
         isLoading: false,
       );
@@ -120,13 +141,16 @@ class SettingsController extends StateNotifier<SettingsState> {
     state = state.copyWith(isLoading: true);
     try {
       await changeLanguageUseCase.call(language);
-      state = state.copyWith(isSuccessful: true, language: language, isLoading: false);
-    } on FirebaseAuthException catch (e) {
       state = state.copyWith(
-        exception: SettingsException.fromFirebaseException(
-          e,
+          isSuccessful: true, language: language, isLoading: false);
+    } catch (e) {
+      state = state.copyWith(
+        exception: SettingsException(
+          'Error changing language',
           SettingsErrorAction.changeLanguage,
+          error: SettingsError.unknown,
         ),
+        isSuccessful: false,
         isLoading: false,
       );
     }
@@ -143,6 +167,19 @@ class SettingsController extends StateNotifier<SettingsState> {
           e,
           SettingsErrorAction.changePassword,
         ),
+        isSuccessful: false,
+
+        isLoading: false,
+      );
+    } catch (e) {
+      state = state.copyWith(
+        exception: SettingsException(
+          'Error changing password',
+          SettingsErrorAction.changePassword,
+          error: SettingsError.unknown,
+        ),
+        isSuccessful: false,
+
         isLoading: false,
       );
     }

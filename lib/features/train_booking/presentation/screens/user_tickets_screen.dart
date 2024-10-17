@@ -52,9 +52,9 @@ class UserTicketsScreenState extends ConsumerState<UserTicketsScreen> {
                   ),
                 );
               },
-              icon: const Icon(
+              icon:  Icon(
                 Icons.calendar_today,
-                color: Colors.white,
+                color: surfaceColor,
               ),
             )
           ],
@@ -125,7 +125,11 @@ class FilterWidget extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
               showCheckmark: false,
               backgroundColor: primaryColor,
-              selectedColor: Colors.white,
+              selectedColor: surfaceColor,
+              side: BorderSide(
+                color: surfaceColor,
+                width: 1,
+              ),
               disabledColor: Colors.white,
               labelStyle: isSelected
                   ? TextStyle(

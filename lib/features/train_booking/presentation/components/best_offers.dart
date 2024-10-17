@@ -68,7 +68,7 @@ class BestOffers extends ConsumerWidget {
             },
             loading: () => const MahattatyLoading(),
             error: (_, __) => MahattatyError(
-                onRetry: () => ref.refresh(bestOffersTrainsController)),
+                onRetry: () => ref.refresh(bestOffersTrainsController),),
           ),
         ),
       ],

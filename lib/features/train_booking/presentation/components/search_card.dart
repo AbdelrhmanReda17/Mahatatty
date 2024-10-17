@@ -23,7 +23,6 @@ class SearchCardForm extends ConsumerWidget {
     final searchState = ref.watch(trainSearchProvider);
     final primaryColor = Theme.of(context).colorScheme.primary;
     final onPrimaryContainer = Theme.of(context).colorScheme.onPrimaryContainer;
-    final onPrimary = Theme.of(context).colorScheme.onPrimary;
     final surface = Theme.of(context).colorScheme.surface;
 
     return Container(
@@ -38,18 +37,27 @@ class SearchCardForm extends ConsumerWidget {
             Row(
               children: [
                 ChoiceChip.elevated(
-                  label: Text(AppLocalizations.of(context)!.oneWay),
+                  label: Text(AppLocalizations.of(context)!.oneWay ,  style: TextStyle(color: searchState.ticketType == TicketType.oneWay ? surface : primaryColor),),
                   selected: searchState.ticketType == TicketType.oneWay,
                   selectedColor: primaryColor,
+                  side: BorderSide(
+                    color: primaryColor,
+                    width: 1,
+                  ),
                   onSelected: (_) =>
                       ref.read(trainSearchProvider.notifier).state =
                           searchState.copyWith(ticketType: TicketType.oneWay),
                 ),
                 const SizedBox(width: 10),
                 ChoiceChip.elevated(
-                  label: Text(AppLocalizations.of(context)!.roundTrip),
+                  label: Text(AppLocalizations.of(context)!.roundTrip ,
+                      style: TextStyle(color: searchState.ticketType == TicketType.roundTrip ? surface : primaryColor),),
                   selected: searchState.ticketType == TicketType.roundTrip,
                   selectedColor: primaryColor,
+                  side: BorderSide(
+                    color: primaryColor,
+                    width: 1,
+                  ),
                   onSelected: (_) => ref
                           .read(trainSearchProvider.notifier)
                           .state =
@@ -121,7 +129,7 @@ class SearchCardForm extends ConsumerWidget {
                       searchState.ticketType == TicketType.roundTrip
                           ? FontAwesomeIcons.arrowsUpDown
                           : FontAwesomeIcons.arrowDown,
-                      color: Colors.white,
+                      color: surface,
                     ),
                   ),
                 ),
@@ -209,6 +217,7 @@ class SearchCardForm extends ConsumerWidget {
                 );
               },
               style: MahattatyButtonStyle.primary,
+              textStyle: TextStyle(color: surface),
               text: AppLocalizations.of(context)!.searchTrainButton,
             ),
           ],

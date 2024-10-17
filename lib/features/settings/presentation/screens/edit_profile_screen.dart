@@ -73,6 +73,7 @@ class EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           );
         }
         if (state.isSuccessful && !state.isLoading && !ref.read(authControllerProvider).isLoading) {
+          log('Profile Updated');
           mahattatyAlertDialog(
             context,
             message: AppLocalizations.of(context)!.profileUpdated,
@@ -164,6 +165,12 @@ class EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                             borderRadius: BorderRadius.circular(50),
                             child: Image.network(
                               user!.photoUrl!,
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Icon(
+                                  FontAwesomeIcons.user,
+                                  size: 50,
+                                );
+                              },
                               fit: BoxFit.cover,
                             ),
                           )

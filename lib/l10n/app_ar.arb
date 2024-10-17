@@ -67,6 +67,10 @@
   "@loginSubtitle": {
     "description": "وصف صفحة تسجيل الدخول"
   },
+  "editProfileError": "حدث خطأ أثناء تحديث الملف الشخصي",
+  "changeModeError": "حدث خطأ أثناء تغيير الوضع",
+  "changePasswordError": "حدث خطأ أثناء تغيير كلمة المرور",
+    "changeLanguageError": "حدث خطأ أثناء تغيير اللغة",
   "registerTitle": "إنشاء حساب",
   "@registerTitle": {
     "description": "عنوان صفحة إنشاء الحساب"
@@ -255,7 +259,7 @@
   "emptyHotNews": "لا توجد أخبار ساخنة",
   "seeAll": "عرض الكل",
   "newsDetails": "تفاصيل الخبر",
-  "fetchError": "حدث خطأ أثناء جلب البيانات",
+  "fetchError":  "حدث خطأ أثناء جلب البيانات ، يرجى التحقق من اتصال الإنترنت الخاص بك والمحاولة مرة أخرى",
   "retryButton": "إعادة المحاولة",
   "trendingNews": "أخبار الشائعة",
   "emptyTrendingNews": "لا توجد أخبار شائعة",

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:mahattaty/core/utils/check_connection.dart';
 import '../models/news_model.dart';
 
 abstract class BaseNewsRemoteDataSource {
@@ -15,6 +16,7 @@ class NewsRemoteDataSource implements BaseNewsRemoteDataSource {
   @override
   Future<List<NewsModel>> getAllNews() async {
     try {
+      await CheckConnection.checkInternetConnection();
       QuerySnapshot snapshot = await fireStore.collection('news').get().timeout(const Duration(seconds: 5));
       List<NewsModel> newsList = snapshot.docs.map((doc) {
         return NewsModel.fromFireStore(
@@ -29,6 +31,8 @@ class NewsRemoteDataSource implements BaseNewsRemoteDataSource {
   @override
   Future<List<NewsModel>> getLatestNews() async {
     try {
+      await CheckConnection.checkInternetConnection();
+
       QuerySnapshot snapshot = await fireStore
           .collection('news')
           .orderBy('publishedAt', descending: true)
@@ -48,6 +52,7 @@ class NewsRemoteDataSource implements BaseNewsRemoteDataSource {
   @override
   Future<List<NewsModel>> getNewsByQuery(String query) async {
     try {
+      await CheckConnection.checkInternetConnection();
       QuerySnapshot snapshot = await fireStore.collection('news').get().timeout(const Duration(seconds: 8));
       List<NewsModel> newsList = snapshot.docs
           .map((doc) => NewsModel.fromFireStore(

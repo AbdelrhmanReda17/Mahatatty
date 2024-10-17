@@ -12,6 +12,7 @@ enum SettingsErrorAction {
   editProfile,
   changeLanguage,
   loadLanguage,
+  changeMode,
 }
 
 class SettingsException {
