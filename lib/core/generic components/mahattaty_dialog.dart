@@ -32,7 +32,6 @@ class MahattatyDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Only extracting the desired styles
     final titleStyle = Theme.of(context).textTheme.titleLarge!.copyWith(
           fontWeight: FontWeight.bold,
         );

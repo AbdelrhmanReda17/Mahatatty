@@ -1,12 +1,16 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mahattaty/core/utils/validations.dart';
 import '../../../../core/generic components/mahattaty_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../core/generic components/mahattaty_text_form_field.dart';
+import '../controllers/settings_controller.dart';
 
-class ChangePasswordDialog extends StatelessWidget {
+class ChangePasswordDialog extends ConsumerWidget {
   final _passwordFormKey = GlobalKey<FormState>();
 
   ChangePasswordDialog({
@@ -20,10 +24,12 @@ class ChangePasswordDialog extends StatelessWidget {
   final Function onButtonPressed;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context ,WidgetRef ref) {
+    final isLoading = ref.watch(settingsControllerProvider).isLoading;
     return MahattatyDialog(
       title: AppLocalizations.of(context)!.changePassword,
       description: AppLocalizations.of(context)!.changePasswordDescription,
+      disabled: isLoading,
       content: [
         Form(
           key: _passwordFormKey,
@@ -56,7 +62,7 @@ class ChangePasswordDialog extends StatelessWidget {
         ),
       ],
       buttonText: AppLocalizations.of(context)!.changePassword,
-      onButtonPressed: () {
+      onButtonPressed: () async{
         if (_passwordFormKey.currentState!.validate()) {
           onButtonPressed(passwordTextControllers[0].text);
         }

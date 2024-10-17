@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 abstract class BaseSettingsRemoteDataResource {
   Future<void> changePassword(String password);
@@ -11,9 +13,9 @@ class SettingsRemoteDataResource implements BaseSettingsRemoteDataResource {
 
 
   @override
-  Future<void> changePassword(String password) {
+  Future<void> changePassword(String password) async {
     try {
-      return firebaseAuth.currentUser!.updatePassword(password);
+      await firebaseAuth.currentUser!.updatePassword(password);
     } catch (e) {
       rethrow;
     }

@@ -9,7 +9,8 @@
   "@appName": {
     "description": "The name of the app"
   },
-    "otherLanguageCode": "ar",
+  "reset" : "Reset",
+  "otherLanguageCode": "ar",
   "onboardingTitle1": "Easy To Get Train Tickets From Anywhere",
   "@onboardingTitle1": {
     "description": "Title for the second onboarding step"
@@ -33,6 +34,11 @@
   "changePassword": "Change Password",
     "@changePassword": {
         "description": "Text for the change password option"
+    },
+  "loading": "Loading...",
+  "passwordChanged": "Password changed successfully",
+    "@passwordChanged": {
+        "description": "Success message for password change"
     },
   "changePasswordDescription": "Change your password to keep your account secure",
     "@changePasswordDescription": {

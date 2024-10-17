@@ -9,6 +9,9 @@
   "@appName": {
     "description": "اسم التطبيق"
   },
+  "loading": "جاري التحميل...",
+  "reset" : "إعادة تعيين",
+  "passwordChanged": "تم تغيير كلمة المرور بنجاح",
   "otherLanguageCode": "en",
   "onboardingTitle1": "سهولة الحصول على تذاكر القطار من أي مكان",
   "@onboardingTitle1": {
