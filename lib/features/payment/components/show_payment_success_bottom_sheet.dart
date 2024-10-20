@@ -32,7 +32,6 @@ void showPaymentSuccessBottomSheet(BuildContext context, Function onClose) {
         ],
         buttonText: AppLocalizations.of(context)!.closeButton,
         onButtonPressed: () {
-          Navigator.of(context).pop();
           onClose();
         },
       ),

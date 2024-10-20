@@ -76,7 +76,7 @@ class MainScreen extends ConsumerWidget {
               children: [
                 const SearchCardForm(),
                 SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.3,
+                  height: MediaQuery.of(context).size.height * 0.42,
                   child: const LatestNews(
                     seeMoreEnabled: true,
                   ),

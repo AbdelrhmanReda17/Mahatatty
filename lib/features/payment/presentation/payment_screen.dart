@@ -11,6 +11,8 @@ import '../../train_booking/domain/entities/train_seat.dart';
 import '../../train_booking/presentation/components/cards/train_card.dart';
 import '../../train_booking/presentation/controllers/book_ticket_controller.dart';
 import '../../../core/generic components/count_down_timer.dart';
+import '../../train_booking/presentation/controllers/get_trains_by_search_controller.dart';
+import '../../train_booking/presentation/controllers/search_train_controller.dart';
 import '../components/payment_method_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

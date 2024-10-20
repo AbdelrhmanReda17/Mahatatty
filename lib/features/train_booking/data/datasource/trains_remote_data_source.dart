@@ -146,28 +146,27 @@ class TrainsRemoteDataSource implements BaseTrainsRemoteDataSource {
       await  CheckConnection.checkInternetConnection();
       final ticket = await fireStore.collection('tickets').doc(ticketId).get();
       final TicketModel ticketData = TicketModel.fromFireStore(ticket.data()!, ticket.id);
-      final train =
-          await fireStore.collection('trains').doc(ticketData.trainId).get();
-      final TrainModel trainData = TrainModel.fromFireStore(train.data()!, train.id);
       await fireStore.collection('tickets').doc(ticketId).delete();
+      final train = await fireStore.collection('trains').doc(ticketData.trainId).get();
+      final TrainModel trainData = TrainModel.fromFireStore(train.data()!, train.id);
+
       await fireStore.collection('trains').doc(ticketData.trainId).update({
-        'trainBookedSeats': trainData.trainBookedSeats - 1,
-        'TrainSeatsStatus':
-            trainData.trainBookedSeats - 1 == trainData.trainTotalSeats
-                ? 'booked'
-                : 'available',
+        'trainBookedSeats': FieldValue.increment(-1),
+        'trainSeatsStatus': 'available',
         'trainSeats': trainData.trainSeats.map((e) {
-          if (e.seatType == ticketData.seatType) {
-            return {
-              'seatType': e.seatType,
-              'numberOfSeats': e.numberOfSeats,
-              'bookedSeats': e.bookedSeats - 1,
-              'seatPrice': e.seatPrice,
-            };
-          }
-          return e;
+          if (e.seatType == ticketData.seatType) e.bookedSeats--;
+          return e.toMap();
         }).toList(),
-      });
+
+      }).then((value) {
+        log('Ticket Canceled Successfully');
+      }).onError((error, stackTrace) {
+        log('Error Canceling Ticket: $error');
+      }).catchError(
+        (error) {
+          log('Error Canceling Ticket: $error');
+        },
+      );
     } catch (e) {
       rethrow;
     }
