@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mahattaty/features/train_booking/data/models/train_seat_model.dart';
-import 'package:mahattaty/features/train_booking/domain/entities/train_seat.dart';
 
 enum TrainStatus {
   onTime,

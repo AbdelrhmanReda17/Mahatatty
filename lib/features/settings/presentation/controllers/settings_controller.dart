@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,7 +12,6 @@ import '../Providers/change_mode_usecase_provider.dart';
 import '../Providers/change_password_usecase_provider.dart';
 import '../Providers/edit_profile_usecase_provider.dart';
 import '../Providers/load_settings_usecase_provider.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingsState {
   final bool isLoading;

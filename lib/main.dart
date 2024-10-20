@@ -1,13 +1,12 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mahattaty/authentication/presentation/screens/authentication_screen.dart';
-import 'package:mahattaty/core/screens/root_screen.dart';
 import 'package:mahattaty/onboarding/presentation/screens/splash_screen.dart';
 import 'package:mahattaty/themes/dark_theme.dart';
 import 'package:mahattaty/themes/light_theme.dart';
+import 'features/screens/root_screen.dart';
 import 'features/settings/presentation/controllers/settings_controller.dart';
 import 'firebase_options.dart';
 import 'dart:developer';

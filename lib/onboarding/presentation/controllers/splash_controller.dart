@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mahattaty/authentication/domain/entities/user.dart';
-import 'package:mahattaty/core/screens/root_screen.dart';
 import '../../../authentication/presentation/controllers/auth_controller.dart';
 import '../../../authentication/presentation/screens/authentication_screen.dart';
 import '../../../core/utils/open_screens.dart';
+import '../../../features/screens/root_screen.dart';
 import '../../domain/usecases/check_onboarding_status_usecase.dart';
 import '../../domain/usecases/set_onboarding_seen_usecase.dart';
 import '../providers/check_onboaring_status_provider.dart';

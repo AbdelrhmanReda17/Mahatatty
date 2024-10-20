@@ -1,9 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 import 'package:transparent_image/transparent_image.dart';
-
 import '../../../../../core/utils/open_screens.dart';
 import '../../../../../core/utils/time_converter.dart';
 import '../../../domain/entities/news.dart';

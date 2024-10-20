@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mahattaty/core/screens/root_screen.dart';
 import 'package:mahattaty/core/utils/open_dialogs.dart';
 import '../../../core/generic components/mahattaty_alert.dart';
 import '../../../core/generic components/mahattaty_button.dart';
 import '../../../core/generic components/mahattaty_scaffold.dart';
+import '../../screens/root_screen.dart';
 import '../../train_booking/domain/entities/ticket.dart';
 import '../../train_booking/domain/entities/train.dart';
 import '../../train_booking/domain/entities/train_seat.dart';

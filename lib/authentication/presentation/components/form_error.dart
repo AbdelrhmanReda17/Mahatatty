@@ -16,24 +16,14 @@ class FormErrorState extends State<FormError>
 
   bool get isShow => widget.isShow;
   late AnimationController _controller;
-  late Animation<double> _fadeAnimation;
 
   @override
   void initState() {
     super.initState();
-    // Initialize the animation controller
     _controller = AnimationController(
       duration: const Duration(milliseconds: 500),
       vsync: this,
     );
-
-    // Initialize fade animation
-    _fadeAnimation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    );
-
-    // Start the animation
     _controller.forward();
   }
 
@@ -58,9 +48,8 @@ class FormErrorState extends State<FormError>
             Icons.error,
             color: Colors.white,
           ),
-          const SizedBox(width: 10), // Add spacing between icon and text
+          const SizedBox(width: 10), 
           Expanded(
-            // Ensure the text fits within the row and wraps properly
             child: Text(
               message,
               style: const TextStyle(color: Colors.white),

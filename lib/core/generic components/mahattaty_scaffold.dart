@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 // ignore: camel_case_types
 enum backgroundHeight { small, medium, large }

@@ -12,7 +12,6 @@ class MahattatySearch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final primaryColor = Theme.of(context).colorScheme.primary;
-    final onPrimaryColor = Theme.of(context).colorScheme.onPrimary;
     final primaryContainer = Theme.of(context).colorScheme.primaryContainer;  
     final surface = Theme.of(context).colorScheme.surface;
     

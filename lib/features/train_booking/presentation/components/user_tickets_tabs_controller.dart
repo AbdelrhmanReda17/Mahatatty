@@ -55,6 +55,7 @@ class UserTicketsTabsController extends StatelessWidget {
   Widget build(BuildContext context) {
     final Map<Ticket, Train> upComingTickets = _buildUpComingTickets(tickets);
     final Map<Ticket, Train> doneTickets = _buildDoneTickets(tickets);
+    final surfaceColor = Theme.of(context).colorScheme.surface;
 
     return DefaultTabController(
       length: 2,
@@ -69,7 +70,7 @@ class UserTicketsTabsController extends StatelessWidget {
               unselectedLabelColor: Colors.grey,
               indicatorColor: Colors.transparent,
               indicator: BoxDecoration(
-                color: Colors.white,
+                color: surfaceColor,
                 borderRadius: BorderRadius.circular(16),
               ),
               tabs:  [

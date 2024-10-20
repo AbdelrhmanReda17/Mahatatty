@@ -8,7 +8,7 @@ final bestOffersTrainsController =
   try {
     final trains = await ref.read(getBestOffersTrainsProvider).call();
     return trains;
-  } catch (e, stackTrace) {
+  } catch (e, _) {
     ref.state = AsyncValue.error(e, e as StackTrace);
     rethrow;
   }

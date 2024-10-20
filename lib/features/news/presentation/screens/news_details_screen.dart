@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:mahattaty/core/utils/time_converter.dart';
 import 'package:mahattaty/features/news/domain/entities/news.dart';
@@ -18,7 +16,7 @@ class NewsDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final surfaceColor = Theme.of(context).colorScheme.surface;
-    final primaryColor = Theme.of(context).colorScheme.primary;
+    final onSurfaceColor = Theme.of(context).colorScheme.onSurface;
     final titleMedium = Theme.of(context).textTheme.titleMedium!;
 
     return MahattatyScaffold(
@@ -90,7 +88,7 @@ class NewsDetailScreen extends StatelessWidget {
             news.description,
             style: TextStyle(
               fontSize: 20,
-              color: primaryColor,
+              color: onSurfaceColor,
               height: 1.5,
             ),
           ),
