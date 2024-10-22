@@ -25,7 +25,7 @@ class TrainPrice extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (isShowDiscount)
+            if (isShowDiscount && trainPrice != discountTrainPrice)
  RichText(
                      textAlign: TextAlign.end,
 

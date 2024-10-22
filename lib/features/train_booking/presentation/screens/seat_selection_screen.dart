@@ -19,8 +19,7 @@ class SeatSelectionScreen extends ConsumerStatefulWidget {
   final Train train;
   final TicketType ticketType;
 
-  const SeatSelectionScreen(
-      {super.key, required this.train, required this.ticketType});
+  const SeatSelectionScreen({super.key, required this.train, required this.ticketType});
 
   @override
   SeatSelectionScreenState createState() => SeatSelectionScreenState();
