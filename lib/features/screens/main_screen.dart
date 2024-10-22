@@ -34,7 +34,7 @@ class MainScreen extends ConsumerWidget {
                   errorBuilder: (context, error, stackTrace) {
                     return const Icon(
                       FontAwesomeIcons.user,
-    size: 20,
+                      size: 20,
                     );
                   },
                   fit: BoxFit.cover,
@@ -42,7 +42,7 @@ class MainScreen extends ConsumerWidget {
               )
                   : const Icon(
                 FontAwesomeIcons.user,
-                size: 50,
+                size: 30,
               ),
             ),
             const SizedBox(width: 10),
