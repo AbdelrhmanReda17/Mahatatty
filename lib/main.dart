@@ -64,7 +64,7 @@ class MyAppState extends ConsumerState<MyApp> {
       ),
     );
     return MaterialApp(
-      title: 'Mahattaty',
+      title: 'Mahatatty',
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: settings.mode,
