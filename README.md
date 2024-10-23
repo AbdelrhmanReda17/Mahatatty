@@ -1,4 +1,4 @@
-# Mahattaty 🚉
+# Mahatatty 🚉
 
 **Mahatatty** (محطتي) is a cross-platform mobile designed for train booking and ticket reservation. The name "Mahatatty" means "station" in Arabic, and the app offers users an easy and convenient way to search, book, and pay for train tickets. It also provides up-to-date news, weather, and train offers, making it a complete solution for travelers in Egypt.
 
