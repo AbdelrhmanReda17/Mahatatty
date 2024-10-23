@@ -41,9 +41,7 @@ enum TrainStations {
   dakahlia('DKA'),
   el_bahariya('BAH'),
   el_wadi_el_gedid('WAD'),
-  el_fayoum('FYM'),
-  el_menoufia('MNF'),
-  el_monufia('MNF');
+  el_fayoum('FYM');
 
   final String code;
 
@@ -85,8 +83,6 @@ enum TrainStations {
         TrainStations.el_bahariya,
         TrainStations.el_wadi_el_gedid,
         TrainStations.el_fayoum,
-        TrainStations.el_menoufia,
-        TrainStations.el_monufia,
       ];
 }
 
